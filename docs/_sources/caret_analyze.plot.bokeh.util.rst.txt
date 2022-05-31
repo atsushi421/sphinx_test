@@ -1,0 +1,7 @@
+caret\_analyze.plot.bokeh.util module
+=====================================
+
+.. automodule:: caret_analyze.plot.bokeh.util
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.subscription module
+======================================================
+
+.. automodule:: caret_analyze.architecture.struct.subscription
+   :members:
+   :undoc-members:
+   :show-inheritance:

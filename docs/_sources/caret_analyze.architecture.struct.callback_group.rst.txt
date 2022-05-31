@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.callback\_group module
+=========================================================
+
+.. automodule:: caret_analyze.architecture.struct.callback_group
+   :members:
+   :undoc-members:
+   :show-inheritance:

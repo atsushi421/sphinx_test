@@ -1,0 +1,239 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.runtime.node module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.runtime.node_path module" href="caret_analyze.runtime.node_path.html" />
+    <link rel="prev" title="caret_analyze.runtime.executor module" href="caret_analyze.runtime.executor.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.runtime.node_path.html" title="caret_analyze.runtime.node_path module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.runtime.executor.html" title="caret_analyze.runtime.executor module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.runtime.html" accesskey="U">caret_analyze.runtime package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.runtime.node module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.runtime.node">
+<span id="caret-analyze-runtime-node-module"></span><h1>caret_analyze.runtime.node module<a class="headerlink" href="#module-caret_analyze.runtime.node" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.runtime.node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.node.html#caret_analyze.value_objects.node.NodeStructValue" title="caret_analyze.value_objects.node.NodeStructValue"><span class="pre">NodeStructValue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">publishers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.publisher.html#caret_analyze.runtime.publisher.Publisher" title="caret_analyze.runtime.publisher.Publisher"><span class="pre">Publisher</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subscription</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.subscription.html#caret_analyze.runtime.subscription.Subscription" title="caret_analyze.runtime.subscription.Subscription"><span class="pre">Subscription</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.timer.html#caret_analyze.runtime.timer.Timer" title="caret_analyze.runtime.timer.Timer"><span class="pre">Timer</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.node_path.html#caret_analyze.runtime.node_path.NodePath" title="caret_analyze.runtime.node_path.NodePath"><span class="pre">NodePath</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.callback_group.html#caret_analyze.runtime.callback_group.CallbackGroup" title="caret_analyze.runtime.callback_group.CallbackGroup"><span class="pre">CallbackGroup</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_passings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.variable_passing.html#caret_analyze.runtime.variable_passing.VariablePassing" title="caret_analyze.runtime.variable_passing.VariablePassing"><span class="pre">VariablePassing</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.transform.html#caret_analyze.runtime.transform.TransformBuffer" title="caret_analyze.runtime.transform.TransformBuffer"><span class="pre">TransformBuffer</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf_broadcaster</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.transform.html#caret_analyze.runtime.transform.TransformBroadcaster" title="caret_analyze.runtime.transform.TransformBroadcaster"><span class="pre">TransformBroadcaster</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/runtime/node.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.runtime.node.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="caret_analyze.common.summary.html#caret_analyze.common.summary.Summarizable" title="caret_analyze.common.summary.Summarizable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Summarizable</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.callback_group_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callback_group_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.callback_group_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.callback_groups">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callback_groups</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.callback_group.html#caret_analyze.runtime.callback_group.CallbackGroup" title="caret_analyze.runtime.callback_group.CallbackGroup"><span class="pre">CallbackGroup</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.callback_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.callback_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callback_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.callback_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.callbacks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.callback.html#caret_analyze.runtime.callback.CallbackBase" title="caret_analyze.runtime.callback.CallbackBase"><span class="pre">CallbackBase</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.get_callback">
+<span class="sig-name descname"><span class="pre">get_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.runtime.callback.html#caret_analyze.runtime.callback.CallbackBase" title="caret_analyze.runtime.callback.CallbackBase"><span class="pre">CallbackBase</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/runtime/node.html#Node.get_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.runtime.node.Node.get_callback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.get_callback_group">
+<span class="sig-name descname"><span class="pre">get_callback_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback_group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.runtime.callback_group.html#caret_analyze.runtime.callback_group.CallbackGroup" title="caret_analyze.runtime.callback_group.CallbackGroup"><span class="pre">CallbackGroup</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/runtime/node.html#Node.get_callback_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.runtime.node.Node.get_callback_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.get_callbacks">
+<span class="sig-name descname"><span class="pre">get_callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">callback_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.callback.html#caret_analyze.runtime.callback.CallbackBase" title="caret_analyze.runtime.callback.CallbackBase"><span class="pre">CallbackBase</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/runtime/node.html#Node.get_callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.runtime.node.Node.get_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.get_path">
+<span class="sig-name descname"><span class="pre">get_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subscribe_topic_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">publish_topic_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.runtime.node_path.html#caret_analyze.runtime.node_path.NodePath" title="caret_analyze.runtime.node_path.NodePath"><span class="pre">NodePath</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/runtime/node.html#Node.get_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.runtime.node.Node.get_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.get_publisher">
+<span class="sig-name descname"><span class="pre">get_publisher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.runtime.publisher.html#caret_analyze.runtime.publisher.Publisher" title="caret_analyze.runtime.publisher.Publisher"><span class="pre">Publisher</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/runtime/node.html#Node.get_publisher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.runtime.node.Node.get_publisher" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.get_subscription">
+<span class="sig-name descname"><span class="pre">get_subscription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.runtime.subscription.html#caret_analyze.runtime.subscription.Subscription" title="caret_analyze.runtime.subscription.Subscription"><span class="pre">Subscription</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/runtime/node.html#Node.get_subscription"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.runtime.node.Node.get_subscription" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.get_timer">
+<span class="sig-name descname"><span class="pre">get_timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.runtime.timer.html#caret_analyze.runtime.timer.Timer" title="caret_analyze.runtime.timer.Timer"><span class="pre">Timer</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/runtime/node.html#Node.get_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.runtime.node.Node.get_timer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.node_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.node_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.paths">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.node_path.html#caret_analyze.runtime.node_path.NodePath" title="caret_analyze.runtime.node_path.NodePath"><span class="pre">NodePath</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.paths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.publish_topic_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">publish_topic_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.publish_topic_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.publishers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">publishers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.publisher.html#caret_analyze.runtime.publisher.Publisher" title="caret_analyze.runtime.publisher.Publisher"><span class="pre">Publisher</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.publishers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.subscribe_topic_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscribe_topic_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.subscribe_topic_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.subscriptions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscriptions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.subscription.html#caret_analyze.runtime.subscription.Subscription" title="caret_analyze.runtime.subscription.Subscription"><span class="pre">Subscription</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.subscriptions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.summary">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">summary</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.common.summary.html#caret_analyze.common.summary.Summary" title="caret_analyze.common.summary.Summary"><span class="pre">Summary</span></a></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.tf_broadcaster">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tf_broadcaster</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.transform.html#caret_analyze.runtime.transform.TransformBroadcaster" title="caret_analyze.runtime.transform.TransformBroadcaster"><span class="pre">TransformBroadcaster</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.tf_broadcaster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.tf_buffer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tf_buffer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.transform.html#caret_analyze.runtime.transform.TransformBuffer" title="caret_analyze.runtime.transform.TransformBuffer"><span class="pre">TransformBuffer</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.tf_buffer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.timers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.timer.html#caret_analyze.runtime.timer.Timer" title="caret_analyze.runtime.timer.Timer"><span class="pre">Timer</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.timers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.runtime.node.Node.variable_passings">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variable_passings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.variable_passing.html#caret_analyze.runtime.variable_passing.VariablePassing" title="caret_analyze.runtime.variable_passing.VariablePassing"><span class="pre">VariablePassing</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.runtime.node.Node.variable_passings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.runtime.executor.html"
+                          title="previous chapter">caret_analyze.runtime.executor module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.runtime.node_path.html"
+                          title="next chapter">caret_analyze.runtime.node_path module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.runtime.node.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.runtime.node_path.html" title="caret_analyze.runtime.node_path module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.runtime.executor.html" title="caret_analyze.runtime.executor module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.runtime.html" >caret_analyze.runtime package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.runtime.node module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

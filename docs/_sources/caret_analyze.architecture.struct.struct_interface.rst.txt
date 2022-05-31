@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.struct\_interface module
+===========================================================
+
+.. automodule:: caret_analyze.architecture.struct.struct_interface
+   :members:
+   :undoc-members:
+   :show-inheritance:

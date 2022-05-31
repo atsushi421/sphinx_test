@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.records\_post\_process module
+========================================================
+
+.. automodule:: caret_analyze.infra.lttng.records_post_process
+   :members:
+   :undoc-members:
+   :show-inheritance:

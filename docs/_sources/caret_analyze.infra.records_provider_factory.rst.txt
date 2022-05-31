@@ -1,0 +1,7 @@
+caret\_analyze.infra.records\_provider\_factory module
+======================================================
+
+.. automodule:: caret_analyze.infra.records_provider_factory
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+caret\_analyze.value\_objects.variable\_passing module
+======================================================
+
+.. automodule:: caret_analyze.value_objects.variable_passing
+   :members:
+   :undoc-members:
+   :show-inheritance:

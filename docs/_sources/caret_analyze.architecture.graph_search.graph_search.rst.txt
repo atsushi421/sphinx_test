@@ -1,0 +1,7 @@
+caret\_analyze.architecture.graph\_search.graph\_search module
+==============================================================
+
+.. automodule:: caret_analyze.architecture.graph_search.graph_search
+   :members:
+   :undoc-members:
+   :show-inheritance:

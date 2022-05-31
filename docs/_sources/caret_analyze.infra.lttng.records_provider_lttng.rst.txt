@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.records\_provider\_lttng module
+==========================================================
+
+.. automodule:: caret_analyze.infra.lttng.records_provider_lttng
+   :members:
+   :undoc-members:
+   :show-inheritance:

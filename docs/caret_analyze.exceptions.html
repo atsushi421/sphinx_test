@@ -1,0 +1,200 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.exceptions module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="caret_analyze.value_objects.variable_passing module" href="caret_analyze.value_objects.variable_passing.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.value_objects.variable_passing.html" title="caret_analyze.value_objects.variable_passing module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" accesskey="U">caret_analyze package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.exceptions module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.exceptions">
+<span id="caret-analyze-exceptions-module"></span><h1>caret_analyze.exceptions module<a class="headerlink" href="#module-caret_analyze.exceptions" title="Permalink to this heading">¶</a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.Error">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#Error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base class for exception in this module.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.InvalidArgumentError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidArgumentError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#InvalidArgumentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.InvalidArgumentError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Failed to process function.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.InvalidColumnAttributeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidColumnAttributeError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#InvalidColumnAttributeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.InvalidColumnAttributeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Given column attribute miss match requests.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.InvalidColumnMapperError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidColumnMapperError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#InvalidColumnMapperError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.InvalidColumnMapperError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Given column mapper miss match.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.InvalidReaderError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidReaderError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#InvalidReaderError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.InvalidReaderError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Failed to load architecutre.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.InvalidRecordsError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidRecordsError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#InvalidRecordsError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.InvalidRecordsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Given Records does not have the necessary columns.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.InvalidTraceFormatError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidTraceFormatError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#InvalidTraceFormatError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.InvalidTraceFormatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Failed to load trace data.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.InvalidYamlFormatError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidYamlFormatError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#InvalidYamlFormatError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.InvalidYamlFormatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Failed to load yaml.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.ItemNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">ItemNotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#ItemNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.ItemNotFoundError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Failed to identify item that match the condition.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.MultipleItemFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">MultipleItemFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#MultipleItemFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.MultipleItemFoundError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Failed to identify item that match the condition.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.TraceResultAanalyzeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">TraceResultAanalyzeError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#TraceResultAanalyzeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.TraceResultAanalyzeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Failed to parse trace results.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.UnsupportedNodeRecordsError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">UnsupportedNodeRecordsError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#UnsupportedNodeRecordsError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.UnsupportedNodeRecordsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Failed to calculate node path records.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="caret_analyze.exceptions.UnsupportedTypeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.exceptions.</span></span><span class="sig-name descname"><span class="pre">UnsupportedTypeError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/exceptions.html#UnsupportedTypeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.exceptions.UnsupportedTypeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.exceptions.Error" title="caret_analyze.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Given type is unsupported.</p>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.value_objects.variable_passing.html"
+                          title="previous chapter">caret_analyze.value_objects.variable_passing module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.exceptions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.value_objects.variable_passing.html" title="caret_analyze.value_objects.variable_passing module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.exceptions module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

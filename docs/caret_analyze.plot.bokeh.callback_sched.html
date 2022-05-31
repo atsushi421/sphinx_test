@@ -1,0 +1,189 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.plot.bokeh.callback_sched module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.plot.bokeh.message_flow module" href="caret_analyze.plot.bokeh.message_flow.html" />
+    <link rel="prev" title="caret_analyze.plot.bokeh.callback_info_interface module" href="caret_analyze.plot.bokeh.callback_info_interface.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.plot.bokeh.message_flow.html" title="caret_analyze.plot.bokeh.message_flow module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.plot.bokeh.callback_info_interface.html" title="caret_analyze.plot.bokeh.callback_info_interface module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.plot.html" >caret_analyze.plot package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.plot.bokeh.html" accesskey="U">caret_analyze.plot.bokeh package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.plot.bokeh.callback_sched module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.plot.bokeh.callback_sched">
+<span id="caret-analyze-plot-bokeh-callback-sched-module"></span><h1>caret_analyze.plot.bokeh.callback_sched module<a class="headerlink" href="#module-caret_analyze.plot.bokeh.callback_sched" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.ColorSelector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">ColorSelector</span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#ColorSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.ColorSelector.create_instance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coloring_rule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#ColorSelector.create_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelector.create_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.ColorSelector.get_color">
+<span class="sig-name descname"><span class="pre">get_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span></span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#ColorSelector.get_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelector.get_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.ColorSelectorCallback">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">ColorSelectorCallback</span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#ColorSelectorCallback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelectorCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelector" title="caret_analyze.plot.bokeh.callback_sched.ColorSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorSelector</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.ColorSelectorCbg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">ColorSelectorCbg</span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#ColorSelectorCbg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelectorCbg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelector" title="caret_analyze.plot.bokeh.callback_sched.ColorSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorSelector</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.ColorSelectorNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">ColorSelectorNode</span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#ColorSelectorNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelectorNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelector" title="caret_analyze.plot.bokeh.callback_sched.ColorSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorSelector</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.callback_sched">
+<span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">callback_sched</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.node.html#caret_analyze.runtime.node.Node" title="caret_analyze.runtime.node.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.runtime.callback_group.html#caret_analyze.runtime.callback_group.CallbackGroup" title="caret_analyze.runtime.callback_group.CallbackGroup"><span class="pre">CallbackGroup</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.runtime.executor.html#caret_analyze.runtime.executor.Executor" title="caret_analyze.runtime.executor.Executor"><span class="pre">Executor</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lstrip_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rstrip_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coloring_rule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'callback'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_sim_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#callback_sched"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.callback_sched" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.get_callback_bar">
+<span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">get_callback_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.runtime.callback.html#caret_analyze.runtime.callback.CallbackBase" title="caret_analyze.runtime.callback.CallbackBase"><span class="pre">CallbackBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_min</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ColumnDataSource</span></span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#get_callback_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.get_callback_bar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.get_callback_rects">
+<span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">get_callback_rects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.runtime.callback.html#caret_analyze.runtime.callback.CallbackBase" title="caret_analyze.runtime.callback.CallbackBase"><span class="pre">CallbackBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.record.data_frame_shaper.html#caret_analyze.record.data_frame_shaper.Clip" title="caret_analyze.record.data_frame_shaper.Clip"><span class="pre">Clip</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">converter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.common.clock_converter.html#caret_analyze.common.clock_converter.ClockConverter" title="caret_analyze.common.clock_converter.ClockConverter"><span class="pre">ClockConverter</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ColumnDataSource</span></span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#get_callback_rects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.get_callback_rects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.get_cbg_and_name">
+<span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">get_cbg_and_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.node.html#caret_analyze.runtime.node.Node" title="caret_analyze.runtime.node.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.runtime.callback_group.html#caret_analyze.runtime.callback_group.CallbackGroup" title="caret_analyze.runtime.callback_group.CallbackGroup"><span class="pre">CallbackGroup</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.runtime.executor.html#caret_analyze.runtime.executor.Executor" title="caret_analyze.runtime.executor.Executor"><span class="pre">Executor</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.callback_group.html#caret_analyze.runtime.callback_group.CallbackGroup" title="caret_analyze.runtime.callback_group.CallbackGroup"><span class="pre">CallbackGroup</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#get_cbg_and_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.get_cbg_and_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.get_range">
+<span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">get_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.callback.html#caret_analyze.runtime.callback.CallbackBase" title="caret_analyze.runtime.callback.CallbackBase"><span class="pre">CallbackBase</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#get_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.get_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="caret_analyze.plot.bokeh.callback_sched.sched_plot_cbg">
+<span class="sig-prename descclassname"><span class="pre">caret_analyze.plot.bokeh.callback_sched.</span></span><span class="sig-name descname"><span class="pre">sched_plot_cbg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.runtime.callback_group.html#caret_analyze.runtime.callback_group.CallbackGroup" title="caret_analyze.runtime.callback_group.CallbackGroup"><span class="pre">CallbackGroup</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_selector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.plot.bokeh.callback_sched.ColorSelector" title="caret_analyze.plot.bokeh.callback_sched.ColorSelector"><span class="pre">ColorSelector</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.record.data_frame_shaper.html#caret_analyze.record.data_frame_shaper.Clip" title="caret_analyze.record.data_frame_shaper.Clip"><span class="pre">Clip</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_sim_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/plot/bokeh/callback_sched.html#sched_plot_cbg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.plot.bokeh.callback_sched.sched_plot_cbg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.plot.bokeh.callback_info_interface.html"
+                          title="previous chapter">caret_analyze.plot.bokeh.callback_info_interface module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.plot.bokeh.message_flow.html"
+                          title="next chapter">caret_analyze.plot.bokeh.message_flow module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.plot.bokeh.callback_sched.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.plot.bokeh.message_flow.html" title="caret_analyze.plot.bokeh.message_flow module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.plot.bokeh.callback_info_interface.html" title="caret_analyze.plot.bokeh.callback_info_interface module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.plot.html" >caret_analyze.plot package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.plot.bokeh.html" >caret_analyze.plot.bokeh package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.plot.bokeh.callback_sched module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

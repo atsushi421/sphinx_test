@@ -1,0 +1,7 @@
+caret\_analyze.record.data\_frame\_shaper module
+================================================
+
+.. automodule:: caret_analyze.record.data_frame_shaper
+   :members:
+   :undoc-members:
+   :show-inheritance:

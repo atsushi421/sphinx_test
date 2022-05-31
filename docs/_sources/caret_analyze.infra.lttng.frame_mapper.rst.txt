@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.frame\_mapper module
+===============================================
+
+.. automodule:: caret_analyze.infra.lttng.frame_mapper
+   :members:
+   :undoc-members:
+   :show-inheritance:

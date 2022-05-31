@@ -1,0 +1,24 @@
+caret\_analyze.record package
+=============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.record.column
+   caret_analyze.record.data_frame_shaper
+   caret_analyze.record.grouped_records
+   caret_analyze.record.interface
+   caret_analyze.record.record
+   caret_analyze.record.record_cpp_impl
+   caret_analyze.record.record_factory
+
+Module contents
+---------------
+
+.. automodule:: caret_analyze.record
+   :members:
+   :undoc-members:
+   :show-inheritance:

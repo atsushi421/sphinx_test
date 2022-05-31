@@ -1,0 +1,7 @@
+caret\_analyze.runtime.timer module
+===================================
+
+.. automodule:: caret_analyze.runtime.timer
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,185 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.lttng.event_counter module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.infra.lttng.event_filter module" href="caret_analyze.infra.lttng.event_filter.html" />
+    <link rel="prev" title="caret_analyze.infra.lttng.data_frame module" href="caret_analyze.infra.lttng.data_frame.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.event_filter.html" title="caret_analyze.infra.lttng.event_filter module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.data_frame.html" title="caret_analyze.infra.lttng.data_frame module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.infra.html" >caret_analyze.infra package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.infra.lttng.html" accesskey="U">caret_analyze.infra.lttng package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.event_counter module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.infra.lttng.event_counter">
+<span id="caret-analyze-infra-lttng-event-counter-module"></span><h1>caret_analyze.infra.lttng.event_counter module<a class="headerlink" href="#module-caret_analyze.infra.lttng.event_counter" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.Category">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.event_counter.</span></span><span class="sig-name descname"><span class="pre">Category</span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#Category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.Category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.CategoryServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.event_counter.</span></span><span class="sig-name descname"><span class="pre">CategoryServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.lttng_info.html#caret_analyze.infra.lttng.lttng_info.LttngInfo" title="caret_analyze.infra.lttng.lttng_info.LttngInfo"><span class="pre">LttngInfo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#CategoryServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.CategoryServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.CategoryServer.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.infra.lttng.event_counter.Category" title="caret_analyze.infra.lttng.event_counter.Category"><span class="pre">Category</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#CategoryServer.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.CategoryServer.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.CategoryServer.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'callback_group',</span> <span class="pre">'callback_object',</span> <span class="pre">'client_handle',</span> <span class="pre">'node_handle',</span> <span class="pre">'publisher_handle',</span> <span class="pre">'service_handle',</span> <span class="pre">'subscription_handle',</span> <span class="pre">'tf_broadcaster',</span> <span class="pre">'tf_buffer_core',</span> <span class="pre">'timer_handle'}</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.CategoryServer.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.CountRecord">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.event_counter.</span></span><span class="sig-name descname"><span class="pre">CountRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.infra.lttng.event_counter.Category" title="caret_analyze.infra.lttng.event_counter.Category"><span class="pre">Category</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#CountRecord"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.CountRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.CountRecord.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#CountRecord.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.CountRecord.as_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.CountRule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.event_counter.</span></span><span class="sig-name descname"><span class="pre">CountRule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#CountRule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.CountRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.EventCounter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.event_counter.</span></span><span class="sig-name descname"><span class="pre">EventCounter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.ros2_tracing.data_model.html#caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel" title="caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel"><span class="pre">Ros2DataModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.lttng_info.html#caret_analyze.infra.lttng.lttng_info.LttngInfo" title="caret_analyze.infra.lttng.lttng_info.LttngInfo"><span class="pre">LttngInfo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#EventCounter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.EventCounter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.EventCounter.count_tracepoints">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">count_tracepoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count_rules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#caret_analyze.infra.lttng.event_counter.CountRule" title="caret_analyze.infra.lttng.event_counter.CountRule"><span class="pre">CountRule</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.infra.lttng.event_counter.CategoryServer" title="caret_analyze.infra.lttng.event_counter.CategoryServer"><span class="pre">CategoryServer</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#caret_analyze.infra.lttng.event_counter.CountRecord" title="caret_analyze.infra.lttng.event_counter.CountRecord"><span class="pre">CountRecord</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#EventCounter.count_tracepoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.EventCounter.count_tracepoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.EventCounter.get_count">
+<span class="sig-name descname"><span class="pre">get_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groupby</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#EventCounter.get_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.EventCounter.get_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.event_counter.EventCounter.get_count_rules">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_count_rules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.ros2_tracing.data_model.html#caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel" title="caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel"><span class="pre">Ros2DataModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#caret_analyze.infra.lttng.event_counter.CountRule" title="caret_analyze.infra.lttng.event_counter.CountRule"><span class="pre">CountRule</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/event_counter.html#EventCounter.get_count_rules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.event_counter.EventCounter.get_count_rules" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.infra.lttng.data_frame.html"
+                          title="previous chapter">caret_analyze.infra.lttng.data_frame module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.infra.lttng.event_filter.html"
+                          title="next chapter">caret_analyze.infra.lttng.event_filter module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.infra.lttng.event_counter.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.event_filter.html" title="caret_analyze.infra.lttng.event_filter module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.data_frame.html" title="caret_analyze.infra.lttng.data_frame module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.infra.html" >caret_analyze.infra package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.infra.lttng.html" >caret_analyze.infra.lttng package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.event_counter module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+caret\_analyze.infra.infra\_base module
+=======================================
+
+.. automodule:: caret_analyze.infra.infra_base
+   :members:
+   :undoc-members:
+   :show-inheritance:

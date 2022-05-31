@@ -1,0 +1,602 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.record.interface module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.record.record module" href="caret_analyze.record.record.html" />
+    <link rel="prev" title="caret_analyze.record.grouped_records module" href="caret_analyze.record.grouped_records.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.record.record.html" title="caret_analyze.record.record module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.record.grouped_records.html" title="caret_analyze.record.grouped_records module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.record.html" accesskey="U">caret_analyze.record package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.record.interface module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.record.interface">
+<span id="caret-analyze-record-interface-module"></span><h1>caret_analyze.record.interface module<a class="headerlink" href="#module-caret_analyze.record.interface" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.record.interface.</span></span><span class="sig-name descname"><span class="pre">RecordInterface</span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Interface for Record class.</p>
+<p>This behavior is similar to the dictionary type.
+To avoid conflicts with the pybind metaclass, ABC is not used.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.add">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordInterface.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add(Update) column value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – key name to set.</p></li>
+<li><p><strong>stamp</strong> (<em>int</em>) – key value to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.change_dict_key">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">change_dict_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordInterface.change_dict_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.change_dict_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change columns name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_key</strong> (<em>str</em>) – column name to be changed.</p></li>
+<li><p><strong>new_key</strong> (<em>str</em>) – new column name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.columns">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get columnnames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Column names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Set[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – dictionary data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, int]:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.drop_columns">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">drop_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordInterface.drop_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.drop_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop columns method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>column_names</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – columns to be dropped.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.equals">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><span class="pre">RecordInterface</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordInterface.equals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><em>RecordInterface</em></a>) – comparison target.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if record data is same, otherwise false.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.get">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordInterface.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value for specific column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – key name to get.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value for selected key.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.get_with_default">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_with_default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordInterface.get_with_default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.get_with_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value for specific column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – key name to get.</p></li>
+<li><p><strong>v</strong> (<em>int</em>) – default value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value for selected key.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordInterface.merge">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><span class="pre">RecordInterface</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordInterface.merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordInterface.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mege record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><em>RecordInterface</em></a>) – merge target.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – inplace record if true, otherwise false.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Merged record class if inplace = false, otherwise None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.Record" title="caret_analyze.record.Record">Record</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.record.interface.</span></span><span class="sig-name descname"><span class="pre">RecordsInterface</span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Interface for Record class.</p>
+<p>To avoid conflicts with the pybind metaclass, ABC is not used.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.append">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><span class="pre">RecordInterface</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append new record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><em>RecordInterface</em></a>) – record to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.append_column">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">append_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.record.column.html#caret_analyze.record.column.ColumnValue" title="caret_analyze.record.column.ColumnValue"><span class="pre">ColumnValue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.append_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.append_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append column to records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>column</strong> (<a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.Column" title="caret_analyze.record.Column"><em>Column</em></a>) – </p></li>
+<li><p><strong>values</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.bind_drop_as_delay">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bind_drop_as_delay</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.bind_drop_as_delay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.bind_drop_as_delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the dropped points to records converted as delay.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.clone">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.clone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get duplicated records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>deep-copyed records.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.column_names">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">column_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.column_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get column names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>column names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.columns">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.record.column.html#caret_analyze.record.column.Columns" title="caret_analyze.record.column.Columns"><span class="pre">Columns</span></a></em><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.Columns" title="caret_analyze.record.Columns">Columns</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.concat">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.concat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concat records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><em>RecordsInterface</em></a>) – records to be concatenated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>concatenated records if inplace=False, otherwise None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><span class="pre">RecordInterface</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get records list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Records list.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Seque[<a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface">RecordInterface</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.drop_duplicates">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">drop_duplicates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.drop_duplicates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.drop_duplicates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.equals">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.equals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equals method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><em>RecordsInterface</em></a>) – comparison target.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true if record data is same, otherwise false.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.filter_if">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">filter_if</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><span class="pre">RecordInterface</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.filter_if"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.filter_if" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get filterd records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><em>RecordInterface</em></a><em>]</em><em>, </em><em>bool</em><em>]</em>) – condition function.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – inplace original instance if true.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.get_column_series">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_column_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.get_column_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.get_column_series" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.get_row_series">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_row_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><span class="pre">RecordInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.get_row_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.get_row_series" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.groupby">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">groupby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.groupby"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.groupby" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split based on the value of the given column name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.iget">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">iget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.iget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.iget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.merge">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">right_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">join_left_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join_right_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">how</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge records by key match.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>right_records</strong> (<a class="reference internal" href="#caret_analyze.record.interface.RecordInterface" title="caret_analyze.record.interface.RecordInterface"><em>RecordInterface</em></a>) – merge target.</p></li>
+<li><p><strong>join_left_key</strong> (<em>str</em>) – Key to use for matching.</p></li>
+<li><p><strong>join_right_key</strong> (<em>str</em>) – Key to use for matching.</p></li>
+<li><p><strong>how</strong> (<em>str</em>) – merge type. [inner/right/left/outer]</p></li>
+<li><p><strong>progress_label</strong> (<em>str</em>) – label for progress bar. cpp impl only.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">left_records</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;join_key&#39;: 1, &#39;left_other&#39;: 1}),</span>
+<span class="go">    Record({&#39;join_key&#39;: 2, &#39;left_other&#39;: 2}),</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">right_records</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;join_key&#39;: 2, &#39;right_other&#39;: 3}),</span>
+<span class="go">    Record({&#39;join_key&#39;: 1, &#39;right_other&#39;: 4}),</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;join_key&#39;: 1, &#39;left_other&#39;: 1, &#39;right_other&#39;: 4}),</span>
+<span class="go">    Record({&#39;join_key&#39;: 2, &#39;left_other&#39;: 2, &#39;right_other&#39;: 3}),</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">left_records</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">right_records</span><span class="p">,</span> <span class="s1">&#39;join_key&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.merge_sequencial">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_sequencial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">right_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_stamp_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_stamp_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join_left_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join_right_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">how</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.merge_sequencial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.merge_sequencial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge chronologically contiguous records.</p>
+<p>Merge left_records[left_key] and the right_records[right_key]
+that occurred immediately after it.
+If join_key is set, left_records[join_key]==right_records[join_key] is added as condition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>right_records</strong> (<a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><em>RecordsInterface</em></a>) – merge target.</p></li>
+<li><p><strong>left_stamp_key</strong> (<em>str</em>) – left records key name to use for comparison in time series merge.</p></li>
+<li><p><strong>right_stamp_key</strong> (<em>str</em>) – right records key name to use for comparison in time series merge.</p></li>
+<li><p><strong>join_key</strong> (<em>str</em>) – join key name to use equal condition.</p></li>
+<li><p><strong>how</strong> (<em>str</em>) – merge type. [inner/right/left/outer]</p></li>
+<li><p><strong>progress_label</strong> (<em>str</em>) – label for progress bar. cpp impl only.</p></li>
+<li><p><strong>Records</strong> – </p></li>
+<li><p><strong>-------</strong> – </p></li>
+<li><p><strong>RecordsInterface</strong> – Merged records.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">left_records</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;join_key&#39;: 1, &#39;left_stamp_key&#39;: 0}),</span>
+<span class="go">    Record({&#39;join_key&#39;: 2, &#39;left_stamp_key&#39;: 3})</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">right_records</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;join_key&#39;: 2, &#39;right_stamp_key&#39;: 5}),</span>
+<span class="go">    Record({&#39;join_key&#39;: 1, &#39;right_stamp_key&#39;: 6})</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;join_key&#39;: 1, &#39;left_stamp_key&#39;: 0, &#39;right_stamp_key&#39;: 6}),</span>
+<span class="go">    Record({&#39;join_key&#39;: 2, &#39;left_stamp_key&#39;: 3, &#39;right_stamp_key&#39;: 5}),</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">left_records</span><span class="o">.</span><span class="n">merge_sequencial</span><span class="p">(</span>
+<span class="go">    right_records, &#39;left_stamp_key&#39;, &#39;right_stamp_key&#39;, &#39;join_key&#39;, &#39;inner&#39;</span>
+<span class="go">).equals(expected)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.merge_sequencial_for_addr_track">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_sequencial_for_addr_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_stamp_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_stamp_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_from_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_to_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_stamp_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sink_from_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.merge_sequencial_for_addr_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.merge_sequencial_for_addr_track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge for tracking addresses when copying occurs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_stamp_key</strong> (<em>str</em>) – key name indicating time stamp for source records</p></li>
+<li><p><strong>source_key</strong> (<em>str</em>) – Key name indicating the address of the copy source for source records.</p></li>
+<li><p><strong>copy_records</strong> (<em>Recordsinterface</em>) – copy records</p></li>
+<li><p><strong>copy_stamp_key</strong> (<em>str</em>) – key name indicating time stamp for copy records</p></li>
+<li><p><strong>copy_from_key</strong> (<em>str</em>) – Key name indicating the address of the copy source for source records.</p></li>
+<li><p><strong>copy_to_key</strong> (<em>str</em>) – Key name indicating the address of the copy destination</p></li>
+<li><p><strong>sink_records</strong> (<a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><em>RecordsInterface</em></a>) – sink-side records</p></li>
+<li><p><strong>sink_stamp_key</strong> (<em>str</em>) – keyname indicating time stamp for copy records</p></li>
+<li><p><strong>sink_from_key</strong> (<em>str</em>) – Key name indicating the address of the copy destination</p></li>
+<li><p><strong>progress_label</strong> (<em>str</em>) – label for progress bar. cpp impl only.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Merged records.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_records</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;source_key&#39;: 1, &#39;source_stamp&#39;: 0}),</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">copy_records</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;copy_from_key&#39;: 1, &#39;copy_to_key&#39;: 11, &#39;copy_stamp_key&#39;: 1})</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sink_records</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;sink_from_key&#39;: 11, &#39;sink_stamp&#39;: 2}),</span>
+<span class="go">    Record({&#39;sink_from_key&#39;: 1, &#39;sink_stamp&#39;: 3}),</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">Records</span><span class="p">([</span>
+<span class="go">    Record({&#39;source_stamp&#39;:0, &#39;sink_stamp&#39;:3, &#39;source_key&#39;:1}),</span>
+<span class="go">    Record({&#39;source_stamp&#39;:0, &#39;sink_stamp&#39;:2, &#39;source_key&#39;:1}),</span>
+<span class="go">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_records</span><span class="o">.</span><span class="n">merge_sequencial_for_addr_track</span><span class="p">(</span>
+<span class="go">    &#39;source_stamp&#39;, &#39;source_key&#39;, copy_records, &#39;copy_stamp_key&#39;, &#39;copy_from_key&#39;,</span>
+<span class="go">    &#39;copy_to_key&#39;, sink_records, &#39;sink_stamp&#39;, &#39;sink_from_key&#39;</span>
+<span class="go">).equals(expected)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.sget">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.sget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.sget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.sort">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.sort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – key name to used for sort.</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em>) – ascending if True, descending if false.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.record.interface.RecordsInterface.to_dataframe">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">converter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.common.clock_converter.html#caret_analyze.common.clock_converter.ClockConverter" title="caret_analyze.common.clock_converter.ClockConverter"><span class="pre">ClockConverter</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/caret_analyze/record/interface.html#RecordsInterface.to_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.record.interface.RecordsInterface.to_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to pandas dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Records data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.record.grouped_records.html"
+                          title="previous chapter">caret_analyze.record.grouped_records module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.record.record.html"
+                          title="next chapter">caret_analyze.record.record module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.record.interface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.record.record.html" title="caret_analyze.record.record module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.record.grouped_records.html" title="caret_analyze.record.grouped_records module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.record.html" >caret_analyze.record package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.record.interface module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

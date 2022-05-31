@@ -1,0 +1,7 @@
+caret\_analyze.value\_objects.message\_context module
+=====================================================
+
+.. automodule:: caret_analyze.value_objects.message_context
+   :members:
+   :undoc-members:
+   :show-inheritance:

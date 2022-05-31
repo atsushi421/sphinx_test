@@ -1,0 +1,355 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.lttng.bridge &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.bridge</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.infra.lttng.bridge</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">.lttng_info</span> <span class="kn">import</span> <span class="n">LttngInfo</span>
+<span class="kn">from</span> <span class="nn">.value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">IntraProcessBufferValueLttng</span><span class="p">,</span>
+    <span class="n">PublisherValueLttng</span><span class="p">,</span>
+    <span class="n">SubscriptionCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">SubscriptionValueLttng</span><span class="p">,</span>
+    <span class="n">TimerCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">TransformBroadcasterValueLttng</span><span class="p">,</span>
+    <span class="n">TransformBufferValueLttng</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">...common</span> <span class="kn">import</span> <span class="n">Util</span>
+<span class="kn">from</span> <span class="nn">...exceptions</span> <span class="kn">import</span> <span class="n">ItemNotFoundError</span><span class="p">,</span> <span class="n">MultipleItemFoundError</span><span class="p">,</span> <span class="n">UnsupportedTypeError</span>
+<span class="kn">from</span> <span class="nn">...value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CallbackStructValue</span><span class="p">,</span>
+    <span class="n">IntraProcessBufferStructValue</span><span class="p">,</span>
+    <span class="n">PublisherStructValue</span><span class="p">,</span>
+    <span class="n">SubscriptionCallbackStructValue</span><span class="p">,</span>
+    <span class="n">SubscriptionStructValue</span><span class="p">,</span>
+    <span class="n">TimerCallbackStructValue</span><span class="p">,</span>
+    <span class="n">TransformBroadcasterStructValue</span><span class="p">,</span>
+    <span class="n">TransformBufferStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="LttngBridge"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge">[docs]</a><span class="k">class</span> <span class="nc">LttngBridge</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lttng_info</span><span class="p">:</span> <span class="n">LttngInfo</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_info</span> <span class="o">=</span> <span class="n">lttng_info</span>
+
+<div class="viewcode-block" id="LttngBridge.get_timer_callback"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge.get_timer_callback">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">get_timer_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">callback</span><span class="p">:</span> <span class="n">TimerCallbackStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TimerCallbackValueLttng</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compare timer callback value with the same conditions.</span>
+
+<span class="sd">        used conditions:</span>
+<span class="sd">        - node name</span>
+<span class="sd">        - callback type</span>
+<span class="sd">        - period_ns</span>
+<span class="sd">        - publish topic names</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        callback :TimerCallbackStructValueTimerCallbackStructValue</span>
+<span class="sd">            Callback value to be searched.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        [TimerCallbackValueLttng]</span>
+<span class="sd">            Timer callback value, including runtime information.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ItemNotFoundError</span>
+<span class="sd">            No value matching the search condition is found.</span>
+<span class="sd">        MultipleItemFoundError</span>
+<span class="sd">            Multiple pieces of values matching the search condition are found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+        <span class="n">timer_callbacks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_timer_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">target_id_value</span> <span class="o">=</span> <span class="n">callback</span><span class="o">.</span><span class="n">id_value</span>
+            <span class="n">timer_callback</span> <span class="o">=</span> <span class="n">Util</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">id_value</span> <span class="o">==</span> <span class="n">target_id_value</span><span class="p">,</span> <span class="n">timer_callbacks</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ItemNotFoundError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No value matching the search condition is found. &#39;</span>
+            <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">MultipleItemFoundError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Multiple pieces of values matching the search condition are found.&#39;</span>
+            <span class="k">raise</span> <span class="n">MultipleItemFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">timer_callback</span></div>
+
+<div class="viewcode-block" id="LttngBridge.get_subscription"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge.get_subscription">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">get_subscription</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">subscription</span><span class="p">:</span> <span class="n">SubscriptionStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubscriptionValueLttng</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">subscription</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+        <span class="n">subs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_subscriptions</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">target_id_value</span> <span class="o">=</span> <span class="n">subscription</span><span class="o">.</span><span class="n">id_value</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="n">Util</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">id_value</span> <span class="o">==</span> <span class="n">target_id_value</span><span class="p">,</span> <span class="n">subs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ItemNotFoundError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No value matching the search condition is found. &#39;</span>
+            <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">MultipleItemFoundError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Multiple pieces of values matching the search condition are found. &#39;</span>
+            <span class="k">raise</span> <span class="n">MultipleItemFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sub</span></div>
+
+<div class="viewcode-block" id="LttngBridge.get_subscription_callback"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge.get_subscription_callback">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">get_subscription_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">callback</span><span class="p">:</span> <span class="n">SubscriptionCallbackStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubscriptionCallbackValueLttng</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get subscription callback value with the same conditions.</span>
+
+<span class="sd">        used conditions:</span>
+<span class="sd">        - node name</span>
+<span class="sd">        - callback type</span>
+<span class="sd">        - subscription topic name</span>
+<span class="sd">        - publish topic names</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        callback : SubscriptionCallbackStructValue</span>
+<span class="sd">            Callback value to be searched.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SubscriptionCallbackValueLttng</span>
+<span class="sd">            Timer callback value, including runtime information.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ItemNotFoundError</span>
+<span class="sd">            No value matching the search condition is found.</span>
+<span class="sd">        MultipleItemFoundError</span>
+<span class="sd">            Multiple pieces of values matching the search condition are found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+        <span class="n">sub_callbacks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_subscription_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">target_id_value</span> <span class="o">=</span> <span class="n">callback</span><span class="o">.</span><span class="n">id_value</span>
+            <span class="n">sub_callback</span> <span class="o">=</span> <span class="n">Util</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">id_value</span> <span class="o">==</span> <span class="n">target_id_value</span><span class="p">,</span> <span class="n">sub_callbacks</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ItemNotFoundError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No value matching the search condition is found. &#39;</span>
+            <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">MultipleItemFoundError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Multiple pieces of values matching the search condition are found. &#39;</span>
+            <span class="k">raise</span> <span class="n">MultipleItemFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sub_callback</span></div>
+
+<div class="viewcode-block" id="LttngBridge.get_tf_broadcaster"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge.get_tf_broadcaster">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">get_tf_broadcaster</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">broadcaster</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TransformBroadcasterStructValue</span><span class="p">,</span>
+                           <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformBroadcasterValueLttng</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+        <span class="n">br</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_tf_broadcaster</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">br</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No value matching the search condition is found. &#39;</span>
+            <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">br</span><span class="p">,</span> <span class="n">TransformBroadcasterValueLttng</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">br</span></div>
+
+<div class="viewcode-block" id="LttngBridge.get_tf_buffer"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge.get_tf_buffer">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">get_tf_buffer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TransformBufferStructValue</span><span class="p">,</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformBufferValueLttng</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">lookup_node_name</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_tf_buffer</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">buf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No value matching the search condition is found. &#39;</span>
+            <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">TransformBufferValueLttng</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">buf</span></div>
+
+<div class="viewcode-block" id="LttngBridge.get_callback"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge.get_callback">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">get_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">CallbackStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TimerCallbackValueLttng</span><span class="p">,</span> <span class="n">SubscriptionCallbackValueLttng</span><span class="p">]:</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">TimerCallbackStructValue</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_timer_callback</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">SubscriptionCallbackStructValue</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_subscription_callback</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Failed to get callback object. &#39;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">callback</span><span class="o">.</span><span class="n">callback_type</span><span class="o">.</span><span class="n">type_name</span><span class="si">}</span><span class="s1"> is not supported.&#39;</span>
+        <span class="k">raise</span> <span class="n">UnsupportedTypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LttngBridge.get_publishers"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge.get_publishers">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">get_publishers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">publisher_value</span><span class="p">:</span> <span class="n">PublisherStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PublisherValueLttng</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get publisher handles.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node_name : str</span>
+<span class="sd">        topic_name : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[PublisherValueLttng]</span>
+<span class="sd">            publisher values that matches the condition</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">publisher_value</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+            <span class="n">pubs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_publishers</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">target_value</span> <span class="o">=</span> <span class="n">publisher_value</span><span class="o">.</span><span class="n">id_value</span>
+            <span class="n">pubs_filtered</span> <span class="o">=</span> <span class="n">Util</span><span class="o">.</span><span class="n">filter_items</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">id_value</span> <span class="o">==</span> <span class="n">target_value</span><span class="p">,</span> <span class="n">pubs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ItemNotFoundError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="s1">&#39;Failed to find publisher instance. &#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pubs_filtered</span></div>
+
+<div class="viewcode-block" id="LttngBridge.get_ipc_buffer"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge.get_ipc_buffer">[docs]</a>    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">get_ipc_buffer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ipc_buffer</span><span class="p">:</span> <span class="n">IntraProcessBufferStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntraProcessBufferValueLttng</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get publisher handles.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node_name : str</span>
+<span class="sd">        topic_name : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[PublisherValueLttng]</span>
+<span class="sd">            publisher values that matches the condition</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">ipc_buffer</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+            <span class="n">bufs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_ipc_buffers</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">target_id_value</span> <span class="o">=</span> <span class="n">ipc_buffer</span><span class="o">.</span><span class="n">id_value</span>
+            <span class="k">return</span> <span class="n">Util</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">id_value</span> <span class="o">==</span> <span class="n">target_id_value</span><span class="p">,</span> <span class="n">bufs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ItemNotFoundError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="s1">&#39;Failed to find publisher instance. &#39;</span><span class="p">)</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.bridge</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.node module
+==============================================
+
+.. automodule:: caret_analyze.architecture.struct.node
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+caret\_analyze.record.record module
+===================================
+
+.. automodule:: caret_analyze.record.record
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+caret\_analyze.architecture.graph\_search.callback\_graph module
+================================================================
+
+.. automodule:: caret_analyze.architecture.graph_search.callback_graph
+   :members:
+   :undoc-members:
+   :show-inheritance:

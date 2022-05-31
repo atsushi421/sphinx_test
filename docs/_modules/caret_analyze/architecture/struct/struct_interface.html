@@ -1,0 +1,466 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.architecture.struct.struct_interface &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.struct.struct_interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.architecture.struct.struct_interface</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">caret_analyze.value_objects.transform</span> <span class="kn">import</span> <span class="n">TransformValue</span>
+
+<span class="kn">from</span> <span class="nn">...value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CallbackStructValue</span><span class="p">,</span>
+    <span class="n">PublisherStructValue</span><span class="p">,</span>
+    <span class="n">SubscriptionStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+    <span class="n">VariablePassingStructValue</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="PublisherStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.PublisherStructInterface">[docs]</a><span class="k">class</span> <span class="nc">PublisherStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PublisherStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.PublisherStructInterface.to_value">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PublisherStructValue</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">topic_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="PublisherStructInterface.is_pair"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.PublisherStructInterface.is_pair">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">is_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="PublishersStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.PublishersStructInterface">[docs]</a><span class="k">class</span> <span class="nc">PublishersStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PublishersStructInterface.get"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.PublishersStructInterface.get">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">topic_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PublisherStructInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">PublisherStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="PublishersStructInterface.as_list"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.PublishersStructInterface.as_list">[docs]</a>    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PublisherStructInterface</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PublishersStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.PublishersStructInterface.to_value">[docs]</a>    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PublisherStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">publisher</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="k">for</span> <span class="n">publisher</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TransformFrameBroadcasterStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBroadcasterStructInterface">[docs]</a><span class="k">class</span> <span class="nc">TransformFrameBroadcasterStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TransformFrameBroadcasterStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBroadcasterStructInterface.to_value">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformValue</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="TransformFrameBroadcasterStructInterface.is_pair"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBroadcasterStructInterface.is_pair">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">is_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">source_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">child_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">target_frame_id</span></div>
+
+
+<div class="viewcode-block" id="TransformFrameBufferStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBufferStructInterface">[docs]</a><span class="k">class</span> <span class="nc">TransformFrameBufferStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">lookup_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">lookup_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformValue</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">listen_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformValue</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">listen_transform</span><span class="o">.</span><span class="n">source_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_child_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">listen_transform</span><span class="o">.</span><span class="n">target_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_source_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_transform</span><span class="o">.</span><span class="n">source_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_target_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_transform</span><span class="o">.</span><span class="n">target_frame_id</span>
+
+<div class="viewcode-block" id="TransformFrameBufferStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBufferStructInterface.to_value">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="TransformFrameBufferStructInterface.is_pair"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBufferStructInterface.is_pair">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">is_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="SubscriptionStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface">[docs]</a><span class="k">class</span> <span class="nc">SubscriptionStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">topic_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="SubscriptionStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface.to_value">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubscriptionStructValue</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="SubscriptionStructInterface.is_pair"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface.is_pair">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">is_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="SubscriptionsStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionsStructInterface">[docs]</a><span class="k">class</span> <span class="nc">SubscriptionsStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SubscriptionsStructInterface.get"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionsStructInterface.get">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">topic_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubscriptionStructInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">SubscriptionStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="SubscriptionsStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionsStructInterface.to_value">[docs]</a>    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">SubscriptionStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">subscription</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="k">for</span> <span class="n">subscription</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubscriptionsStructInterface.as_list"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionsStructInterface.as_list">[docs]</a>    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubscriptionStructInterface</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<span class="n">NodeOutputType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">TransformFrameBroadcasterStructInterface</span><span class="p">,</span>
+                       <span class="n">PublisherStructInterface</span><span class="p">]</span>
+<span class="n">NodeInputType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">TransformFrameBufferStructInterface</span><span class="p">,</span>
+                      <span class="n">SubscriptionStructInterface</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="NodeStructsInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.NodeStructsInterface">[docs]</a><span class="k">class</span> <span class="nc">NodeStructsInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="VariablePassingStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.VariablePassingStructInterface">[docs]</a><span class="k">class</span> <span class="nc">VariablePassingStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">callback_name_read</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">callback_name_write</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="VariablePassingStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.VariablePassingStructInterface.to_value">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VariablePassingStructValue</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="VariablePassingsStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.VariablePassingsStructInterface">[docs]</a><span class="k">class</span> <span class="nc">VariablePassingsStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">VariablePassingStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="VariablePassingsStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.VariablePassingsStructInterface.to_value">[docs]</a>    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">VariablePassingStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">variable_passing</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="k">for</span> <span class="n">variable_passing</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="NodeStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.NodeStructInterface">[docs]</a><span class="k">class</span> <span class="nc">NodeStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CallbacksStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">variable_passings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">VariablePassingsStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="NodeStructInterface.get_node_input"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.NodeStructInterface.get_node_input">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeInputType</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NodeStructInterface.get_node_output"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.NodeStructInterface.get_node_output">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeOutputType</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">publishers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PublishersStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">tf_broadcaster</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformBroadcasterStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">subscriptions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SubscriptionsStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">tf_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformBufferStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="TransformBroadcasterStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformBroadcasterStructInterface">[docs]</a><span class="k">class</span> <span class="nc">TransformBroadcasterStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TransformBroadcasterStructInterface.get"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformBroadcasterStructInterface.get">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">child_frame_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBroadcasterStructInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="TransformBufferStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformBufferStructInterface">[docs]</a><span class="k">class</span> <span class="nc">TransformBufferStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TransformBufferStructInterface.get"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformBufferStructInterface.get">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">listen_frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">listen_child_frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">lookup_frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">lookup_child_frame_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBufferStructInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="NodePathStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.NodePathStructInterface">[docs]</a><span class="k">class</span> <span class="nc">NodePathStructInterface</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">subscription</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SubscriptionStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PublisherStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="NodePathsStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.NodePathsStructInterface">[docs]</a><span class="k">class</span> <span class="nc">NodePathsStructInterface</span><span class="p">:</span>
+
+<div class="viewcode-block" id="NodePathsStructInterface.get"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.NodePathsStructInterface.get">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">node_input</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">],</span>
+        <span class="n">node_output</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodePathStructInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="NodePathsStructInterface.create"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.NodePathsStructInterface.create">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">node_input</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">],</span>
+        <span class="n">node_output</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="CallbackStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.CallbackStructInterface">[docs]</a><span class="k">class</span> <span class="nc">CallbackStructInterface</span><span class="p">:</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">]]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">]]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">callback_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="CallbackStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.CallbackStructInterface.to_value">[docs]</a>    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallbackStructValue</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="CallbacksStructInterface"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.CallbacksStructInterface">[docs]</a><span class="k">class</span> <span class="nc">CallbacksStructInterface</span><span class="p">:</span>
+
+<div class="viewcode-block" id="CallbacksStructInterface.get_callback"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.CallbacksStructInterface.get_callback">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">callback_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallbackStructInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CallbacksStructInterface.get_callbacks"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.CallbacksStructInterface.get_callbacks">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_callbacks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">callback_ids</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallbacksStructInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">CallbackStructInterface</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="CallbacksStructInterface.as_list"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.CallbacksStructInterface.as_list">[docs]</a>    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">CallbackStructInterface</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CallbacksStructInterface.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.CallbacksStructInterface.to_value">[docs]</a>    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">CallbackStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.struct.struct_interface</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+caret\_analyze.common.singleton module
+======================================
+
+.. automodule:: caret_analyze.common.singleton
+   :members:
+   :undoc-members:
+   :show-inheritance:

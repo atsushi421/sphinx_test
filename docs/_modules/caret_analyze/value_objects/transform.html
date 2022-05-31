@@ -1,0 +1,621 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.value_objects.transform &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.value_objects.transform</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.value_objects.transform</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Collection</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Sequence</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">multimethod</span> <span class="kn">import</span> <span class="n">multimethod</span> <span class="k">as</span> <span class="n">singledispatchmethod</span>
+
+<span class="kn">from</span> <span class="nn">.publisher</span> <span class="kn">import</span> <span class="n">PublisherStructValue</span><span class="p">,</span> <span class="n">PublisherValue</span>
+<span class="kn">from</span> <span class="nn">.subscription</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SubscriptionCallbackStructValue</span><span class="p">,</span>
+    <span class="n">SubscriptionStructValue</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.value_object</span> <span class="kn">import</span> <span class="n">ValueObject</span>
+<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">InvalidArgumentError</span><span class="p">,</span>
+    <span class="n">ItemNotFoundError</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="TransformValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformValue">[docs]</a><span class="k">class</span> <span class="nc">TransformValue</span><span class="p">(</span><span class="n">ValueObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source_frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">target_frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source_frame_id</span> <span class="o">=</span> <span class="n">source_frame_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target_frame_id</span> <span class="o">=</span> <span class="n">target_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">source_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">target_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_frame_id</span></div>
+
+
+<div class="viewcode-block" id="BroadcastedTransformValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.BroadcastedTransformValue">[docs]</a><span class="k">class</span> <span class="nc">BroadcastedTransformValue</span><span class="p">(</span><span class="n">TransformValue</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">child_frame_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame_id</span><span class="p">,</span> <span class="n">child_frame_id</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">child_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_frame_id</span></div>
+
+
+<div class="viewcode-block" id="TransformRecords"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformRecords">[docs]</a><span class="k">class</span> <span class="nc">TransformRecords</span><span class="p">():</span>
+
+<div class="viewcode-block" id="TransformRecords.to_dataframe"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformRecords.to_dataframe">[docs]</a>    <span class="k">def</span> <span class="nf">to_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TransformBroadcasterValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformBroadcasterValue">[docs]</a><span class="k">class</span> <span class="nc">TransformBroadcasterValue</span><span class="p">(</span><span class="n">ValueObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pub</span><span class="p">:</span> <span class="n">PublisherValue</span><span class="p">,</span>
+        <span class="n">broadcast_transforms</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">BroadcastedTransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+        <span class="n">callback_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span> <span class="o">=</span> <span class="n">pub</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send_transforms</span> <span class="o">=</span> <span class="n">broadcast_transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_ids</span> <span class="o">=</span> <span class="n">callback_ids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">broadcast_transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BroadcastedTransformValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_transforms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PublisherValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span><span class="o">.</span><span class="n">node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">callback_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback_ids</span></div>
+
+
+<div class="viewcode-block" id="TransformBroadcasterStructValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformBroadcasterStructValue">[docs]</a><span class="k">class</span> <span class="nc">TransformBroadcasterStructValue</span><span class="p">(</span><span class="n">ValueObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Structured transform broadcaster value.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span><span class="p">,</span>
+        <span class="n">transforms</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BroadcastedTransformValue</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span> <span class="o">=</span> <span class="n">publisher</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transforms</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">transforms</span><span class="p">)</span>
+        <span class="n">frame_broadcaster</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transforms</span><span class="p">:</span>
+            <span class="n">frame_broadcaster</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">(</span>
+                    <span class="n">publisher</span><span class="p">,</span>
+                    <span class="n">transform</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_broadcasters</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">frame_broadcaster</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transforms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">topic_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span><span class="o">.</span><span class="n">topic_name</span>
+
+<div class="viewcode-block" id="TransformBroadcasterStructValue.get"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformBroadcasterStructValue.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transform</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">frame_broadcaster</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_broadcasters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">frame_broadcaster</span><span class="o">.</span><span class="n">transform</span> <span class="o">==</span> <span class="n">transform</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">frame_broadcaster</span>
+        <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">callback_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span><span class="o">.</span><span class="n">callback_ids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span><span class="o">.</span><span class="n">node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PublisherStructValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">frame_broadcasters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_broadcasters</span></div>
+
+
+<div class="viewcode-block" id="TransformFrameBroadcasterStructValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformFrameBroadcasterStructValue">[docs]</a><span class="k">class</span> <span class="nc">TransformFrameBroadcasterStructValue</span><span class="p">(</span><span class="n">ValueObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Structured transform broadcaster value.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span><span class="p">,</span>
+        <span class="n">transform</span><span class="p">:</span> <span class="n">BroadcastedTransformValue</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span> <span class="o">=</span> <span class="n">transform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span> <span class="o">=</span> <span class="n">publisher</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PublisherStructValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BroadcastedTransformValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span><span class="o">.</span><span class="n">frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">child_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span><span class="o">.</span><span class="n">child_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span><span class="o">.</span><span class="n">node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">topic_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub</span><span class="o">.</span><span class="n">topic_name</span></div>
+
+
+<div class="viewcode-block" id="TransformBufferValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformBufferValue">[docs]</a><span class="k">class</span> <span class="nc">TransformBufferValue</span><span class="p">(</span><span class="n">ValueObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;transform buffer info.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lookup_node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">lookup_node_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">listener_node_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">listener_node_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">lookup_transforms</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span>
+        <span class="n">listen_transforms</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">BroadcastedTransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_name</span> <span class="o">=</span> <span class="n">listener_node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_id</span> <span class="o">=</span> <span class="n">listener_node_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_name</span> <span class="o">=</span> <span class="n">lookup_node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_id</span> <span class="o">=</span> <span class="n">lookup_node_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transforms</span> <span class="o">=</span> <span class="n">lookup_transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transforms</span> <span class="o">=</span> <span class="n">listen_transforms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_node_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listener_node_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listener_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transforms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">BroadcastedTransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transforms</span></div>
+
+
+<div class="viewcode-block" id="TransformFrameBufferValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformFrameBufferValue">[docs]</a><span class="k">class</span> <span class="nc">TransformFrameBufferValue</span><span class="p">(</span><span class="n">ValueObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;transform buffer info.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lookup_node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">lookup_node_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">listener_node_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">listener_node_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">lookup_transform</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">,</span>
+        <span class="n">listen_transform</span><span class="p">:</span> <span class="n">BroadcastedTransformValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_name</span> <span class="o">=</span> <span class="n">listener_node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_id</span> <span class="o">=</span> <span class="n">listener_node_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_name</span> <span class="o">=</span> <span class="n">lookup_node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_id</span> <span class="o">=</span> <span class="n">lookup_node_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transform</span> <span class="o">=</span> <span class="n">lookup_transform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transform</span> <span class="o">=</span> <span class="n">listen_transform</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_node_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listener_node_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listener_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transform</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BroadcastedTransformValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transform</span></div>
+
+
+<div class="viewcode-block" id="TransformBufferStructValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformBufferStructValue">[docs]</a><span class="k">class</span> <span class="nc">TransformBufferStructValue</span><span class="p">(</span><span class="n">ValueObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lookup_node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">listener_node_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">lookup_transforms</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+        <span class="n">listen_transforms</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">BroadcastedTransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+        <span class="n">listener_subscription</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SubscriptionStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_name</span> <span class="o">=</span> <span class="n">lookup_node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_name</span> <span class="o">=</span> <span class="n">listener_node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transforms</span> <span class="o">=</span> <span class="n">lookup_transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transforms</span> <span class="o">=</span> <span class="n">listen_transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_buffers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">TransformFrameBufferStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">frame_buffers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">listen_transform</span><span class="p">,</span> <span class="n">lookup_transform</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">listen_transforms</span><span class="p">,</span> <span class="n">lookup_transforms</span><span class="p">):</span>
+            <span class="n">frame_buffers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">TransformFrameBufferStructValue</span><span class="p">(</span>
+                    <span class="n">lookup_node_name</span><span class="p">,</span>
+                    <span class="n">listener_node_name</span><span class="p">,</span>
+                    <span class="n">listen_transform</span><span class="p">,</span>
+                    <span class="n">lookup_transform</span><span class="p">,</span>
+                    <span class="n">listener_subscription</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_buffers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">frame_buffers</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listener_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transforms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">BroadcastedTransformValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transforms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">frame_buffers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">TransformFrameBufferStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_buffers</span>
+
+<div class="viewcode-block" id="TransformBufferStructValue.get_frame_buffer"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformBufferStructValue.get_frame_buffer">[docs]</a>    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span> <span class="nf">get_frame_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@get_frame_buffer</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span> <span class="nf">_get_frame_buffer_tf_value</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">listen_transform</span><span class="p">:</span> <span class="n">BroadcastedTransformValue</span><span class="p">,</span>
+        <span class="n">lookup_transform</span><span class="p">:</span> <span class="n">TransformValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_frame_buffer_dict</span><span class="p">(</span>
+            <span class="n">listen_transform</span><span class="o">.</span><span class="n">source_frame_id</span><span class="p">,</span>
+            <span class="n">listen_transform</span><span class="o">.</span><span class="n">target_frame_id</span><span class="p">,</span>
+            <span class="n">lookup_transform</span><span class="o">.</span><span class="n">source_frame_id</span><span class="p">,</span>
+            <span class="n">lookup_transform</span><span class="o">.</span><span class="n">target_frame_id</span>
+        <span class="p">)</span>
+
+    <span class="nd">@get_frame_buffer</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span> <span class="nf">_get_frame_buffer_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">listen_frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">listen_child_frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">lookup_source_frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">lookup_target_frame_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">buff</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_buffers</span> <span class="ow">or</span> <span class="p">[]:</span>
+            <span class="k">if</span> <span class="n">buff</span><span class="o">.</span><span class="n">listen_frame_id</span> <span class="o">==</span> <span class="n">listen_frame_id</span> <span class="ow">and</span> \
+                    <span class="n">buff</span><span class="o">.</span><span class="n">listen_child_frame_id</span> <span class="o">==</span> <span class="n">listen_child_frame_id</span> <span class="ow">and</span> \
+                    <span class="n">buff</span><span class="o">.</span><span class="n">lookup_source_frame_id</span> <span class="o">==</span> <span class="n">lookup_source_frame_id</span> <span class="ow">and</span> \
+                    <span class="n">buff</span><span class="o">.</span><span class="n">lookup_target_frame_id</span> <span class="o">==</span> <span class="n">lookup_target_frame_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">buff</span>
+        <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TransformFrameBufferStructValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformFrameBufferStructValue">[docs]</a><span class="k">class</span> <span class="nc">TransformFrameBufferStructValue</span><span class="p">(</span><span class="n">ValueObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lookup_node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">listener_node_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">listen_transform</span><span class="p">:</span> <span class="n">BroadcastedTransformValue</span><span class="p">,</span>
+        <span class="n">lookup_transform</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">,</span>
+        <span class="n">listener_subscription</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SubscriptionStructValue</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_name</span> <span class="o">=</span> <span class="n">lookup_node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_name</span> <span class="o">=</span> <span class="n">listener_node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transform</span> <span class="o">=</span> <span class="n">listen_transform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transform</span> <span class="o">=</span> <span class="n">lookup_transform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listener_subscription</span> <span class="o">=</span> <span class="n">listener_subscription</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transform</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_source_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transform</span><span class="o">.</span><span class="n">source_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_target_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_transform</span><span class="o">.</span><span class="n">target_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BroadcastedTransformValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transform</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transform</span><span class="o">.</span><span class="n">frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_child_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listen_transform</span><span class="o">.</span><span class="n">child_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listener_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listener_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">topic_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;/tf&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listener_subscription</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SubscriptionStructValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listener_subscription</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listener_subscription_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SubscriptionCallbackStructValue</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">listener_subscription</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">listener_subscription</span><span class="o">.</span><span class="n">callback</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TransformCommunicationStructValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformCommunicationStructValue">[docs]</a><span class="k">class</span> <span class="nc">TransformCommunicationStructValue</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">broadcaster</span><span class="p">:</span> <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_broadcaster</span> <span class="o">=</span> <span class="n">broadcaster</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">buffer</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">broadcast_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broadcaster</span><span class="o">.</span><span class="n">node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">publish_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broadcaster</span><span class="o">.</span><span class="n">node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subscribe_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="o">.</span><span class="n">listener_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="o">.</span><span class="n">lookup_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">broadcaster</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broadcaster</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">topic_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broadcaster</span><span class="o">.</span><span class="n">topic_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">lookup_transform</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">listen_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BroadcastedTransformValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">listen_transform</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_transform</span><span class="o">.</span><span class="n">source_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lookup_target_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_transform</span><span class="o">.</span><span class="n">target_frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">broadcast_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">transform</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">broadcast_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">frame_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">broadcast_child_frame_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">child_frame_id</span></div>
+
+
+<div class="viewcode-block" id="TransformTreeValue"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformTreeValue">[docs]</a><span class="k">class</span> <span class="nc">TransformTreeValue</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">transforms</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_to_parent</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_to_parent</span><span class="p">[</span><span class="n">transform</span><span class="o">.</span><span class="n">source_frame_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">target_frame_id</span>
+
+<div class="viewcode-block" id="TransformTreeValue.is_in"><a class="viewcode-back" href="../../../caret_analyze.value_objects.transform.html#caret_analyze.value_objects.TransformTreeValue.is_in">[docs]</a>    <span class="k">def</span> <span class="nf">is_in</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lookup_transform</span><span class="p">:</span> <span class="n">TransformValue</span><span class="p">,</span>
+        <span class="n">target_transform</span><span class="p">:</span> <span class="n">TransformValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">lookup_frame_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_root</span><span class="p">(</span><span class="n">lookup_transform</span><span class="o">.</span><span class="n">source_frame_id</span><span class="p">)</span>
+        <span class="n">lookup_child_frme_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_root</span><span class="p">(</span><span class="n">lookup_transform</span><span class="o">.</span><span class="n">target_frame_id</span><span class="p">)</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">lookup_frame_ids</span><span class="p">)</span> <span class="o">^</span> <span class="nb">set</span><span class="p">(</span><span class="n">lookup_child_frme_ids</span><span class="p">)</span>
+        <span class="n">frames_set</span> <span class="o">=</span> <span class="p">{</span><span class="n">frame</span><span class="o">.</span><span class="n">source_frame_id</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">}</span> <span class="o">|</span> \
+            <span class="p">{</span><span class="n">frame</span><span class="o">.</span><span class="n">target_frame_id</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">}</span>
+        <span class="n">target_frame_set</span> <span class="o">=</span> <span class="p">{</span><span class="n">target_transform</span><span class="o">.</span><span class="n">source_frame_id</span><span class="p">,</span> <span class="n">target_transform</span><span class="o">.</span><span class="n">target_frame_id</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">target_frame_set</span> <span class="o">&lt;=</span> <span class="n">frames_set</span></div>
+
+    <span class="k">def</span> <span class="nf">_to_root</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">]:</span>
+        <span class="n">s</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">frame_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_parent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">s</span>
+
+        <span class="n">child_frame_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_parent</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TransformValue</span><span class="p">(</span><span class="n">frame_id</span><span class="p">,</span> <span class="n">child_frame_id</span><span class="p">))</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">child_frame_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_parent</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">child_frame_id</span><span class="p">,</span> <span class="n">frame_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_parent</span><span class="p">[</span><span class="n">child_frame_id</span><span class="p">],</span> <span class="n">child_frame_id</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TransformValue</span><span class="p">(</span><span class="n">frame_id</span><span class="p">,</span> <span class="n">child_frame_id</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">s</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.value_objects.transform</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

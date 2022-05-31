@@ -1,0 +1,562 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.architecture.architecture_dict &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.architecture_dict</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.architecture.architecture_dict</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>  <span class="c1"># type: ignore</span>
+
+<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">InvalidArgumentError</span><span class="p">,</span> <span class="n">UnsupportedTypeError</span>
+<span class="kn">from</span> <span class="nn">..value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CallbackGroupStructValue</span><span class="p">,</span>
+    <span class="n">CallbackStructValue</span><span class="p">,</span>
+    <span class="n">ExecutorStructValue</span><span class="p">,</span>
+    <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="n">NodeStructValue</span><span class="p">,</span>
+    <span class="n">PathStructValue</span><span class="p">,</span>
+    <span class="n">PublisherStructValue</span><span class="p">,</span>
+    <span class="n">SubscriptionCallbackStructValue</span><span class="p">,</span>
+    <span class="n">SubscriptionStructValue</span><span class="p">,</span>
+    <span class="n">TimerCallbackStructValue</span><span class="p">,</span>
+    <span class="n">TransformBroadcasterStructValue</span><span class="p">,</span>
+    <span class="n">TransformBufferStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+    <span class="n">VariablePassingStructValue</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="ArchitectureDict"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.ArchitectureDict">[docs]</a><span class="k">class</span> <span class="nc">ArchitectureDict</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_values</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">NodeStructValue</span><span class="p">],</span>
+        <span class="n">executor_values</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">ExecutorStructValue</span><span class="p">],</span>
+        <span class="n">named_path_values</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">PathStructValue</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_named_path_values</span> <span class="o">=</span> <span class="n">named_path_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor_values</span> <span class="o">=</span> <span class="n">executor_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node_values</span> <span class="o">=</span> <span class="n">node_values</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArchitectureDict.to_dict"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.ArchitectureDict.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">named_path_dicts</span> <span class="o">=</span> <span class="n">NamedPathsDicts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_named_path_values</span><span class="p">)</span>
+        <span class="n">executor_dicts</span> <span class="o">=</span> <span class="n">ExecutorsDicts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executor_values</span><span class="p">)</span>
+        <span class="n">nodes_dicts</span> <span class="o">=</span> <span class="n">NodesDicts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;named_paths&#39;</span><span class="p">:</span> <span class="n">named_path_dicts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+            <span class="s1">&#39;executors&#39;</span><span class="p">:</span> <span class="n">executor_dicts</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+            <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="n">nodes_dicts</span><span class="o">.</span><span class="n">data</span>
+        <span class="p">}</span></div></div>
+
+
+<div class="viewcode-block" id="NamedPathsDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.NamedPathsDicts">[docs]</a><span class="k">class</span> <span class="nc">NamedPathsDicts</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">named_path_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PathStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">named_path_values</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_value</span><span class="p">:</span> <span class="n">PathStructValue</span><span class="p">):</span>
+        <span class="n">obj</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;path_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">path_value</span><span class="o">.</span><span class="n">path_name</span>
+        <span class="n">node_chain</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node_path</span> <span class="ow">in</span> <span class="n">path_value</span><span class="o">.</span><span class="n">node_paths</span><span class="p">:</span>
+            <span class="n">node_path_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;node_name&#39;</span><span class="p">:</span> <span class="n">node_path</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+                <span class="s1">&#39;publish_topic_name&#39;</span><span class="p">:</span> <span class="n">node_path</span><span class="o">.</span><span class="n">publish_topic_name</span><span class="p">,</span>
+                <span class="s1">&#39;subscribe_topic_name&#39;</span><span class="p">:</span> <span class="n">node_path</span><span class="o">.</span><span class="n">subscribe_topic_name</span>
+            <span class="p">}</span>
+            <span class="n">tf_br_dict</span> <span class="o">=</span> <span class="n">TfFrameBroadcasterDict</span><span class="p">(</span><span class="n">node_path</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span><span class="p">)</span>
+            <span class="n">node_path_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tf_br_dict</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="n">tf_buff_dict</span> <span class="o">=</span> <span class="n">TfFrameBufferDict</span><span class="p">(</span><span class="n">node_path</span><span class="o">.</span><span class="n">tf_frame_buffer</span><span class="p">)</span>
+            <span class="n">node_path_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tf_buff_dict</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="n">node_chain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_path_dict</span><span class="p">)</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;node_chain&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_chain</span>
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+
+<div class="viewcode-block" id="TfFrameBroadcasterDict"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.TfFrameBroadcasterDict">[docs]</a><span class="k">class</span> <span class="nc">TfFrameBroadcasterDict</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tf_frame_broadcaster</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformFrameBroadcasterStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tf_frame_broadcaster</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;broadcast_frame_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">frame_id</span><span class="p">,</span>
+            <span class="s1">&#39;broadcast_child_frame_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">child_frame_id</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="TfFrameBufferDict"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.TfFrameBufferDict">[docs]</a><span class="k">class</span> <span class="nc">TfFrameBufferDict</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tf_frame_buffer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformFrameBufferStructValue</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">tf_frame_buffer</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;buffer_listen_frame_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">listen_frame_id</span><span class="p">,</span>
+            <span class="s1">&#39;buffer_listen_child_frame_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">listen_child_frame_id</span><span class="p">,</span>
+            <span class="s1">&#39;buffer_lookup_source_frame_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">lookup_source_frame_id</span><span class="p">,</span>
+            <span class="s1">&#39;buffer_lookup_target_frame_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">lookup_target_frame_id</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="CallbackDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.CallbackDicts">[docs]</a><span class="k">class</span> <span class="nc">CallbackDicts</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">callback_values</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">CallbackStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">callbacks_dicts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cb_to_dict</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">callback_values</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">callbacks_dicts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;callback_name&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_timer_cb_to_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">timer_callback</span><span class="p">:</span> <span class="n">TimerCallbackStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">return</span>  \
+            <span class="p">{</span>
+                <span class="s1">&#39;callback_id&#39;</span><span class="p">:</span> <span class="n">timer_callback</span><span class="o">.</span><span class="n">callback_id</span><span class="p">,</span>
+                <span class="s1">&#39;callback_name&#39;</span><span class="p">:</span> <span class="n">timer_callback</span><span class="o">.</span><span class="n">callback_name</span><span class="p">,</span>
+                <span class="s1">&#39;callback_type&#39;</span><span class="p">:</span> <span class="s1">&#39;timer_callback&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;period_ns&#39;</span><span class="p">:</span> <span class="n">timer_callback</span><span class="o">.</span><span class="n">period_ns</span><span class="p">,</span>
+                <span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="n">timer_callback</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span>
+            <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_sub_cb_to_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">subscription_callback</span><span class="p">:</span> <span class="n">SubscriptionCallbackStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;callback_id&#39;</span><span class="p">:</span> <span class="n">subscription_callback</span><span class="o">.</span><span class="n">callback_id</span><span class="p">,</span>
+            <span class="s1">&#39;callback_name&#39;</span><span class="p">:</span> <span class="n">subscription_callback</span><span class="o">.</span><span class="n">callback_name</span><span class="p">,</span>
+            <span class="s1">&#39;callback_type&#39;</span><span class="p">:</span> <span class="s1">&#39;subscription_callback&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;topic_name&#39;</span><span class="p">:</span> <span class="n">subscription_callback</span><span class="o">.</span><span class="n">subscribe_topic_name</span><span class="p">,</span>
+            <span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="n">subscription_callback</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_cb_to_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">callback</span><span class="p">:</span> <span class="n">CallbackStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">TimerCallbackStructValue</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer_cb_to_dict</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">SubscriptionCallbackStructValue</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sub_cb_to_dict</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="n">UnsupportedTypeError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="VarPassDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.VarPassDicts">[docs]</a><span class="k">class</span> <span class="nc">VarPassDicts</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">var_pass_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Collection</span><span class="p">[</span><span class="n">VariablePassingStructValue</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">var_pass_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_undefined_dict</span><span class="p">]</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">var_pass</span> <span class="ow">in</span> <span class="n">var_pass_values</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;callback_id_write&#39;</span><span class="p">:</span> <span class="n">var_pass</span><span class="o">.</span><span class="n">callback_id_write</span><span class="p">,</span>
+                    <span class="s1">&#39;callback_id_read&#39;</span><span class="p">:</span> <span class="n">var_pass</span><span class="o">.</span><span class="n">callback_id_read</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_undefined_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_undefined_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">return</span> \
+            <span class="p">{</span>
+                <span class="s1">&#39;callback_id_write&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;callback_id_read&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="PubDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.PubDicts">[docs]</a><span class="k">class</span> <span class="nc">PubDicts</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pubishers</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">PublisherStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dicts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">publisher</span> <span class="ow">in</span> <span class="n">pubishers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">publisher</span><span class="o">.</span><span class="n">topic_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/info/pub&#39;</span><span class="p">):</span>
+                <span class="k">continue</span>  <span class="c1"># skip tilde createdtopic</span>
+            <span class="k">if</span> <span class="n">publisher</span><span class="o">.</span><span class="n">topic_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;/clock&#39;</span><span class="p">,</span> <span class="s1">&#39;/rosout&#39;</span><span class="p">,</span> <span class="s1">&#39;/parameter_events&#39;</span><span class="p">]:</span>
+                <span class="k">continue</span>  <span class="c1"># skip</span>
+            <span class="n">dicts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(</span><span class="n">publisher</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dicts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;topic_name&#39;</span><span class="p">])</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span><span class="p">):</span>
+
+        <span class="n">callback_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">publisher</span><span class="p">,</span> <span class="n">PublisherStructValue</span><span class="p">)</span> \
+                <span class="ow">and</span> <span class="n">publisher</span><span class="o">.</span><span class="n">callback_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">callback_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">publisher</span><span class="o">.</span><span class="n">callback_ids</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">callback_ids</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;topic_name&#39;</span><span class="p">:</span> <span class="n">publisher</span><span class="o">.</span><span class="n">topic_name</span><span class="p">,</span>
+            <span class="s1">&#39;callback_ids&#39;</span><span class="p">:</span> <span class="n">callback_ids</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="SubDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.SubDicts">[docs]</a><span class="k">class</span> <span class="nc">SubDicts</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">subscriptions</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">SubscriptionStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dicts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">subscriptions</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dicts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;topic_name&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">subscription</span><span class="p">:</span> <span class="n">SubscriptionStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;topic_name&#39;</span><span class="p">:</span> <span class="n">subscription</span><span class="o">.</span><span class="n">topic_name</span><span class="p">,</span>
+            <span class="s1">&#39;callback_id&#39;</span><span class="p">:</span> <span class="n">subscription</span><span class="o">.</span><span class="n">callback_id</span>
+        <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="CbgsDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.CbgsDicts">[docs]</a><span class="k">class</span> <span class="nc">CbgsDicts</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cbgs</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">CallbackGroupStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">cbgs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[{</span>
+            <span class="s1">&#39;callback_group_id&#39;</span><span class="p">:</span> <span class="n">cbg</span><span class="o">.</span><span class="n">callback_group_id</span><span class="p">,</span>
+            <span class="s1">&#39;callback_group_type&#39;</span><span class="p">:</span> <span class="n">cbg</span><span class="o">.</span><span class="n">callback_group_type_name</span><span class="p">,</span>
+            <span class="s1">&#39;callback_group_name&#39;</span><span class="p">:</span> <span class="n">cbg</span><span class="o">.</span><span class="n">callback_group_name</span><span class="p">,</span>
+            <span class="s1">&#39;callback_ids&#39;</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cbg</span><span class="o">.</span><span class="n">callback_ids</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">for</span> <span class="n">cbg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="NodesDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.NodesDicts">[docs]</a><span class="k">class</span> <span class="nc">NodesDicts</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_values</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">NodeStructValue</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">nodes_dicts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span>
+            <span class="ow">in</span> <span class="n">node_values</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_ignored</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nodes_dicts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;node_name&#39;</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_ignored</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">NodeStructValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;transform_listener_impl&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s1">&#39;rviz2&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="n">obj</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;node_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">node_id</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;node_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">callback_groups</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;callback_groups&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CbgsDicts</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">callback_groups</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">callbacks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">callbacks</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;callbacks&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CallbackDicts</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">callbacks</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">callbacks</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;variable_passings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">VarPassDicts</span><span class="p">(</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">variable_passings</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">publishers</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;publishes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PubDicts</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">publishers</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;subscribes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SubDicts</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;message_contexts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MessageContextDicts</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tf_broadcaster</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;tf_broadcaster&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TfBroadcasterDicts</span><span class="p">(</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">tf_broadcaster</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tf_buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;tf_buffer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TfBufferDicts</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">tf_buffer</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+
+<div class="viewcode-block" id="MessageContextDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.MessageContextDicts">[docs]</a><span class="k">class</span> <span class="nc">MessageContextDicts</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">paths</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">NodePathStructValue</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">publish_topic_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">subscribe_topic_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">publish_topic_name</span> <span class="o">==</span> <span class="s1">&#39;/tf&#39;</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">message_context</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">message_context</span>
+            <span class="k">if</span> <span class="n">message_context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message_context</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="TfBroadcasterDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.TfBroadcasterDicts">[docs]</a><span class="k">class</span> <span class="nc">TfBroadcasterDicts</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">broadcaster</span><span class="p">:</span> <span class="n">TransformBroadcasterStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">broadcaster</span><span class="o">.</span><span class="n">transforms</span><span class="p">:</span>
+            <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;frame_id&#39;</span><span class="p">:</span> <span class="n">transform</span><span class="o">.</span><span class="n">source_frame_id</span><span class="p">,</span>
+                    <span class="s1">&#39;child_frame_id&#39;</span><span class="p">:</span> <span class="n">transform</span><span class="o">.</span><span class="n">target_frame_id</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="n">cb_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">broadcaster</span><span class="o">.</span><span class="n">callback_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cb_ids</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cb_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">cb_id</span> <span class="ow">in</span> <span class="n">broadcaster</span><span class="o">.</span><span class="n">callback_ids</span><span class="p">]</span>
+        <span class="n">cb_ids</span> <span class="o">=</span> <span class="n">cb_ids</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cb_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;frames&#39;</span><span class="p">:</span> <span class="n">frames</span><span class="p">,</span>
+            <span class="s1">&#39;callback_ids&#39;</span><span class="p">:</span> <span class="n">cb_ids</span>
+        <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="TfBufferDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.TfBufferDicts">[docs]</a><span class="k">class</span> <span class="nc">TfBufferDicts</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">TransformBufferStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">buffer</span><span class="o">.</span><span class="n">lookup_transforms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">buffer</span><span class="o">.</span><span class="n">lookup_transforms</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s1">&#39;lookup_source_frame_id&#39;</span><span class="p">:</span> <span class="n">transform</span><span class="o">.</span><span class="n">source_frame_id</span><span class="p">,</span>
+                        <span class="s1">&#39;lookup_target_frame_id&#39;</span><span class="p">:</span> <span class="n">transform</span><span class="o">.</span><span class="n">target_frame_id</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+
+<div class="viewcode-block" id="ExecutorsDicts"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_dict.html#caret_analyze.architecture.architecture_dict.ExecutorsDicts">[docs]</a><span class="k">class</span> <span class="nc">ExecutorsDicts</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">executor_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ExecutorStructValue</span><span class="p">],</span>
+        <span class="n">is_ignored</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">ExecutorStructValue</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">is_ignored</span> <span class="o">=</span> <span class="n">is_ignored</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_ignored</span>
+        <span class="n">exec_dicts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">executor_values</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_ignored</span><span class="p">(</span><span class="n">e</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">exec_dicts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;executor_name&#39;</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="n">executor_value</span><span class="p">:</span> <span class="n">ExecutorStructValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">executor_value</span><span class="o">.</span><span class="n">executor_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;executor_value.executor_name is None&#39;</span><span class="p">)</span>
+
+        <span class="n">cbgs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor_value</span><span class="o">.</span><span class="n">callback_groups</span><span class="p">)</span>
+        <span class="n">cbgs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cbgs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">callback_group_name</span><span class="p">)</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;executor_id&#39;</span><span class="p">:</span> <span class="n">executor_value</span><span class="o">.</span><span class="n">executor_id</span><span class="p">,</span>
+            <span class="s1">&#39;executor_type&#39;</span><span class="p">:</span> <span class="n">executor_value</span><span class="o">.</span><span class="n">executor_type_name</span><span class="p">,</span>
+            <span class="s1">&#39;executor_name&#39;</span><span class="p">:</span> <span class="n">executor_value</span><span class="o">.</span><span class="n">executor_name</span><span class="p">,</span>
+            <span class="s1">&#39;callback_group_ids&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">cbg</span><span class="o">.</span><span class="n">callback_group_id</span>
+                <span class="k">for</span> <span class="n">cbg</span>
+                <span class="ow">in</span> <span class="n">cbgs</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_ignored</span><span class="p">(</span><span class="n">executor</span><span class="p">:</span> <span class="n">ExecutorStructValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">callback_groups</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">cbg</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">callback_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;transform_listener_impl&#39;</span> <span class="ow">in</span> <span class="n">cbg</span><span class="o">.</span><span class="n">node_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.architecture_dict</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

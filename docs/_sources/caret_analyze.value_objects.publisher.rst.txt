@@ -1,0 +1,7 @@
+caret\_analyze.value\_objects.publisher module
+==============================================
+
+.. automodule:: caret_analyze.value_objects.publisher
+   :members:
+   :undoc-members:
+   :show-inheritance:

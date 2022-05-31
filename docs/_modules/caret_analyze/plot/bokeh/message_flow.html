@@ -1,0 +1,492 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.plot.bokeh.message_flow &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.plot.bokeh.message_flow</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.plot.bokeh.message_flow</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">bokeh.io</span> <span class="kn">import</span> <span class="n">save</span><span class="p">,</span> <span class="n">show</span>
+<span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">CrosshairTool</span>
+<span class="kn">from</span> <span class="nn">bokeh.palettes</span> <span class="kn">import</span> <span class="n">Bokeh8</span>
+<span class="kn">from</span> <span class="nn">bokeh.plotting</span> <span class="kn">import</span> <span class="n">ColumnDataSource</span><span class="p">,</span> <span class="n">figure</span>
+<span class="kn">from</span> <span class="nn">bokeh.resources</span> <span class="kn">import</span> <span class="n">CDN</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">apply_x_axis_offset</span><span class="p">,</span> <span class="n">get_callback_param_desc</span><span class="p">,</span> <span class="n">RectValues</span>
+<span class="kn">from</span> <span class="nn">...common</span> <span class="kn">import</span> <span class="n">ClockConverter</span>
+<span class="kn">from</span> <span class="nn">...exceptions</span> <span class="kn">import</span> <span class="n">InvalidArgumentError</span>
+<span class="kn">from</span> <span class="nn">...record.data_frame_shaper</span> <span class="kn">import</span> <span class="n">Clip</span><span class="p">,</span> <span class="n">Strip</span>
+<span class="kn">from</span> <span class="nn">...runtime.path</span> <span class="kn">import</span> <span class="n">Path</span>
+
+
+<div class="viewcode-block" id="message_flow"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.message_flow">[docs]</a><span class="k">def</span> <span class="nf">message_flow</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">export_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">granularity</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">treat_drop_as_delay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">lstrip_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">rstrip_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">use_sim_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">granularity</span> <span class="o">=</span> <span class="n">granularity</span> <span class="ow">or</span> <span class="s1">&#39;raw&#39;</span>
+    <span class="k">if</span> <span class="n">granularity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">,</span> <span class="s1">&#39;node&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;granularity must be [ raw / node ]&#39;</span><span class="p">)</span>
+
+    <span class="n">TOOLTIPS</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    &lt;div style=&quot;width:400px; word-wrap: break-word;&quot;&gt;</span>
+<span class="s2">    t = @x [ns] &lt;br&gt;</span>
+<span class="s2">    t_start = @x_min [ns] &lt;br&gt;</span>
+<span class="s2">    t_end = @x_max [ns] &lt;br&gt;</span>
+<span class="s2">    latency = @latency [ms] &lt;br&gt;</span>
+
+<span class="s2">    &lt;br&gt;</span>
+<span class="s2">    @desc</span>
+<span class="s2">    &lt;/div&gt;</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span>
+        <span class="n">x_axis_label</span><span class="o">=</span><span class="s1">&#39;Time [s]&#39;</span><span class="p">,</span>
+        <span class="n">y_axis_label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Message flow of </span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">path_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">plot_width</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">plot_height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+        <span class="n">active_scroll</span><span class="o">=</span><span class="s1">&#39;wheel_zoom&#39;</span><span class="p">,</span>
+        <span class="n">tooltips</span><span class="o">=</span><span class="n">TOOLTIPS</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_tools</span><span class="p">(</span><span class="n">CrosshairTool</span><span class="p">(</span><span class="n">line_alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">))</span>
+
+    <span class="n">color_palette</span> <span class="o">=</span> <span class="n">ColorPalette</span><span class="p">(</span><span class="n">Bokeh8</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="n">treat_drop_as_delay</span><span class="o">=</span><span class="n">treat_drop_as_delay</span><span class="p">)</span>
+
+    <span class="n">converter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClockConverter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">use_sim_time</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">path</span><span class="o">.</span><span class="n">callbacks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">callbacks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">converter</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">get_sim_time_converter</span><span class="p">()</span>  <span class="c1"># TODO(hsgwa): refactor</span>
+
+    <span class="n">strip</span> <span class="o">=</span> <span class="n">Strip</span><span class="p">(</span><span class="n">lstrip_s</span><span class="p">,</span> <span class="n">rstrip_s</span><span class="p">)</span>
+    <span class="n">clip</span> <span class="o">=</span> <span class="n">strip</span><span class="o">.</span><span class="n">to_clip</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="n">frame_min</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">min_ns</span>
+    <span class="n">frame_max</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">max_ns</span>
+
+    <span class="k">if</span> <span class="n">converter</span><span class="p">:</span>
+        <span class="n">frame_min</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">frame_min</span><span class="p">)</span>
+        <span class="n">frame_max</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">frame_max</span><span class="p">)</span>
+
+    <span class="n">x_range_name</span> <span class="o">=</span> <span class="s1">&#39;x_plot_axis&#39;</span>
+    <span class="n">apply_x_axis_offset</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">x_range_name</span><span class="p">,</span> <span class="n">frame_min</span><span class="p">,</span> <span class="n">frame_max</span><span class="p">)</span>
+
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">FormatterFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">granularity</span><span class="p">)</span>
+    <span class="n">formatter</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">formatter</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+    <span class="n">yaxis_property</span> <span class="o">=</span> <span class="n">YAxisProperty</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">yaxis_values</span> <span class="o">=</span> <span class="n">YAxisValues</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">yaxis_property</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">major_label_overrides</span> <span class="o">=</span> <span class="n">yaxis_property</span><span class="o">.</span><span class="n">labels_dict</span>
+
+    <span class="n">rect_source</span> <span class="o">=</span> <span class="n">get_callback_rects</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">yaxis_values</span><span class="p">,</span> <span class="n">granularity</span><span class="p">,</span> <span class="n">clip</span><span class="p">,</span> <span class="n">converter</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span>
+        <span class="s1">&#39;x&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;y&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">,</span>
+        <span class="n">source</span><span class="o">=</span><span class="n">rect_source</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">hover_fill_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+        <span class="n">hover_alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+        <span class="n">x_range_name</span><span class="o">=</span><span class="n">x_range_name</span>
+    <span class="p">)</span>
+
+    <span class="n">line_sources</span> <span class="o">=</span> <span class="n">get_flow_lines</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">converter</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line_source</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line_sources</span><span class="p">):</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span>
+            <span class="n">line_width</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+            <span class="n">line_color</span><span class="o">=</span><span class="n">color_palette</span><span class="o">.</span><span class="n">get_index_color</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+            <span class="n">line_alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">line_source</span><span class="p">,</span>
+            <span class="n">x_range_name</span><span class="o">=</span><span class="n">x_range_name</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">export_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">save</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">export_path</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;time vs tracepoint&#39;</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">CDN</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_callback_rects"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.get_callback_rects">[docs]</a><span class="k">def</span> <span class="nf">get_callback_rects</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">y_axi_values</span><span class="p">:</span> <span class="n">YAxisValues</span><span class="p">,</span>
+    <span class="n">granularity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">clip</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Clip</span><span class="p">],</span>
+    <span class="n">converter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClockConverter</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ColumnDataSource</span><span class="p">:</span>
+    <span class="n">rect_source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;x_min&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;x_max&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;desc&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;latency&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">})</span>
+
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">callbacks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rect_source</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">x_min</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">x_max</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">latency</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">callbacks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">granularity</span> <span class="o">==</span> <span class="s1">&#39;raw&#39;</span><span class="p">:</span>
+            <span class="n">search_name</span> <span class="o">=</span> <span class="n">callback</span><span class="o">.</span><span class="n">callback_name</span>
+        <span class="k">elif</span> <span class="n">granularity</span> <span class="o">==</span> <span class="s1">&#39;node&#39;</span><span class="p">:</span>
+            <span class="n">search_name</span> <span class="o">=</span> <span class="n">callback</span><span class="o">.</span><span class="n">node_name</span>
+
+        <span class="n">y_maxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_axi_values</span><span class="o">.</span><span class="n">get_start_indexes</span><span class="p">(</span><span class="n">search_name</span><span class="p">))</span>
+        <span class="n">y_mins</span> <span class="o">=</span> <span class="n">y_maxs</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">callback_desc</span> <span class="o">=</span> <span class="n">get_callback_param_desc</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_mins</span><span class="p">,</span> <span class="n">y_maxs</span><span class="p">):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">callback</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="n">shaper</span><span class="o">=</span><span class="n">clip</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">callback_start</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">to_list</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">callback_end</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">to_list</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">converter</span><span class="p">:</span>
+                    <span class="n">callback_start</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">callback_start</span><span class="p">)</span>
+                    <span class="n">callback_end</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">callback_end</span><span class="p">)</span>
+                <span class="n">rect</span> <span class="o">=</span> <span class="n">RectValues</span><span class="p">(</span><span class="n">callback_start</span><span class="p">,</span> <span class="n">callback_end</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+                <span class="n">x_min</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">callback_start</span><span class="p">)</span>
+                <span class="n">x_max</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">callback_end</span><span class="p">)</span>
+                <span class="n">width</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+                <span class="n">latency</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">callback_end</span><span class="o">-</span><span class="n">callback_start</span><span class="p">)</span><span class="o">*</span><span class="mf">1.0e-6</span><span class="p">)</span>
+                <span class="n">height</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+                <span class="n">desc_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;callback_type: </span><span class="si">{</span><span class="n">callback</span><span class="o">.</span><span class="n">callback_type</span><span class="si">}</span><span class="s1">&#39;</span> <span class="o">+</span> \
+                    <span class="sa">f</span><span class="s1">&#39;, </span><span class="si">{</span><span class="n">callback_desc</span><span class="si">}</span><span class="s1">, symbol: </span><span class="si">{</span><span class="n">callback</span><span class="o">.</span><span class="n">symbol</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="n">desc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">desc_str</span><span class="p">)</span>
+
+    <span class="n">rect_source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span>
+        <span class="s1">&#39;x_min&#39;</span><span class="p">:</span> <span class="n">x_min</span><span class="p">,</span>
+        <span class="s1">&#39;x_max&#39;</span><span class="p">:</span> <span class="n">x_max</span><span class="p">,</span>
+        <span class="s1">&#39;desc&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">,</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">width</span><span class="p">,</span>
+        <span class="s1">&#39;latency&#39;</span><span class="p">:</span> <span class="n">latency</span><span class="p">,</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">height</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="n">rect_source</span></div>
+
+
+<div class="viewcode-block" id="get_flow_lines"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.get_flow_lines">[docs]</a><span class="k">def</span> <span class="nf">get_flow_lines</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">converter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClockConverter</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ColumnDataSource</span><span class="p">:</span>
+    <span class="n">tick_labels</span> <span class="o">=</span> <span class="n">YAxisProperty</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">line_sources</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">row_values</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">if</span> <span class="n">converter</span><span class="p">:</span>
+            <span class="n">row_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">row_values</span><span class="p">]</span>
+        <span class="n">x_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">row_values</span><span class="p">)</span>
+        <span class="n">x_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">row_values</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span>
+
+        <span class="n">line_source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">({</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">row_values</span><span class="p">,</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">tick_labels</span><span class="o">.</span><span class="n">values</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">row_values</span><span class="p">)],</span>
+            <span class="s1">&#39;x_min&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x_min</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">row_values</span><span class="p">),</span>
+            <span class="s1">&#39;x_max&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x_max</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">row_values</span><span class="p">),</span>
+            <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">width</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">row_values</span><span class="p">),</span>
+            <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">row_values</span><span class="p">),</span>
+            <span class="s1">&#39;latency&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">width</span><span class="o">*</span><span class="mf">1.0e-6</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">row_values</span><span class="p">),</span>
+            <span class="s1">&#39;desc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;index: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">row_values</span><span class="p">),</span>
+        <span class="p">})</span>
+
+        <span class="n">line_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_source</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">line_sources</span></div>
+
+
+<div class="viewcode-block" id="DataFrameColumnNameParsed"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.DataFrameColumnNameParsed">[docs]</a><span class="k">class</span> <span class="nc">DataFrameColumnNameParsed</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">split_text</span> <span class="o">=</span> <span class="n">column_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+        <span class="n">tracepoint_name</span> <span class="o">=</span> <span class="n">split_text</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tracepoint_name</span> <span class="o">=</span> <span class="n">tracepoint_name</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop_index</span> <span class="o">=</span> <span class="n">split_text</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_text</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_node_name</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">node_names</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_text</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_topic_name</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">topic_names</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_text</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_has_topic_name</span><span class="p">(</span><span class="n">topic_names</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">topic_name</span> <span class="ow">in</span> <span class="n">topic_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">topic_name</span> <span class="ow">in</span> <span class="n">column_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_has_node_name</span><span class="p">(</span><span class="n">topic_names</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">topic_name</span> <span class="ow">in</span> <span class="n">topic_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">topic_name</span> <span class="ow">in</span> <span class="n">column_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="ColorPalette"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.ColorPalette">[docs]</a><span class="k">class</span> <span class="nc">ColorPalette</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color_palette</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color_palette</span> <span class="o">=</span> <span class="n">color_palette</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_palette_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">color_palette</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ColorPalette.get_index_color"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.ColorPalette.get_index_color">[docs]</a>    <span class="k">def</span> <span class="nf">get_index_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color_palette</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_palette_size</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="YAxisProperty"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.YAxisProperty">[docs]</a><span class="k">class</span> <span class="nc">YAxisProperty</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tick_labels</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">y_axis_step</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">y_value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tick_labels</span><span class="p">[</span><span class="n">y_value</span><span class="p">]</span> <span class="o">=</span> <span class="n">column_name</span>
+            <span class="n">y_value</span> <span class="o">+=</span> <span class="n">y_axis_step</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tick_labels</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tick_labels</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">labels_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tick_labels</span></div>
+
+
+<div class="viewcode-block" id="YAxisValues"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.YAxisValues">[docs]</a><span class="k">class</span> <span class="nc">YAxisValues</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_names</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_column_names</span> <span class="o">=</span> <span class="n">column_names</span>
+
+    <span class="k">def</span> <span class="nf">_search_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_column_names</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;callback_end&#39;</span> <span class="ow">in</span> <span class="n">column_name</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">search_name</span> <span class="ow">in</span> <span class="n">column_name</span><span class="p">:</span>
+                <span class="n">indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indexes</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">indexes</span>
+
+<div class="viewcode-block" id="YAxisValues.get_start_indexes"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.YAxisValues.get_start_indexes">[docs]</a>    <span class="k">def</span> <span class="nf">get_start_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_values</span><span class="p">(</span><span class="n">search_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">((</span><span class="n">indexes</span><span class="p">)</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="YAxisValues.get_end_values"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.YAxisValues.get_end_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_end_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_values</span><span class="p">(</span><span class="n">search_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">((</span><span class="n">indexes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DataFrameFormatter"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.DataFrameFormatter">[docs]</a><span class="k">class</span> <span class="nc">DataFrameFormatter</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataFrameFormatter.remove_columns"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.DataFrameFormatter.remove_columns">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">remove_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataFrameFormatter.rename_columns"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.DataFrameFormatter.rename_columns">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">rename_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="FormatterFactory"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.FormatterFactory">[docs]</a><span class="k">class</span> <span class="nc">FormatterFactory</span><span class="p">():</span>
+
+<div class="viewcode-block" id="FormatterFactory.create"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.FormatterFactory.create">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">granularity</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrameFormatter</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">granularity</span> <span class="o">==</span> <span class="s1">&#39;raw&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">RawLevelFormatter</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">granularity</span> <span class="o">==</span> <span class="s1">&#39;node&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">NodeLevelFormatter</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="RawLevelFormatter"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.RawLevelFormatter">[docs]</a><span class="k">class</span> <span class="nc">RawLevelFormatter</span><span class="p">(</span><span class="n">DataFrameFormatter</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="RawLevelFormatter.remove_columns"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.RawLevelFormatter.remove_columns">[docs]</a>    <span class="k">def</span> <span class="nf">remove_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RawLevelFormatter.rename_columns"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.RawLevelFormatter.rename_columns">[docs]</a>    <span class="k">def</span> <span class="nf">rename_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">renames</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;_timestamp&#39;</span> <span class="ow">in</span> <span class="n">column_name</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">column_name</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;_timestamp&#39;</span><span class="p">)</span>
+                <span class="n">renames</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">column_name</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">renames</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="NodeLevelFormatter"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.NodeLevelFormatter">[docs]</a><span class="k">class</span> <span class="nc">NodeLevelFormatter</span><span class="p">(</span><span class="n">DataFrameFormatter</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
+
+<div class="viewcode-block" id="NodeLevelFormatter.remove_columns"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.NodeLevelFormatter.remove_columns">[docs]</a>    <span class="k">def</span> <span class="nf">remove_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">raw_level_formatter</span> <span class="o">=</span> <span class="n">RawLevelFormatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
+        <span class="n">raw_level_formatter</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="n">drop_columns</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># remove callbacks in the same node</span>
+        <span class="k">for</span> <span class="n">column_name_</span><span class="p">,</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">parsed_before</span> <span class="o">=</span> <span class="n">DataFrameColumnNameParsed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="n">column_name_</span><span class="p">)</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">DataFrameColumnNameParsed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">parsed_before</span><span class="o">.</span><span class="n">node_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">parsed</span><span class="o">.</span><span class="n">node_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                    <span class="n">parsed_before</span><span class="o">.</span><span class="n">node_name</span> <span class="o">==</span> <span class="n">parsed</span><span class="o">.</span><span class="n">node_name</span><span class="p">:</span>
+                <span class="n">drop_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">parsed_before</span><span class="o">.</span><span class="n">topic_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">parsed</span><span class="o">.</span><span class="n">topic_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                    <span class="n">parsed_before</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">==</span> <span class="n">parsed</span><span class="o">.</span><span class="n">topic_name</span><span class="p">:</span>
+                <span class="n">drop_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">drop_columns</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NodeLevelFormatter.rename_columns"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.message_flow.html#caret_analyze.plot.NodeLevelFormatter.rename_columns">[docs]</a>    <span class="k">def</span> <span class="nf">rename_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">renames</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;_timestamp&#39;</span> <span class="ow">in</span> <span class="n">column_name</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">column_name</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;_timestamp&#39;</span><span class="p">)</span>
+                <span class="n">renames</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">column_name</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">renames</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.plot.bokeh.message_flow</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

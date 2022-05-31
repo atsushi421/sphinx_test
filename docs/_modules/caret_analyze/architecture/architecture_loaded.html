@@ -1,0 +1,678 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.architecture.architecture_loaded &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.architecture_loaded</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.architecture.architecture_loaded</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">.graph_search</span> <span class="kn">import</span> <span class="n">CallbackPathSearcher</span>
+<span class="kn">from</span> <span class="nn">.reader_interface</span> <span class="kn">import</span> <span class="n">ArchitectureReader</span>
+<span class="kn">from</span> <span class="nn">.struct</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CallbackGroupsStruct</span><span class="p">,</span>
+    <span class="n">CallbackGroupStruct</span><span class="p">,</span>
+    <span class="n">CallbacksStruct</span><span class="p">,</span>
+    <span class="n">CallbackStruct</span><span class="p">,</span>
+    <span class="n">CommunicationsStruct</span><span class="p">,</span>
+    <span class="n">ExecutorsStruct</span><span class="p">,</span>
+    <span class="n">IntraProcessBufferStruct</span><span class="p">,</span>
+    <span class="n">NodeInputType</span><span class="p">,</span>
+    <span class="n">NodeOutputType</span><span class="p">,</span>
+    <span class="n">NodePathsStruct</span><span class="p">,</span>
+    <span class="n">NodesStruct</span><span class="p">,</span>
+    <span class="n">NodeStruct</span><span class="p">,</span>
+    <span class="n">PathsStruct</span><span class="p">,</span>
+    <span class="n">PublishersStruct</span><span class="p">,</span>
+    <span class="n">PublisherStruct</span><span class="p">,</span>
+    <span class="n">SubscriptionsStruct</span><span class="p">,</span>
+    <span class="n">SubscriptionStruct</span><span class="p">,</span>
+    <span class="n">TimersStruct</span><span class="p">,</span>
+    <span class="n">TransformBroadcasterStruct</span><span class="p">,</span>
+    <span class="n">TransformBufferStruct</span><span class="p">,</span>
+    <span class="n">VariablePassingsStruct</span><span class="p">,</span>
+    <span class="n">VariablePassingStruct</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..common</span> <span class="kn">import</span> <span class="n">Progress</span><span class="p">,</span> <span class="n">Util</span>
+<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">Error</span><span class="p">,</span> <span class="n">InvalidReaderError</span>
+<span class="kn">from</span> <span class="nn">..value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CallbackGroupValue</span><span class="p">,</span>
+    <span class="n">CallbackValue</span><span class="p">,</span>
+    <span class="n">ClientCallbackValue</span><span class="p">,</span>
+    <span class="n">CommunicationStructValue</span><span class="p">,</span>
+    <span class="n">ExecutorStructValue</span><span class="p">,</span>
+    <span class="n">ExecutorValue</span><span class="p">,</span>
+    <span class="n">MessageContext</span><span class="p">,</span>
+    <span class="n">NodeStructValue</span><span class="p">,</span>
+    <span class="n">NodeValue</span><span class="p">,</span>
+    <span class="n">PathStructValue</span><span class="p">,</span>
+    <span class="n">PathValue</span><span class="p">,</span>
+    <span class="n">PublisherValue</span><span class="p">,</span>
+    <span class="n">ServiceCallbackValue</span><span class="p">,</span>
+    <span class="n">SubscriptionCallbackValue</span><span class="p">,</span>
+    <span class="n">SubscriptionValue</span><span class="p">,</span>
+    <span class="n">TimerCallbackValue</span><span class="p">,</span>
+    <span class="n">TimerValue</span><span class="p">,</span>
+    <span class="n">TransformBroadcasterValue</span><span class="p">,</span>
+    <span class="n">TransformBufferValue</span><span class="p">,</span>
+    <span class="n">TransformTreeValue</span><span class="p">,</span>
+    <span class="n">TransformValue</span><span class="p">,</span>
+    <span class="n">VariablePassingValue</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ArchitectureLoaded"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.ArchitectureLoaded">[docs]</a><span class="k">class</span> <span class="nc">ArchitectureLoaded</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+        <span class="n">ignore_topics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">topic_ignored_reader</span> <span class="o">=</span> <span class="n">TopicIgnoredReader</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">ignore_topics</span><span class="p">)</span>
+
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">create_nodes</span><span class="p">(</span><span class="n">topic_ignored_reader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+
+        <span class="n">executors</span> <span class="o">=</span> <span class="n">ExecutorsStruct</span><span class="o">.</span><span class="n">create_from_reader</span><span class="p">(</span><span class="n">topic_ignored_reader</span><span class="p">,</span> <span class="n">nodes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executors</span> <span class="o">=</span> <span class="n">executors</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+
+        <span class="n">comms</span> <span class="o">=</span> <span class="n">CommunicationsStruct</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_communications</span> <span class="o">=</span> <span class="n">comms</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+
+        <span class="n">paths</span> <span class="o">=</span> <span class="n">PathsStruct</span><span class="p">(</span><span class="n">topic_ignored_reader</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">comms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paths</span> <span class="o">=</span> <span class="n">paths</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PathStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paths</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">executors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExecutorStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_executors</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NodeStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">communications</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">CommunicationStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_communications</span></div>
+
+
+<div class="viewcode-block" id="TopicIgnoredReader"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.TopicIgnoredReader">[docs]</a><span class="k">class</span> <span class="nc">TopicIgnoredReader</span><span class="p">(</span><span class="n">ArchitectureReader</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+        <span class="n">ignore_topics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span> <span class="o">=</span> <span class="n">reader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_topics</span> <span class="o">=</span> <span class="n">ignore_topics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_callback_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ignore_callback_ids</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">ignore_topics</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_publishers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PublisherValue</span><span class="p">]:</span>
+        <span class="n">publishers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PublisherValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">publisher</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_publishers</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">publisher</span><span class="o">.</span><span class="n">topic_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_topics</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">publishers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">publishers</span>
+
+<div class="viewcode-block" id="TopicIgnoredReader.get_node"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.TopicIgnoredReader.get_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TopicIgnoredReader.get_tf_frames"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.TopicIgnoredReader.get_tf_frames">[docs]</a>    <span class="k">def</span> <span class="nf">get_tf_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TransformValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">get_tf_frames</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_timers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TimerValue</span><span class="p">]:</span>
+        <span class="n">timers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TimerValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">timer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_timers</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+            <span class="n">timers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">timer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">timers</span>
+
+    <span class="k">def</span> <span class="nf">_get_callback_groups</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">CallbackGroupValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">CallbackGroupValue</span><span class="p">(</span>
+                <span class="n">cbg</span><span class="o">.</span><span class="n">callback_group_type</span><span class="o">.</span><span class="n">type_name</span><span class="p">,</span>
+                <span class="n">cbg</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+                <span class="n">cbg</span><span class="o">.</span><span class="n">node_id</span><span class="p">,</span>
+                <span class="nb">tuple</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">cbg</span><span class="o">.</span><span class="n">callback_ids</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_callback_ids</span><span class="p">),</span>
+                <span class="n">cbg</span><span class="o">.</span><span class="n">callback_group_id</span><span class="p">,</span>
+                <span class="n">callback_group_name</span><span class="o">=</span><span class="n">cbg</span><span class="o">.</span><span class="n">callback_group_name</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">cbg</span>
+            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_callback_groups</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get_client_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ClientCallbackValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_client_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_service_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ServiceCallbackValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_service_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TopicIgnoredReader.get_executors"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.TopicIgnoredReader.get_executors">[docs]</a>    <span class="k">def</span> <span class="nf">get_executors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExecutorValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">get_executors</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_message_contexts</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_message_contexts</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_tf_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformBufferValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_tf_buffer</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_tf_broadcaster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformBroadcasterValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_tf_broadcaster</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_filter_callback_id</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">callback_ids</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">is_not_ignored</span><span class="p">(</span><span class="n">callback_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">callback_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_callback_ids</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">Util</span><span class="o">.</span><span class="n">filter_items</span><span class="p">(</span><span class="n">is_not_ignored</span><span class="p">,</span> <span class="n">callback_ids</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_ignore_callback_ids</span><span class="p">(</span>
+        <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+        <span class="n">ignore_topics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">ignore_callback_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ignore_topic_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ignore_topics</span><span class="p">)</span>
+
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">Progress</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;Loading callbacks&#39;</span><span class="p">):</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sub</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">_get_subscription_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">sub_val</span> <span class="ow">in</span> <span class="n">sub</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sub_val</span><span class="o">.</span><span class="n">subscribe_topic_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore_topic_set</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="k">if</span> <span class="n">sub_val</span><span class="o">.</span><span class="n">callback_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">ignore_callback_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_val</span><span class="o">.</span><span class="n">callback_id</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;Failed to load callback for node </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">ignore_callback_ids</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TopicIgnoredReader.get_paths"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.TopicIgnoredReader.get_paths">[docs]</a>    <span class="k">def</span> <span class="nf">get_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PathValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">get_paths</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TopicIgnoredReader.get_nodes"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.TopicIgnoredReader.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">NodeValue</span><span class="p">]:</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+        <span class="n">nodes_</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodeValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">node_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">node_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_names</span><span class="p">:</span>
+                <span class="n">node_names</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+                <span class="n">nodes_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">InvalidReaderError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">nodes_</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nodes_</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">nodes_</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">NodeValue</span><span class="p">]):</span>
+        <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
+
+        <span class="c1"># validate node name uniqueness.</span>
+        <span class="n">node_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">node_name</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">]</span>
+        <span class="n">duplicated</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">node_names</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">group</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">duplicated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">duplicated</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidReaderError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Duplicated node name. </span><span class="si">{</span><span class="n">duplicated</span><span class="si">}</span><span class="s1">. Use first node only.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_subscriptions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubscriptionValue</span><span class="p">]:</span>
+        <span class="n">subscriptions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SubscriptionValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">subscription</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_subscriptions</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">subscription</span><span class="o">.</span><span class="n">topic_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_topics</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">subscriptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subscription</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">subscriptions</span>
+
+    <span class="k">def</span> <span class="nf">_get_variable_passings</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">VariablePassingValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_variable_passings</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_timer_callbacks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TimerCallbackValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">get_timer_callbacks</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_subscription_callbacks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SubscriptionCallbackValue</span><span class="p">]:</span>
+        <span class="n">callbacks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SubscriptionCallbackValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">subscription_callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">_get_subscription_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">subscription_callback</span><span class="o">.</span><span class="n">subscribe_topic_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_topics</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subscription_callback</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">callbacks</span></div>
+
+
+<div class="viewcode-block" id="create_nodes"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_nodes">[docs]</a><span class="k">def</span> <span class="nf">create_nodes</span><span class="p">(</span><span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodesStruct</span><span class="p">:</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">NodesStruct</span><span class="p">()</span>
+
+    <span class="n">node_values</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+    <span class="n">added_node</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">Progress</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">node_values</span><span class="p">,</span> <span class="s1">&#39;Loading nodes.&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">node_name</span> <span class="ow">in</span> <span class="n">added_node</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">added_node</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">create_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">reader</span><span class="p">)</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;Failed to load node. node_name = </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nodes</span></div>
+
+
+<div class="viewcode-block" id="create_node"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_node">[docs]</a><span class="k">def</span> <span class="nf">create_node</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">,</span> <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeStruct</span><span class="p">:</span>
+    <span class="n">node_struct</span> <span class="o">=</span> <span class="n">NodeStruct</span><span class="p">(</span>
+        <span class="n">node_id</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">node_id</span><span class="p">,</span>
+        <span class="n">node_name</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span>
+    <span class="p">)</span>
+
+    <span class="c1"># load node inputs/outputs</span>
+    <span class="n">publishers</span> <span class="o">=</span> <span class="n">PublishersStruct</span><span class="o">.</span><span class="n">create_from_reader</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">create_subscriptions</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+    <span class="n">transforms</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_tf_frames</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transforms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">tf_tree</span> <span class="o">=</span> <span class="n">TransformTreeValue</span><span class="p">(</span><span class="n">transforms</span><span class="p">)</span>
+        <span class="n">node_struct</span><span class="o">.</span><span class="n">tf_buffer</span> <span class="o">=</span> <span class="n">create_transform_buffer</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">tf_tree</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+        <span class="n">node_struct</span><span class="o">.</span><span class="n">tf_broadcaster</span> <span class="o">=</span> <span class="n">create_transform_broadcaster</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">tf_tree</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+    <span class="c1"># load node</span>
+    <span class="n">callbacks</span> <span class="o">=</span> <span class="n">create_callbacks</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">subscriptions</span><span class="p">,</span> <span class="n">publishers</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">publishers</span><span class="o">.</span><span class="n">assign_callbacks</span><span class="p">(</span><span class="n">callbacks</span><span class="p">)</span>
+    <span class="n">subscriptions</span><span class="o">.</span><span class="n">assign_callbacks</span><span class="p">(</span><span class="n">callbacks</span><span class="p">)</span>
+
+    <span class="n">node_struct</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="n">callbacks</span>
+    <span class="n">node_struct</span><span class="o">.</span><span class="n">publishers</span> <span class="o">=</span> <span class="n">publishers</span>
+    <span class="n">node_struct</span><span class="o">.</span><span class="n">subscriptions</span> <span class="o">=</span> <span class="n">subscriptions</span>
+
+    <span class="n">node_struct</span><span class="o">.</span><span class="n">timers</span> <span class="o">=</span> <span class="n">TimersStruct</span><span class="o">.</span><span class="n">create_from_reader</span><span class="p">(</span>
+        <span class="n">reader</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">node_struct</span><span class="o">.</span><span class="n">callback_groups</span> <span class="o">=</span> <span class="n">create_callback_groups</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">node_struct</span><span class="o">.</span><span class="n">variable_passings</span> <span class="o">=</span> <span class="n">create_variable_passings</span><span class="p">(</span>
+        <span class="n">reader</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">node_struct</span><span class="o">.</span><span class="n">node_paths</span> <span class="o">=</span> <span class="n">create_node_paths</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">node_struct</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">node_struct</span></div>
+
+
+<div class="viewcode-block" id="create_subscriptions"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_subscriptions">[docs]</a><span class="k">def</span> <span class="nf">create_subscriptions</span><span class="p">(</span>
+    <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubscriptionsStruct</span><span class="p">:</span>
+
+    <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">SubscriptionsStruct</span><span class="p">()</span>
+    <span class="n">subscription_values</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_subscriptions</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">sub_value</span> <span class="ow">in</span> <span class="n">subscription_values</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">buffer</span> <span class="o">=</span> <span class="n">IntraProcessBufferStruct</span><span class="p">(</span>
+                <span class="n">sub_value</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+                <span class="n">sub_value</span><span class="o">.</span><span class="n">topic_name</span><span class="p">)</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="n">SubscriptionStruct</span><span class="p">(</span>
+                <span class="n">sub_value</span><span class="o">.</span><span class="n">callback_id</span><span class="p">,</span>
+                <span class="n">sub_value</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+                <span class="n">sub_value</span><span class="o">.</span><span class="n">topic_name</span><span class="p">,</span>
+                <span class="n">buffer</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">subscriptions</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">subscriptions</span></div>
+
+
+<div class="viewcode-block" id="create_transform_buffer"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_transform_buffer">[docs]</a><span class="k">def</span> <span class="nf">create_transform_buffer</span><span class="p">(</span>
+        <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+        <span class="n">tf_tree</span><span class="p">:</span> <span class="n">TransformTreeValue</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformBufferStruct</span><span class="p">]:</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_tf_buffer</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">buffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">tf_sub</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">buffer</span><span class="o">.</span><span class="n">listener_node_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">buffer</span><span class="o">.</span><span class="n">listener_node_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">create_subscriptions</span><span class="p">(</span>
+            <span class="n">reader</span><span class="p">,</span> <span class="n">NodeValue</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">listener_node_name</span><span class="p">,</span> <span class="n">buffer</span><span class="o">.</span><span class="n">listener_node_id</span><span class="p">))</span>
+        <span class="n">tf_sub</span> <span class="o">=</span> <span class="n">subscriptions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">listener_node_name</span><span class="p">,</span> <span class="s1">&#39;/tf&#39;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">buffer</span><span class="o">.</span><span class="n">lookup_transforms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">lookup_transforms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">buffer</span><span class="o">.</span><span class="n">listen_transforms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">TransformBufferStruct</span><span class="p">(</span>
+        <span class="n">tf_tree</span><span class="o">=</span><span class="n">tf_tree</span><span class="p">,</span>
+        <span class="n">listener_subscription</span><span class="o">=</span><span class="n">tf_sub</span><span class="p">,</span>
+        <span class="n">lookup_node_name</span><span class="o">=</span><span class="n">buffer</span><span class="o">.</span><span class="n">lookup_node_name</span><span class="p">,</span>
+        <span class="n">listener_node_name</span><span class="o">=</span><span class="n">buffer</span><span class="o">.</span><span class="n">listener_node_name</span><span class="p">,</span>
+        <span class="n">lookup_transforms</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">lookup_transforms</span><span class="p">),</span>
+        <span class="n">listen_transforms</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">listen_transforms</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_transform_broadcaster"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_transform_broadcaster">[docs]</a><span class="k">def</span> <span class="nf">create_transform_broadcaster</span><span class="p">(</span>
+        <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+        <span class="n">tf_tree</span><span class="p">:</span> <span class="n">TransformTreeValue</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformBroadcasterStruct</span><span class="p">]:</span>
+    <span class="n">broadcaster</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_tf_broadcaster</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">broadcaster</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">assert</span> <span class="n">broadcaster</span><span class="o">.</span><span class="n">broadcast_transforms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="c1"># TODO(hsgwa) : auto bind tf br and callback</span>
+    <span class="n">publisher</span> <span class="o">=</span> <span class="n">PublisherStruct</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="s1">&#39;/tf&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">TransformBroadcasterStruct</span><span class="p">(</span>
+        <span class="n">publisher</span><span class="o">=</span><span class="n">publisher</span><span class="p">,</span>
+        <span class="n">transforms</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">broadcast_transforms</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_callbacks"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_callbacks">[docs]</a><span class="k">def</span> <span class="nf">create_callbacks</span><span class="p">(</span>
+    <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+    <span class="n">subscriptions</span><span class="p">:</span> <span class="n">SubscriptionsStruct</span><span class="p">,</span>
+    <span class="n">publishers</span><span class="p">:</span> <span class="n">PublishersStruct</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallbacksStruct</span><span class="p">:</span>
+    <span class="n">callbacks</span> <span class="o">=</span> <span class="n">CallbacksStruct</span><span class="p">()</span>
+
+    <span class="n">callback_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CallbackValue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">callback_values</span> <span class="o">+=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_timer_callbacks</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+    <span class="n">callback_values</span> <span class="o">+=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_subscription_callbacks</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+    <span class="n">callback_values</span> <span class="o">+=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_service_callbacks</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+    <span class="n">callback_values</span> <span class="o">+=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_client_callbacks</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">callback_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">callback_values</span><span class="p">):</span>
+        <span class="n">callback</span> <span class="o">=</span> <span class="n">CallbackStruct</span><span class="o">.</span><span class="n">create_instance</span><span class="p">(</span><span class="n">subscriptions</span><span class="p">,</span> <span class="n">publishers</span><span class="p">,</span> <span class="n">callback_value</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">callbacks</span></div>
+
+
+<div class="viewcode-block" id="create_callback_groups"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_callback_groups">[docs]</a><span class="k">def</span> <span class="nf">create_callback_groups</span><span class="p">(</span>
+    <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="p">:</span> <span class="n">CallbacksStruct</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallbackGroupsStruct</span><span class="p">:</span>
+    <span class="n">cbgs</span> <span class="o">=</span> <span class="n">CallbackGroupsStruct</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cbg_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">get_callback_groups</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)):</span>
+        <span class="n">cbg_name</span> <span class="o">=</span> <span class="n">cbg_value</span><span class="o">.</span><span class="n">callback_group_name</span> <span class="ow">or</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">/callback_group_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="n">cbg</span> <span class="o">=</span> <span class="n">CallbackGroupStruct</span><span class="p">(</span>
+            <span class="n">callback_group_type</span><span class="o">=</span><span class="n">cbg_value</span><span class="o">.</span><span class="n">callback_group_type</span><span class="p">,</span>
+            <span class="n">node_name</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+            <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="o">.</span><span class="n">get_callback_by_cbg</span><span class="p">(</span><span class="n">cbg_value</span><span class="p">),</span>
+            <span class="n">callback_group_name</span><span class="o">=</span><span class="n">cbg_name</span><span class="p">,</span>
+            <span class="n">callback_group_id</span><span class="o">=</span><span class="n">cbg_value</span><span class="o">.</span><span class="n">callback_group_id</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">cbgs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">cbg</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cbgs</span></div>
+
+
+<div class="viewcode-block" id="create_variable_passings"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_variable_passings">[docs]</a><span class="k">def</span> <span class="nf">create_variable_passings</span><span class="p">(</span>
+    <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="p">:</span> <span class="n">CallbacksStruct</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VariablePassingsStruct</span><span class="p">:</span>
+
+    <span class="n">var_passes</span> <span class="o">=</span> <span class="n">VariablePassingsStruct</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">var_pass_value</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_variable_passings</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">var_pass_value</span><span class="o">.</span><span class="n">callback_id_read</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                <span class="n">var_pass_value</span><span class="o">.</span><span class="n">callback_id_write</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">var_pass</span> <span class="o">=</span> <span class="n">VariablePassingStruct</span><span class="p">(</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+            <span class="n">callback_write</span><span class="o">=</span><span class="n">callbacks</span><span class="o">.</span><span class="n">get_callback</span><span class="p">(</span>
+                <span class="n">var_pass_value</span><span class="o">.</span><span class="n">callback_id_write</span><span class="p">),</span>
+            <span class="n">callback_read</span><span class="o">=</span><span class="n">callbacks</span><span class="o">.</span><span class="n">get_callback</span><span class="p">(</span>
+                <span class="n">var_pass_value</span><span class="o">.</span><span class="n">callback_id_read</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">var_passes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">var_pass</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">var_passes</span></div>
+
+
+<div class="viewcode-block" id="create_node_paths"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_node_paths">[docs]</a><span class="k">def</span> <span class="nf">create_node_paths</span><span class="p">(</span>
+    <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">NodeStruct</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodePathsStruct</span><span class="p">:</span>
+
+    <span class="n">node_paths</span> <span class="o">=</span> <span class="n">NodePathsStruct</span><span class="p">()</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">node_paths</span> <span class="o">=</span> <span class="n">node_paths</span>
+
+    <span class="k">for</span> <span class="n">node_input</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">node_inputs</span><span class="p">:</span>
+        <span class="n">node_paths</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_input</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">node_output</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">node_outputs</span><span class="p">:</span>
+        <span class="n">node_paths</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">node_output</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">node_input</span><span class="p">,</span> <span class="n">node_output</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_inputs</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">node_outputs</span><span class="p">):</span>
+        <span class="n">node_paths</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_input</span><span class="p">,</span> <span class="n">node_output</span><span class="p">)</span>
+
+    <span class="c1"># assign callback-graph paths</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;[callback_chain]&#39;</span><span class="p">)</span>
+
+    <span class="n">assign_callback_graph_paths</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">node_paths</span><span class="p">)</span>
+
+    <span class="c1"># assign message contexts</span>
+    <span class="n">create_message_context</span><span class="p">(</span><span class="n">node_paths</span><span class="p">,</span> <span class="n">reader</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">node_paths</span></div>
+
+
+<div class="viewcode-block" id="assign_callback_graph_paths"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.assign_callback_graph_paths">[docs]</a><span class="k">def</span> <span class="nf">assign_callback_graph_paths</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">NodeStruct</span><span class="p">,</span> <span class="n">node_paths</span><span class="p">:</span> <span class="n">NodePathsStruct</span><span class="p">):</span>
+    <span class="n">searcher</span> <span class="o">=</span> <span class="n">CallbackPathSearcher</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">node_paths</span><span class="p">)</span>
+    <span class="n">callbacks</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">callbacks</span>
+
+    <span class="k">if</span> <span class="n">callbacks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">start_callback</span><span class="p">,</span> <span class="n">end_callback</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">callbacks</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">):</span>
+        <span class="n">cb_paths</span> <span class="o">=</span> <span class="n">searcher</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">start_callback</span><span class="p">,</span> <span class="n">end_callback</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cb_paths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cb_paths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[callback_chain] </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cb_paths</span><span class="p">)</span><span class="si">}</span><span class="s1"> paths found&#39;</span><span class="p">)</span>
+        <span class="n">cb_path</span> <span class="o">=</span> <span class="n">cb_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">node_inputs</span> <span class="o">=</span> <span class="n">start_callback</span><span class="o">.</span><span class="n">node_inputs</span>
+        <span class="n">node_outputs</span> <span class="o">=</span> <span class="n">end_callback</span><span class="o">.</span><span class="n">node_outputs</span>
+        <span class="n">is_assignable</span> <span class="o">=</span> <span class="n">node_inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">node_outputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_assignable</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">for</span> <span class="n">node_input</span><span class="p">,</span> <span class="n">node_output</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">node_inputs</span><span class="p">,</span> <span class="n">node_outputs</span><span class="p">):</span>
+            <span class="n">node_path</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_node_path</span><span class="p">(</span><span class="n">node_input</span><span class="p">,</span> <span class="n">node_output</span><span class="p">)</span>
+            <span class="n">node_path</span><span class="o">.</span><span class="n">callback_path</span> <span class="o">=</span> <span class="n">cb_path</span></div>
+
+
+<div class="viewcode-block" id="create_message_context"><a class="viewcode-back" href="../../../caret_analyze.architecture.architecture_loaded.html#caret_analyze.architecture.architecture_loaded.create_message_context">[docs]</a><span class="k">def</span> <span class="nf">create_message_context</span><span class="p">(</span>
+    <span class="n">node_paths</span><span class="p">:</span> <span class="n">NodePathsStruct</span><span class="p">,</span>
+    <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">NodeStruct</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">context_dicts</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">get_message_contexts</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">context_dict</span> <span class="ow">in</span> <span class="n">context_dicts</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">context_type</span> <span class="o">=</span> <span class="n">context_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;context_type&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">context_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;message context is None. </span><span class="si">{</span><span class="n">context_dict</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">pub_topic_name</span> <span class="o">=</span> <span class="n">context_dict</span><span class="p">[</span><span class="s1">&#39;publisher_topic_name&#39;</span><span class="p">]</span>
+            <span class="n">node_output</span><span class="p">:</span> <span class="n">NodeOutputType</span>
+            <span class="k">if</span> <span class="n">pub_topic_name</span> <span class="o">==</span> <span class="s1">&#39;/tf&#39;</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">tf_broadcaster</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_output</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">tf_broadcaster</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="n">context_dict</span><span class="p">[</span><span class="s1">&#39;broadcast_frame_id&#39;</span><span class="p">],</span>
+                    <span class="n">context_dict</span><span class="p">[</span><span class="s1">&#39;broadcast_child_frame_id&#39;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">node</span><span class="o">.</span><span class="n">publishers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pub_topic_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+                <span class="n">node_output</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">publishers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="n">pub_topic_name</span><span class="p">)</span>
+
+            <span class="n">sub_topic_name</span> <span class="o">=</span> <span class="n">context_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subscription_topic_name&#39;</span><span class="p">)</span>
+            <span class="n">node_input</span><span class="p">:</span> <span class="n">NodeInputType</span>
+            <span class="k">if</span> <span class="n">sub_topic_name</span> <span class="o">==</span> <span class="s1">&#39;/tf&#39;</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">tf_buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_input</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">tf_buffer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="n">context_dict</span><span class="p">[</span><span class="s1">&#39;listen_frame_id&#39;</span><span class="p">],</span>
+                    <span class="n">context_dict</span><span class="p">[</span><span class="s1">&#39;listen_child_frame_id&#39;</span><span class="p">],</span>
+                    <span class="n">context_dict</span><span class="p">[</span><span class="s1">&#39;lookup_source_frame_id&#39;</span><span class="p">],</span>
+                    <span class="n">context_dict</span><span class="p">[</span><span class="s1">&#39;lookup_target_frame_id&#39;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">node</span><span class="o">.</span><span class="n">subscriptions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub_topic_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+                <span class="n">node_input</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">subscriptions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="n">sub_topic_name</span><span class="p">)</span>
+
+            <span class="n">node_path</span> <span class="o">=</span> <span class="n">node_paths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node_input</span><span class="p">,</span> <span class="n">node_output</span><span class="p">)</span>
+
+            <span class="n">node_path</span><span class="o">.</span><span class="n">message_context</span> <span class="o">=</span> <span class="n">MessageContext</span><span class="o">.</span><span class="n">create_instance</span><span class="p">(</span>
+                <span class="n">context_type_name</span><span class="o">=</span><span class="n">context_type</span><span class="p">,</span>
+                <span class="n">context_dict</span><span class="o">=</span><span class="n">context_dict</span><span class="p">,</span>
+                <span class="n">node_name</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+                <span class="n">node_in</span><span class="o">=</span><span class="n">node_input</span><span class="o">.</span><span class="n">to_value</span><span class="p">(),</span>
+                <span class="n">node_out</span><span class="o">=</span><span class="n">node_output</span><span class="o">.</span><span class="n">to_value</span><span class="p">(),</span>
+                <span class="n">child</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">Error</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.architecture_loaded</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

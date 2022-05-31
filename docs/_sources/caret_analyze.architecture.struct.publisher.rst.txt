@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.publisher module
+===================================================
+
+.. automodule:: caret_analyze.architecture.struct.publisher
+   :members:
+   :undoc-members:
+   :show-inheritance:

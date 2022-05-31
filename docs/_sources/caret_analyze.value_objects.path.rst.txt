@@ -1,0 +1,7 @@
+caret\_analyze.value\_objects.path module
+=========================================
+
+.. automodule:: caret_analyze.value_objects.path
+   :members:
+   :undoc-members:
+   :show-inheritance:

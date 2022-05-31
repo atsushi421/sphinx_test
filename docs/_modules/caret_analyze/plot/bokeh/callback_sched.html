@@ -1,0 +1,464 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.plot.bokeh.callback_sched &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.plot.bokeh.callback_sched</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.plot.bokeh.callback_sched</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">bokeh.colors</span> <span class="kn">import</span> <span class="n">Color</span><span class="p">,</span> <span class="n">RGB</span>
+<span class="kn">from</span> <span class="nn">bokeh.io</span> <span class="kn">import</span> <span class="n">show</span>
+<span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">Arrow</span><span class="p">,</span> <span class="n">HoverTool</span><span class="p">,</span> <span class="n">NormalHead</span>
+<span class="kn">from</span> <span class="nn">bokeh.plotting</span> <span class="kn">import</span> <span class="n">ColumnDataSource</span><span class="p">,</span> <span class="n">figure</span>
+
+<span class="kn">from</span> <span class="nn">caret_analyze.runtime.callback</span> <span class="kn">import</span> <span class="n">TimerCallback</span>
+
+<span class="kn">import</span> <span class="nn">colorcet</span> <span class="k">as</span> <span class="nn">cc</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">apply_x_axis_offset</span><span class="p">,</span> <span class="n">get_callback_param_desc</span><span class="p">,</span> <span class="n">RectValues</span>
+<span class="kn">from</span> <span class="nn">...common</span> <span class="kn">import</span> <span class="n">ClockConverter</span><span class="p">,</span> <span class="n">Util</span>
+<span class="kn">from</span> <span class="nn">...exceptions</span> <span class="kn">import</span> <span class="n">InvalidArgumentError</span>
+<span class="kn">from</span> <span class="nn">...record</span> <span class="kn">import</span> <span class="n">Clip</span>
+<span class="kn">from</span> <span class="nn">...runtime</span> <span class="kn">import</span> <span class="n">CallbackBase</span><span class="p">,</span> <span class="n">CallbackGroup</span><span class="p">,</span> <span class="n">Executor</span><span class="p">,</span> <span class="n">Node</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="callback_sched"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.callback_sched">[docs]</a><span class="k">def</span> <span class="nf">callback_sched</span><span class="p">(</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Node</span><span class="p">,</span> <span class="n">CallbackGroup</span><span class="p">,</span> <span class="n">Executor</span><span class="p">],</span>
+    <span class="n">lstrip_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">rstrip_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">coloring_rule</span><span class="o">=</span><span class="s1">&#39;callback&#39;</span><span class="p">,</span>
+    <span class="n">use_sim_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">):</span>
+    <span class="k">assert</span> <span class="n">coloring_rule</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="s1">&#39;callback_group&#39;</span><span class="p">,</span> <span class="s1">&#39;node&#39;</span><span class="p">]</span>
+
+    <span class="n">cbgs</span><span class="p">,</span> <span class="n">target_name</span> <span class="o">=</span> <span class="n">get_cbg_and_name</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="n">callbacks</span> <span class="o">=</span> <span class="n">Util</span><span class="o">.</span><span class="n">flatten</span><span class="p">([</span><span class="n">cbg</span><span class="o">.</span><span class="n">callbacks</span> <span class="k">for</span> <span class="n">cbg</span> <span class="ow">in</span> <span class="n">cbgs</span><span class="p">])</span>
+    <span class="n">frame_min</span><span class="p">,</span> <span class="n">frame_max</span> <span class="o">=</span> <span class="n">get_range</span><span class="p">(</span><span class="n">callbacks</span><span class="p">)</span>
+    <span class="n">clip_min</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">frame_min</span> <span class="o">+</span> <span class="n">lstrip_s</span><span class="o">*</span><span class="mf">1.0e9</span><span class="p">)</span>
+    <span class="n">clip_max</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">frame_max</span> <span class="o">-</span> <span class="n">rstrip_s</span><span class="o">*</span><span class="mf">1.0e9</span><span class="p">)</span>
+    <span class="n">clip</span> <span class="o">=</span> <span class="n">Clip</span><span class="p">(</span><span class="n">clip_min</span><span class="p">,</span> <span class="n">clip_max</span><span class="p">)</span>
+
+    <span class="n">color_selector</span> <span class="o">=</span> <span class="n">ColorSelector</span><span class="o">.</span><span class="n">create_instance</span><span class="p">(</span><span class="n">coloring_rule</span><span class="p">)</span>
+    <span class="n">sched_plot_cbg</span><span class="p">(</span><span class="n">target_name</span><span class="p">,</span> <span class="n">cbgs</span><span class="p">,</span> <span class="n">color_selector</span><span class="p">,</span> <span class="n">clip</span><span class="p">,</span> <span class="n">use_sim_time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_cbg_and_name"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.get_cbg_and_name">[docs]</a><span class="k">def</span> <span class="nf">get_cbg_and_name</span><span class="p">(</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Node</span><span class="p">,</span> <span class="n">CallbackGroup</span><span class="p">,</span> <span class="n">Executor</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">CallbackGroup</span><span class="p">],</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">callback_groups</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;target.callback_groups is None&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="n">callback_groups</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">node_name</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Executor</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="n">callback_groups</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">executor_name</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">target</span><span class="p">],</span> <span class="n">target</span><span class="o">.</span><span class="n">callback_group_name</span></div>
+
+
+<div class="viewcode-block" id="get_range"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.get_range">[docs]</a><span class="k">def</span> <span class="nf">get_range</span><span class="p">(</span><span class="n">callbacks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">CallbackBase</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="n">callbacks_valid</span> <span class="o">=</span> <span class="p">[</span><span class="n">cb</span> <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="n">callbacks</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">to_records</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">callbacks_valid</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Failed to found Callback measurement results.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+
+    <span class="n">cb_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">cb</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span> <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="n">callbacks</span><span class="p">]</span>
+    <span class="n">cb_dfs_valid</span> <span class="o">=</span> <span class="p">[</span><span class="n">cb_df</span> <span class="k">for</span> <span class="n">cb_df</span> <span class="ow">in</span> <span class="n">cb_dfs</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cb_df</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">cb_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">cb_dfs_valid</span><span class="p">)</span>
+    <span class="n">cb_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">cb_dfs_valid</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cb_min</span><span class="p">,</span> <span class="n">cb_max</span></div>
+
+
+<div class="viewcode-block" id="sched_plot_cbg"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.sched_plot_cbg">[docs]</a><span class="k">def</span> <span class="nf">sched_plot_cbg</span><span class="p">(</span>
+    <span class="n">target_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">cbgs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">CallbackGroup</span><span class="p">],</span>
+    <span class="n">color_selector</span><span class="p">:</span> <span class="n">ColorSelector</span><span class="p">,</span>
+    <span class="n">clipper</span><span class="p">:</span> <span class="n">Clip</span><span class="p">,</span>
+    <span class="n">use_sim_time</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span>
+               <span class="n">x_axis_label</span><span class="o">=</span><span class="s1">&#39;Time [s]&#39;</span><span class="p">,</span>
+               <span class="n">y_axis_label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+               <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Time-line of callbacks in </span><span class="si">{</span><span class="n">target_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+               <span class="n">width</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span>
+               <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;xwheel_zoom&#39;</span><span class="p">,</span> <span class="s1">&#39;xpan&#39;</span><span class="p">,</span> <span class="s1">&#39;save&#39;</span><span class="p">,</span> <span class="s1">&#39;reset&#39;</span><span class="p">],</span>
+               <span class="n">active_scroll</span><span class="o">=</span><span class="s1">&#39;xwheel_zoom&#39;</span><span class="p">,</span>
+                <span class="p">)</span>
+    <span class="n">x_range_name</span> <span class="o">=</span> <span class="s1">&#39;x_plot_axis&#39;</span>
+    <span class="n">converter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClockConverter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">use_sim_time</span><span class="p">:</span>
+        <span class="n">cbs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CallbackBase</span><span class="p">]</span> <span class="o">=</span> <span class="n">Util</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span>
+            <span class="n">cbg</span><span class="o">.</span><span class="n">callbacks</span> <span class="k">for</span> <span class="n">cbg</span> <span class="ow">in</span> <span class="n">cbgs</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cbg</span><span class="o">.</span><span class="n">callbacks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">converter</span> <span class="o">=</span> <span class="n">cbs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">get_sim_time_converter</span><span class="p">()</span>  <span class="c1"># TODO(hsgwa): refactor</span>
+        <span class="n">frame_min</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">clipper</span><span class="o">.</span><span class="n">min_ns</span><span class="p">)</span>
+        <span class="n">frame_max</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">clipper</span><span class="o">.</span><span class="n">max_ns</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">frame_min</span> <span class="o">=</span> <span class="n">clipper</span><span class="o">.</span><span class="n">min_ns</span>
+        <span class="n">frame_max</span> <span class="o">=</span> <span class="n">clipper</span><span class="o">.</span><span class="n">max_ns</span>
+    <span class="n">apply_x_axis_offset</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x_range_name</span><span class="p">,</span> <span class="n">frame_min</span><span class="p">,</span> <span class="n">frame_max</span><span class="p">)</span>
+
+    <span class="n">rect_y</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">rect_height</span> <span class="o">=</span> <span class="mf">0.3</span>
+    <span class="n">rect_y_step</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.5</span>
+    <span class="n">callbcak_num</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">callback_group</span> <span class="ow">in</span> <span class="n">cbgs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="n">callback_group</span><span class="o">.</span><span class="n">callbacks</span><span class="p">:</span>
+            <span class="n">callbcak_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">rect_source</span> <span class="o">=</span> <span class="n">get_callback_rects</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">clipper</span><span class="p">,</span> <span class="n">rect_y</span><span class="p">,</span> <span class="n">rect_height</span><span class="p">,</span> <span class="n">converter</span><span class="p">)</span>
+            <span class="n">bar_source</span> <span class="o">=</span> <span class="n">get_callback_bar</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">rect_y</span><span class="p">,</span> <span class="n">frame_max</span><span class="p">,</span> <span class="n">frame_min</span><span class="p">)</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">color_selector</span><span class="o">.</span><span class="n">get_color</span><span class="p">(</span>
+                <span class="n">callback</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+                <span class="n">callback_group</span><span class="o">.</span><span class="n">callback_group_name</span><span class="p">,</span>
+                <span class="n">callback</span><span class="o">.</span><span class="n">callback_name</span><span class="p">)</span>
+            <span class="n">plot1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span>
+                   <span class="s1">&#39;x&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;y&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;width&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;height&#39;</span><span class="p">,</span>
+                   <span class="n">source</span><span class="o">=</span><span class="n">rect_source</span><span class="p">,</span>
+                   <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                   <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                   <span class="n">hover_fill_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                   <span class="n">hover_alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                   <span class="n">x_range_name</span><span class="o">=</span><span class="n">x_range_name</span><span class="p">)</span>
+
+            <span class="n">plot2</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span>
+                   <span class="s1">&#39;x&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;y&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;width&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;height&#39;</span><span class="p">,</span>
+                   <span class="n">source</span><span class="o">=</span><span class="n">bar_source</span><span class="p">,</span>
+                   <span class="n">fill_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                   <span class="n">legend_label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;callback</span><span class="si">{</span><span class="n">callbcak_num</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                   <span class="n">hover_fill_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                   <span class="n">hover_alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                   <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                   <span class="n">level</span><span class="o">=</span><span class="s1">&#39;underlay&#39;</span><span class="p">,</span>
+                   <span class="n">x_range_name</span><span class="o">=</span><span class="n">x_range_name</span><span class="p">)</span>
+
+            <span class="n">Hover1</span> <span class="o">=</span> <span class="n">HoverTool</span><span class="p">(</span>
+                     <span class="n">renderers</span><span class="o">=</span><span class="p">[</span><span class="n">plot1</span><span class="p">],</span>
+                     <span class="n">tooltips</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                     &lt;div style=&quot;width:400px; word-wrap: break-word;&quot;&gt;</span>
+<span class="s2">                     &lt;br&gt;</span>
+<span class="s2">                     callback_start = @x_min [ns] &lt;br&gt;</span>
+<span class="s2">                     callback_end = @x_max [ns] &lt;br&gt;</span>
+<span class="s2">                     latency = @latency [ms] &lt;br&gt;</span>
+<span class="s2">                     &quot;&quot;&quot;</span><span class="p">,</span>
+                     <span class="n">toggleable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">attachment</span><span class="o">=</span><span class="s1">&#39;above&#39;</span><span class="p">)</span>
+
+            <span class="n">Hover2</span> <span class="o">=</span> <span class="n">HoverTool</span><span class="p">(</span>
+                     <span class="n">renderers</span><span class="o">=</span><span class="p">[</span><span class="n">plot2</span><span class="p">],</span>
+                     <span class="n">tooltips</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                     &lt;div style=&quot;width:400px; word-wrap: break-word;&quot;&gt;</span>
+<span class="s2">                     &lt;br&gt;</span>
+<span class="s2">                     node_name = @node_name &lt;br&gt;</span>
+<span class="s2">                     callback_type = @callback_type &lt;br&gt;</span>
+<span class="s2">                     @callback_param &lt;br&gt;</span>
+<span class="s2">                     symbol = @symbol</span>
+<span class="s2">                     &lt;/div&gt;</span>
+<span class="s2">                     &quot;&quot;&quot;</span><span class="p">,</span>
+                     <span class="n">toggleable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">point_policy</span><span class="o">=</span><span class="s1">&#39;follow_mouse&#39;</span><span class="p">,</span>
+                     <span class="n">attachment</span><span class="o">=</span><span class="s1">&#39;below&#39;</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">add_tools</span><span class="p">(</span><span class="n">Hover1</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">add_tools</span><span class="p">(</span><span class="n">Hover2</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">TimerCallback</span><span class="p">):</span>
+                <span class="n">y_start</span> <span class="o">=</span> <span class="n">rect_source</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.9</span>
+                <span class="n">y_end</span> <span class="o">=</span> <span class="n">rect_source</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">rect_height</span>
+                <span class="n">timer</span> <span class="o">=</span> <span class="n">callback</span><span class="o">.</span><span class="n">timer</span>
+                <span class="k">assert</span> <span class="n">timer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
+                    <span class="n">timerstamp</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">_1</span>
+                    <span class="n">callback_start</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">_2</span>
+                    <span class="c1"># callback_end = item._3</span>
+                    <span class="n">res</span> <span class="o">=</span> <span class="n">callback_start</span><span class="o">-</span><span class="n">timerstamp</span>
+                    <span class="n">delayed_th</span> <span class="o">=</span> <span class="mi">500000</span>
+                    <span class="c1"># The callback is considered delayed if this value is exceeded.</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">res</span> <span class="o">&gt;</span> <span class="n">delayed_th</span><span class="p">:</span>
+                            <span class="n">p</span><span class="o">.</span><span class="n">add_layout</span><span class="p">(</span><span class="n">Arrow</span><span class="p">(</span><span class="n">end</span><span class="o">=</span><span class="n">NormalHead</span><span class="p">(</span>
+                                <span class="n">fill_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                                <span class="n">line_width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">size</span><span class="o">=</span><span class="mi">10</span>
+                                <span class="p">),</span>
+                                       <span class="n">x_start</span><span class="o">=</span><span class="p">(</span><span class="n">timerstamp</span><span class="o">-</span><span class="n">frame_min</span><span class="p">)</span><span class="o">*</span><span class="mf">1.0e-9</span><span class="p">,</span> <span class="n">y_start</span><span class="o">=</span><span class="n">y_start</span><span class="p">,</span>
+                                       <span class="n">x_end</span><span class="o">=</span><span class="p">(</span><span class="n">timerstamp</span><span class="o">-</span><span class="n">frame_min</span><span class="p">)</span><span class="o">*</span><span class="mf">1.0e-9</span><span class="p">,</span> <span class="n">y_end</span><span class="o">=</span><span class="n">y_end</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">p</span><span class="o">.</span><span class="n">add_layout</span><span class="p">(</span><span class="n">Arrow</span><span class="p">(</span><span class="n">end</span><span class="o">=</span><span class="n">NormalHead</span><span class="p">(</span>
+                                <span class="n">fill_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                                <span class="n">line_width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+                                       <span class="n">x_start</span><span class="o">=</span><span class="p">(</span><span class="n">timerstamp</span><span class="o">-</span><span class="n">frame_min</span><span class="p">)</span><span class="o">*</span><span class="mf">1.0e-9</span><span class="p">,</span> <span class="n">y_start</span><span class="o">=</span><span class="n">y_start</span><span class="p">,</span>
+                                       <span class="n">x_end</span><span class="o">=</span><span class="p">(</span><span class="n">timerstamp</span><span class="o">-</span><span class="n">frame_min</span><span class="p">)</span><span class="o">*</span><span class="mf">1.0e-9</span><span class="p">,</span> <span class="n">y_end</span><span class="o">=</span><span class="n">y_end</span><span class="p">))</span>
+            <span class="n">rect_y</span> <span class="o">+=</span> <span class="n">rect_y_step</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">ygrid</span><span class="o">.</span><span class="n">grid_line_alpha</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="s1">&#39;bottom_left&#39;</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">click_policy</span> <span class="o">=</span> <span class="s1">&#39;hide&#39;</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">add_layout</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">legend</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;right&#39;</span><span class="p">)</span>
+
+    <span class="n">show</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_callback_rects"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.get_callback_rects">[docs]</a><span class="k">def</span> <span class="nf">get_callback_rects</span><span class="p">(</span>
+    <span class="n">callback</span><span class="p">:</span> <span class="n">CallbackBase</span><span class="p">,</span>
+    <span class="n">clip</span><span class="p">:</span> <span class="n">Clip</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">height</span><span class="p">,</span>
+    <span class="n">converter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClockConverter</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ColumnDataSource</span><span class="p">:</span>
+    <span class="n">y_min</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">height</span>
+    <span class="n">y_max</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">height</span>
+
+    <span class="n">rect_source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;x_min&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;x_max&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;latency&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;node_name&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;callback_type&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;callback_param&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="p">[]</span>
+
+    <span class="p">})</span>
+
+    <span class="n">callback_param</span> <span class="o">=</span> <span class="n">get_callback_param_desc</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">callback</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="n">shaper</span><span class="o">=</span><span class="n">clip</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
+        <span class="n">callback_start</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">_1</span>
+        <span class="n">callback_end</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">_2</span>
+        <span class="k">if</span> <span class="n">converter</span><span class="p">:</span>
+            <span class="n">callback_start</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">callback_start</span><span class="p">)</span>
+            <span class="n">callback_end</span> <span class="o">=</span> <span class="n">converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">callback_end</span><span class="p">)</span>
+
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">RectValues</span><span class="p">(</span><span class="n">callback_start</span><span class="p">,</span> <span class="n">callback_end</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+        <span class="n">new_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">],</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">],</span>
+            <span class="s1">&#39;x_min&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">callback_start</span><span class="p">],</span>
+            <span class="s1">&#39;x_max&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">callback_end</span><span class="p">],</span>
+            <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">],</span>
+            <span class="s1">&#39;latency&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="n">callback_end</span><span class="o">-</span><span class="n">callback_start</span><span class="p">)</span><span class="o">*</span><span class="mf">1.0e-6</span><span class="p">],</span>
+            <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">],</span>
+            <span class="s1">&#39;node_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">callback</span><span class="o">.</span><span class="n">node_name</span><span class="p">],</span>
+            <span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">callback</span><span class="o">.</span><span class="n">symbol</span><span class="p">],</span>
+            <span class="s1">&#39;callback_param&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">callback_param</span><span class="p">],</span>
+            <span class="s1">&#39;callback_type&#39;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">callback</span><span class="o">.</span><span class="n">callback_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="n">rect_source</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rect_source</span></div>
+
+
+<div class="viewcode-block" id="get_callback_bar"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.get_callback_bar">[docs]</a><span class="k">def</span> <span class="nf">get_callback_bar</span><span class="p">(</span>
+    <span class="n">callback</span><span class="p">:</span> <span class="n">CallbackBase</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">frame_max</span><span class="p">,</span>
+    <span class="n">frame_min</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ColumnDataSource</span><span class="p">:</span>
+    <span class="n">y_min</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mf">0.6</span>
+    <span class="n">y_max</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span>
+
+    <span class="n">rect_source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;node_name&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;callback_type&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;callback_param&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="p">[]</span>
+
+    <span class="p">})</span>
+
+    <span class="n">callback_param</span> <span class="o">=</span> <span class="n">get_callback_param_desc</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+    <span class="n">bar_start</span> <span class="o">=</span> <span class="n">frame_min</span> <span class="o">-</span> <span class="mi">10000000000</span>
+    <span class="n">bar_end</span> <span class="o">=</span> <span class="n">frame_max</span> <span class="o">+</span> <span class="mi">10000000000</span>
+    <span class="n">rect</span> <span class="o">=</span> <span class="n">RectValues</span><span class="p">(</span><span class="n">bar_start</span><span class="p">,</span> <span class="n">bar_end</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+    <span class="n">rect_source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">],</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">],</span>
+            <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">],</span>
+            <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">],</span>
+            <span class="s1">&#39;node_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">callback</span><span class="o">.</span><span class="n">node_name</span><span class="p">],</span>
+            <span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">callback</span><span class="o">.</span><span class="n">symbol</span><span class="p">],</span>
+            <span class="s1">&#39;callback_param&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">callback_param</span><span class="p">],</span>
+            <span class="s1">&#39;callback_type&#39;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">callback</span><span class="o">.</span><span class="n">callback_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">rect_source</span></div>
+
+
+<div class="viewcode-block" id="ColorSelector"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.ColorSelector">[docs]</a><span class="k">class</span> <span class="nc">ColorSelector</span><span class="p">:</span>
+
+<div class="viewcode-block" id="ColorSelector.create_instance"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.ColorSelector.create_instance">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="n">coloring_rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">coloring_rule</span> <span class="o">==</span> <span class="s1">&#39;callback&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ColorSelectorCallback</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">coloring_rule</span> <span class="o">==</span> <span class="s1">&#39;callback_group&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ColorSelectorCbg</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">coloring_rule</span> <span class="o">==</span> <span class="s1">&#39;node&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ColorSelectorNode</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_palette</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_from_rgb</span><span class="p">(</span><span class="o">*</span><span class="n">rgb</span><span class="p">)</span> <span class="k">for</span> <span class="n">rgb</span> <span class="ow">in</span> <span class="n">cc</span><span class="o">.</span><span class="n">glasbey_bw_minc_20</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Color</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="ColorSelector.get_color"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.ColorSelector.get_color">[docs]</a>    <span class="k">def</span> <span class="nf">get_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cbg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="n">color_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_color_hash</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">cbg_name</span><span class="p">,</span> <span class="n">callback_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">color_hash</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color_map</span><span class="p">:</span>
+            <span class="n">color_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color_map</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_palette</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_color_map</span><span class="p">[</span><span class="n">color_hash</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_palette</span><span class="p">[</span><span class="n">color_index</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color_map</span><span class="p">[</span><span class="n">color_hash</span><span class="p">]</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_color_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cbg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_from_rgb</span><span class="p">(</span><span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="n">r_</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span>
+        <span class="n">g_</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span>
+        <span class="n">b_</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RGB</span><span class="p">(</span><span class="n">r_</span><span class="p">,</span> <span class="n">g_</span><span class="p">,</span> <span class="n">b_</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ColorSelectorCallback"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.ColorSelectorCallback">[docs]</a><span class="k">class</span> <span class="nc">ColorSelectorCallback</span><span class="p">(</span><span class="n">ColorSelector</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_get_color_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cbg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">callback_name</span></div>
+
+
+<div class="viewcode-block" id="ColorSelectorCbg"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.ColorSelectorCbg">[docs]</a><span class="k">class</span> <span class="nc">ColorSelectorCbg</span><span class="p">(</span><span class="n">ColorSelector</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_get_color_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cbg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cbg_name</span></div>
+
+
+<div class="viewcode-block" id="ColorSelectorNode"><a class="viewcode-back" href="../../../../caret_analyze.plot.bokeh.callback_sched.html#caret_analyze.plot.ColorSelectorNode">[docs]</a><span class="k">class</span> <span class="nc">ColorSelectorNode</span><span class="p">(</span><span class="n">ColorSelector</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_get_color_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cbg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">node_name</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.plot.bokeh.callback_sched</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

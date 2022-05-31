@@ -1,0 +1,626 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.lttng.lttng &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.lttng</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.infra.lttng.lttng</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">bt2</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">tracetools_analysis.loading</span> <span class="kn">import</span> <span class="n">load_file</span>
+
+<span class="kn">from</span> <span class="nn">.event_filter</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Event</span><span class="p">,</span>
+    <span class="n">LttngEventFilter</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.records_post_process</span> <span class="kn">import</span> <span class="n">post_process_records</span>
+<span class="kn">from</span> <span class="nn">.ros2_tracing.data_model</span> <span class="kn">import</span> <span class="n">DataModel</span>
+<span class="kn">from</span> <span class="nn">.ros2_tracing.processor</span> <span class="kn">import</span> <span class="n">Ros2Handler</span>
+<span class="kn">from</span> <span class="nn">.value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ClientCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">IntraProcessBufferValueLttng</span><span class="p">,</span>
+    <span class="n">PublisherValueLttng</span><span class="p">,</span>
+    <span class="n">ServiceCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">SubscriptionCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">SubscriptionValueLttng</span><span class="p">,</span>
+    <span class="n">TimerCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">TransformBroadcasterValueLttng</span><span class="p">,</span>
+    <span class="n">TransformBufferValueLttng</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..infra_base</span> <span class="kn">import</span> <span class="n">InfraBase</span>
+<span class="kn">from</span> <span class="nn">...common</span> <span class="kn">import</span> <span class="n">ClockConverter</span>
+<span class="kn">from</span> <span class="nn">...exceptions</span> <span class="kn">import</span> <span class="n">InvalidRecordsError</span>
+<span class="kn">from</span> <span class="nn">...record</span> <span class="kn">import</span> <span class="n">ColumnMapper</span><span class="p">,</span> <span class="n">RecordsInterface</span>
+<span class="kn">from</span> <span class="nn">...value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BroadcastedTransformValue</span><span class="p">,</span>
+    <span class="n">CallbackGroupValue</span><span class="p">,</span>
+    <span class="n">CallbackStructValue</span><span class="p">,</span>
+    <span class="n">CommunicationStructValue</span><span class="p">,</span>
+    <span class="n">ExecutorValue</span><span class="p">,</span>
+    <span class="n">IntraProcessBufferStructValue</span><span class="p">,</span>
+    <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="n">NodeValue</span><span class="p">,</span>
+    <span class="n">PublisherStructValue</span><span class="p">,</span>
+    <span class="n">Qos</span><span class="p">,</span>
+    <span class="n">SubscriptionStructValue</span><span class="p">,</span>
+    <span class="n">TimerStructValue</span><span class="p">,</span>
+    <span class="n">TimerValue</span><span class="p">,</span>
+    <span class="n">TransformCommunicationStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+    <span class="n">VariablePassingStructValue</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Lttng"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng">[docs]</a><span class="k">class</span> <span class="nc">Lttng</span><span class="p">(</span><span class="n">InfraBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Lttng data container class.</span>
+
+<span class="sd">    This class is a singleton in order to retain information.</span>
+<span class="sd">    The main processing is done by LttngInfo and RecordsSource.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_last_load_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_last_filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">LttngEventFilter</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">trace_dir_or_events</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">],</span>
+        <span class="n">force_conversion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">use_singleton_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">event_filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">LttngEventFilter</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">store_events</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.lttng_info</span> <span class="kn">import</span> <span class="n">LttngInfo</span>
+        <span class="kn">from</span> <span class="nn">.bridge</span> <span class="kn">import</span> <span class="n">LttngBridge</span>
+        <span class="kn">from</span> <span class="nn">.records_source</span> <span class="kn">import</span> <span class="n">RecordsSource</span>
+        <span class="kn">from</span> <span class="nn">.event_counter</span> <span class="kn">import</span> <span class="n">EventCounter</span>
+
+        <span class="n">event_filters</span> <span class="o">=</span> <span class="n">event_filters</span> <span class="ow">or</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_load_dir</span> <span class="o">==</span> <span class="n">trace_dir_or_events</span> <span class="ow">and</span> <span class="n">use_singleton_cache</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> \
+                <span class="n">event_filters</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_filters</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">data</span><span class="p">,</span> <span class="n">events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_lttng_data</span><span class="p">(</span>
+            <span class="n">trace_dir_or_events</span><span class="p">,</span>
+            <span class="n">force_conversion</span><span class="p">,</span>
+            <span class="n">event_filters</span>
+        <span class="p">)</span>
+        <span class="n">post_process_records</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_info</span> <span class="o">=</span> <span class="n">LttngInfo</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bridge</span> <span class="o">=</span> <span class="n">LttngBridge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="p">:</span> <span class="n">RecordsSource</span> <span class="o">=</span> <span class="n">RecordsSource</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bridge</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span> <span class="o">=</span> <span class="n">EventCounter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span> <span class="k">if</span> <span class="n">store_events</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tf_frame_id_mapper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_tf_column_mapper</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Lttng.clear_singleton_cache"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.clear_singleton_cache">[docs]</a>    <span class="k">def</span> <span class="nf">clear_singleton_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_load_dir</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_init_tf_column_mapper</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ColumnMapper</span><span class="p">:</span>
+        <span class="n">frame_id_mapper</span> <span class="o">=</span> <span class="n">ColumnMapper</span><span class="p">()</span>
+
+        <span class="n">frames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tf_frames</span><span class="p">()</span>
+        <span class="n">frame_names</span> <span class="o">=</span> \
+            <span class="nb">sorted</span><span class="p">({</span><span class="n">f</span><span class="o">.</span><span class="n">source_frame_id</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">}</span> <span class="o">|</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">target_frame_id</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">frame_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">frame_names</span><span class="p">):</span>
+            <span class="n">frame_id_mapper</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">frame_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">frame_id_mapper</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_lttng_data</span><span class="p">(</span>
+        <span class="n">trace_dir_or_events</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">],</span>
+        <span class="n">force_conversion</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">event_filters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LttngEventFilter</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">DataModel</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">trace_dir_or_events</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># Check for traces lost</span>
+            <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">bt2</span><span class="o">.</span><span class="n">TraceCollectionMessageIterator</span><span class="p">(</span><span class="n">trace_dir_or_events</span><span class="p">):</span>
+                <span class="k">if</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="ow">is</span> <span class="n">bt2</span><span class="o">.</span><span class="n">_DiscardedEventsMessageConst</span><span class="p">):</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Tracer discarded &#39;</span>
+                           <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s1"> events between &#39;</span>
+                           <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">beginning_default_clock_snapshot</span><span class="o">.</span><span class="n">ns_from_origin</span><span class="si">}</span><span class="s1"> and &#39;</span>
+                           <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">end_default_clock_snapshot</span><span class="o">.</span><span class="n">ns_from_origin</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="n">Lttng</span><span class="o">.</span><span class="n">_last_load_dir</span> <span class="o">=</span> <span class="n">trace_dir_or_events</span>
+            <span class="n">Lttng</span><span class="o">.</span><span class="n">_last_filters</span> <span class="o">=</span> <span class="n">event_filters</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="n">load_file</span><span class="p">(</span><span class="n">trace_dir_or_events</span><span class="p">,</span> <span class="n">force_conversion</span><span class="o">=</span><span class="n">force_conversion</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> events found.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="n">trace_dir_or_events</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">event_filters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="n">Lttng</span><span class="o">.</span><span class="n">_filter_events</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">event_filters</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;filted to </span><span class="si">{}</span><span class="s1"> events.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)))</span>
+
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">Ros2Handler</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">handler</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">events</span>
+
+<div class="viewcode-block" id="Lttng.get_service_callbacks"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_service_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">get_service_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ServiceCallbackValueLttng</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_service_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_client_callbacks"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_client_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">get_client_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ClientCallbackValueLttng</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_client_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_filter_events</span><span class="p">(</span><span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Event</span><span class="p">],</span> <span class="n">filters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LttngEventFilter</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">common</span> <span class="o">=</span> <span class="n">LttngEventFilter</span><span class="o">.</span><span class="n">Common</span><span class="p">()</span>
+        <span class="n">common</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">LttngEventFilter</span><span class="o">.</span><span class="n">TIMESTAMP</span><span class="p">]</span>
+        <span class="n">common</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">LttngEventFilter</span><span class="o">.</span><span class="n">TIMESTAMP</span><span class="p">]</span>
+
+        <span class="n">filtered</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">events</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">event_filter</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">common</span><span class="p">)</span> <span class="k">for</span> <span class="n">event_filter</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">):</span>
+                <span class="n">filtered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">filtered</span>
+
+<div class="viewcode-block" id="Lttng.get_nodes"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">NodeValue</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get nodes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sequence[NodeValue]</span>
+<span class="sd">            nodes info.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Lttng.get_node"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_node</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeValue</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_rmw_impl"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_rmw_impl">[docs]</a>    <span class="k">def</span> <span class="nf">get_rmw_impl</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get rmw implementation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            rmw_implementation</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_rmw_impl</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Lttng.get_executors"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_executors">[docs]</a>    <span class="k">def</span> <span class="nf">get_executors</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExecutorValue</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get executors information.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sequence[ExecutorInfo]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_executors</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Lttng.get_callback_groups"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_callback_groups">[docs]</a>    <span class="k">def</span> <span class="nf">get_callback_groups</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">CallbackGroupValue</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get callback group information.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sequence[CallbackGroupValue]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_callback_groups</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_publishers"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_publishers">[docs]</a>    <span class="k">def</span> <span class="nf">get_publishers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PublisherValueLttng</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get publishers information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : NodeValue</span>
+<span class="sd">            target node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sequence[PublisherInfoLttng]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_publishers</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_subscriptions"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_subscriptions">[docs]</a>    <span class="k">def</span> <span class="nf">get_subscriptions</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SubscriptionValueLttng</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get subscriptions information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : NodeValue</span>
+<span class="sd">            target node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sequence[SubscriptionInfoLttng]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_subscriptions</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_tf_broadcaster"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_tf_broadcaster">[docs]</a>    <span class="k">def</span> <span class="nf">get_tf_broadcaster</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformBroadcasterValueLttng</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_tf_broadcaster</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_timers"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_timers">[docs]</a>    <span class="k">def</span> <span class="nf">get_timers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TimerValue</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get timers information.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sequence[TimerValue]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_timers</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_timer_callbacks"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_timer_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">get_timer_callbacks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TimerCallbackValueLttng</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get timer callback values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : NodeValue</span>
+<span class="sd">            target node name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sequence[TimerCallbackInfoLttng]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_timer_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_subscription_callbacks"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_subscription_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">get_subscription_callbacks</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SubscriptionCallbackValueLttng</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get subscription callbacks infomation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : NodeValue</span>
+<span class="sd">            target node name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sequence[SubscriptionCallbackInfoLttng]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_subscription_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_publisher_qos"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_publisher_qos">[docs]</a>    <span class="k">def</span> <span class="nf">get_publisher_qos</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pub</span><span class="p">:</span> <span class="n">PublisherStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Qos</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get publisher qos.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pub : PublisherValueLttng</span>
+<span class="sd">            target publisher</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Qos</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pubs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bridge</span><span class="o">.</span><span class="n">get_publishers</span><span class="p">(</span><span class="n">pub</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_publisher_qos</span><span class="p">(</span><span class="n">pubs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Lttng.get_subscription_qos"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_subscription_qos">[docs]</a>    <span class="k">def</span> <span class="nf">get_subscription_qos</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sub</span><span class="p">:</span> <span class="n">SubscriptionStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Qos</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get subscription qos.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sub : SubscriptionValueLttng</span>
+<span class="sd">            target subscription</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Qos</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sub_lttng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bridge</span><span class="o">.</span><span class="n">get_subscription_callback</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">callback</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_subscription_qos</span><span class="p">(</span><span class="n">sub_lttng</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_sim_time_converter"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_sim_time_converter">[docs]</a>    <span class="k">def</span> <span class="nf">get_sim_time_converter</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClockConverter</span><span class="p">:</span>
+        <span class="n">records</span><span class="p">:</span> <span class="n">RecordsInterface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">system_and_sim_times</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidRecordsError</span><span class="p">(</span>
+                <span class="s1">&#39;Failed to load sim_time. Please measure again with clock_recorder running.&#39;</span>
+            <span class="p">)</span>
+
+        <span class="n">system_times</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">get_column_series</span><span class="p">(</span><span class="s1">&#39;system_time&#39;</span><span class="p">)</span>
+        <span class="n">sim_times</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">get_column_series</span><span class="p">(</span><span class="s1">&#39;sim_time&#39;</span><span class="p">)</span>
+        <span class="n">system_times_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">system_times</span> <span class="k">if</span> <span class="n">_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">sim_times_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sim_times</span> <span class="k">if</span> <span class="n">_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClockConverter</span><span class="o">.</span><span class="n">create_from_series</span><span class="p">(</span><span class="n">system_times_filtered</span><span class="p">,</span> <span class="n">sim_times_filtered</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_ipc_buffers"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_ipc_buffers">[docs]</a>    <span class="k">def</span> <span class="nf">get_ipc_buffers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">IntraProcessBufferValueLttng</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_ipc_buffers</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_ipc_buffer_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_ipc_buffer_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_ipc_buffer_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">IntraProcessBufferStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">ipc_buffer_records</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_count"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_count">[docs]</a>    <span class="k">def</span> <span class="nf">get_count</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">groupby</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">groupby</span> <span class="o">=</span> <span class="n">groupby</span> <span class="ow">or</span> <span class="p">[</span><span class="s1">&#39;trace_point&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_counter</span><span class="o">.</span><span class="n">get_count</span><span class="p">(</span><span class="n">groupby</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_var_pass_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_var_pass_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_var_pass_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">var_pass</span><span class="p">:</span> <span class="n">VariablePassingStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">get_var_pass_records</span><span class="p">(</span><span class="n">var_pass</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_tf_buffer"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_tf_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">get_tf_buffer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformBufferValueLttng</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_tf_buffer</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_tf_frames"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_tf_frames">[docs]</a>    <span class="k">def</span> <span class="nf">get_tf_frames</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BroadcastedTransformValue</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">get_tf_frames</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Lttng.is_intra_process_communication"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.is_intra_process_communication">[docs]</a>    <span class="k">def</span> <span class="nf">is_intra_process_communication</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span><span class="p">,</span>
+        <span class="n">subscription</span><span class="p">:</span> <span class="n">SubscriptionStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">publishers_lttng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bridge</span><span class="o">.</span><span class="n">get_publishers</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span>
+        <span class="n">subscription_lttng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bridge</span><span class="o">.</span><span class="n">get_subscription</span><span class="p">(</span><span class="n">subscription</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">is_intra_process_communication</span><span class="p">(</span><span class="n">publishers_lttng</span><span class="p">,</span> <span class="n">subscription_lttng</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_inter_proc_tf_comm_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_inter_proc_tf_comm_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_inter_proc_tf_comm_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">comm</span><span class="p">:</span> <span class="n">TransformCommunicationStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">get_inter_proc_tf_comm_records</span><span class="p">(</span><span class="n">comm</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_inter_proc_comm_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_inter_proc_comm_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_inter_proc_comm_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">comm</span><span class="p">:</span> <span class="n">CommunicationStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compose inter process communication records of all communications in one records.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+<span class="sd">            columns</span>
+<span class="sd">            - callback_object</span>
+<span class="sd">            - callback_start_timestamp</span>
+<span class="sd">            - publisher_handle</span>
+<span class="sd">            - rclcpp_publish_timestamp</span>
+<span class="sd">            - rcl_publish_timestamp (Optional)</span>
+<span class="sd">            - dds_write_timestamp (Optional)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">inter_proc_comm_records</span><span class="p">(</span><span class="n">comm</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_intra_proc_comm_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_intra_proc_comm_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_intra_proc_comm_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">comm</span><span class="p">:</span> <span class="n">CommunicationStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compose inter process communication records of all communications in one records.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+<span class="sd">            columns</span>
+<span class="sd">            - callback_object</span>
+<span class="sd">            - callback_start_timestamp</span>
+<span class="sd">            - publisher_handle</span>
+<span class="sd">            - rclcpp_publish_timestamp</span>
+<span class="sd">            - rcl_publish_timestamp (Optional)</span>
+<span class="sd">            - dds_write_timestamp (Optional)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">intra_proc_comm_records</span><span class="p">(</span><span class="n">comm</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_callback_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_callback_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_callback_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">callback</span><span class="p">:</span> <span class="n">CallbackStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">callback_records</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_node_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_node_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_path</span><span class="p">:</span> <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">get_node_records</span><span class="p">(</span><span class="n">node_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_publish_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_publish_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_publish_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">publish_records</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_intra_publish_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_intra_publish_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_intra_publish_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">intra_publish_records</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_timer_callback"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_timer_callback">[docs]</a>    <span class="k">def</span> <span class="nf">get_timer_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">timer</span><span class="p">:</span> <span class="n">TimerStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">get_timer_records</span><span class="p">(</span><span class="n">timer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_subscribe_records"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_subscribe_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_subscribe_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">subscription</span><span class="p">:</span> <span class="n">SubscriptionStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">subscribe_records</span><span class="p">(</span><span class="n">subscription</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_send_transform"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_send_transform">[docs]</a>    <span class="k">def</span> <span class="nf">get_send_transform</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">broadcaster</span><span class="p">:</span> <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">send_transform_records</span><span class="p">(</span><span class="n">broadcaster</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lttng.get_lookup_transform"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.lttng.html#caret_analyze.Lttng.get_lookup_transform">[docs]</a>    <span class="k">def</span> <span class="nf">get_lookup_transform</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">lookup_transform_records</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.lttng</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

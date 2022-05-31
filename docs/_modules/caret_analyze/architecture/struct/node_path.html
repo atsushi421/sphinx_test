@@ -1,0 +1,379 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.architecture.struct.node_path &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.struct.node_path</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.architecture.struct.node_path</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Iterable</span><span class="p">,</span>
+    <span class="n">Iterator</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">multimethod</span> <span class="kn">import</span> <span class="n">multimethod</span> <span class="k">as</span> <span class="n">singledispatchmethod</span>
+
+<span class="kn">from</span> <span class="nn">.callback_path</span> <span class="kn">import</span> <span class="n">CallbackPathStruct</span>
+<span class="kn">from</span> <span class="nn">.publisher</span> <span class="kn">import</span> <span class="n">PublisherStruct</span>
+<span class="kn">from</span> <span class="nn">.struct_interface</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NodeInputType</span><span class="p">,</span>
+    <span class="n">NodeOutputType</span><span class="p">,</span>
+    <span class="n">NodePathsStructInterface</span><span class="p">,</span>
+    <span class="n">NodePathStructInterface</span><span class="p">,</span>
+    <span class="n">NodeStructInterface</span><span class="p">,</span>
+    <span class="n">TransformFrameBroadcasterStructInterface</span><span class="p">,</span>
+    <span class="n">TransformFrameBufferStructInterface</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.subscription</span> <span class="kn">import</span> <span class="n">SubscriptionStruct</span>
+<span class="kn">from</span> <span class="nn">.transform</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TransformFrameBroadcasterStruct</span><span class="p">,</span>
+    <span class="n">TransformFrameBufferStruct</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..reader_interface</span> <span class="kn">import</span> <span class="n">ArchitectureReader</span>
+<span class="kn">from</span> <span class="nn">...exceptions</span> <span class="kn">import</span> <span class="n">ItemNotFoundError</span>
+<span class="kn">from</span> <span class="nn">...value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MessageContext</span><span class="p">,</span>
+    <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="n">NodePathValue</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="NodePathStruct"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.node_path.html#caret_analyze.architecture.struct.NodePathStruct">[docs]</a><span class="k">class</span> <span class="nc">NodePathStruct</span><span class="p">(</span><span class="n">NodePathStructInterface</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">node_input</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">],</span>
+        <span class="n">node_output</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">],</span>
+        <span class="n">callback_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CallbackPathStruct</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">message_context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MessageContext</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node_name</span> <span class="o">=</span> <span class="n">node_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node_input</span> <span class="o">=</span> <span class="n">node_input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node_output</span> <span class="o">=</span> <span class="n">node_output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_path</span> <span class="o">=</span> <span class="n">callback_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_context</span> <span class="o">=</span> <span class="n">message_context</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PublisherStruct</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_output</span><span class="p">,</span> <span class="n">PublisherStruct</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_output</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">node_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_input</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">node_output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_output</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tf_frame_broadcaster</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformFrameBroadcasterStructInterface</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_output</span><span class="p">,</span> <span class="n">TransformFrameBroadcasterStructInterface</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_output</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subscription</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SubscriptionStruct</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_input</span><span class="p">,</span> <span class="n">SubscriptionStruct</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_input</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tf_frame_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TransformFrameBufferStructInterface</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_input</span><span class="p">,</span> <span class="n">TransformFrameBufferStructInterface</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_input</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="NodePathStruct.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.node_path.html#caret_analyze.architecture.struct.NodePathStruct.to_value">[docs]</a>    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodePathStructValue</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="c1"># assert self.publisher is not None or self.tf_frame_broadcaster is not None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">==</span> <span class="s1">&#39;/tf&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">None</span>
+
+        <span class="n">publisher</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+        <span class="n">subscription</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscription</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscription</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+        <span class="n">tf_frame_buffer</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tf_frame_buffer</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">tf_frame_buffer</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+        <span class="n">tf_frame_br</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span> <span class="ow">is</span> <span class="kc">None</span> \
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+        <span class="n">msg_contxt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_context</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback_path</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">NodePathStructValue</span><span class="p">(</span>
+            <span class="n">node_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+            <span class="n">subscription</span><span class="o">=</span><span class="n">subscription</span><span class="p">,</span>
+            <span class="n">publisher</span><span class="o">=</span><span class="n">publisher</span><span class="p">,</span>
+            <span class="n">tf_frame_buffer</span><span class="o">=</span><span class="n">tf_frame_buffer</span><span class="p">,</span>
+            <span class="n">tf_frame_broadcaster</span><span class="o">=</span><span class="n">tf_frame_br</span><span class="p">,</span>
+            <span class="n">child</span><span class="o">=</span><span class="n">child</span><span class="p">,</span>
+            <span class="n">message_context</span><span class="o">=</span><span class="n">msg_contxt</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">node_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">message_context</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MessageContext</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message_context</span>
+
+    <span class="nd">@message_context</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">message_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message_context</span><span class="p">:</span> <span class="n">MessageContext</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_context</span> <span class="o">=</span> <span class="n">message_context</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">child</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CallbackPathStruct</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback_path</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">callback_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CallbackPathStruct</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback_path</span>
+
+    <span class="nd">@callback_path</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">callback_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback_path</span><span class="p">:</span> <span class="n">CallbackPathStruct</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_path</span> <span class="o">=</span> <span class="n">callback_path</span></div>
+
+
+<div class="viewcode-block" id="NodePathsStruct"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.node_path.html#caret_analyze.architecture.struct.NodePathsStruct">[docs]</a><span class="k">class</span> <span class="nc">NodePathsStruct</span><span class="p">(</span><span class="n">NodePathsStructInterface</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodePathStruct</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="NodePathsStruct.insert"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.node_path.html#caret_analyze.architecture.struct.NodePathsStruct.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_path</span><span class="p">:</span> <span class="n">NodePathStruct</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NodePathsStruct.to_value"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.node_path.html#caret_analyze.architecture.struct.NodePathsStruct.to_value">[docs]</a>    <span class="k">def</span> <span class="nf">to_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NodePathStructValue</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">NodePathStruct</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NodePathsStruct.get"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.node_path.html#caret_analyze.architecture.struct.NodePathsStruct.get">[docs]</a>    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Not implemented&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@get</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span> <span class="nf">_get_struct</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_input</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">],</span>
+        <span class="n">node_output</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodePathStruct</span><span class="p">:</span>
+        <span class="n">node_name</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_input</span><span class="p">,</span> <span class="n">SubscriptionStruct</span><span class="p">):</span>
+            <span class="n">node_name</span> <span class="o">=</span> <span class="n">node_input</span><span class="o">.</span><span class="n">node_name</span> <span class="k">if</span> <span class="n">node_input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_input</span><span class="p">,</span> <span class="n">TransformFrameBufferStruct</span><span class="p">):</span>
+            <span class="n">node_name</span> <span class="o">=</span> <span class="n">node_name</span> <span class="ow">or</span> <span class="n">node_input</span><span class="o">.</span><span class="n">lookup_node_name</span> \
+                <span class="k">if</span> <span class="n">node_input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_output</span><span class="p">,</span> <span class="n">PublisherStruct</span><span class="p">):</span>
+            <span class="n">node_name</span> <span class="o">=</span> <span class="n">node_name</span> <span class="ow">or</span> <span class="n">node_output</span><span class="o">.</span><span class="n">node_name</span> <span class="k">if</span> <span class="n">node_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_output</span><span class="p">,</span> <span class="n">TransformFrameBroadcasterStruct</span><span class="p">):</span>
+            <span class="n">node_name</span> <span class="o">=</span> <span class="n">node_name</span> <span class="ow">or</span> <span class="n">node_output</span><span class="o">.</span><span class="n">node_name</span> <span class="k">if</span> <span class="n">node_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">assert</span> <span class="n">node_input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">node_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="n">node_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">node_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node_path</span><span class="o">.</span><span class="n">node_input</span> <span class="o">==</span> <span class="n">node_input</span> <span class="ow">and</span> \
+                <span class="n">node_path</span><span class="o">.</span><span class="n">node_output</span> <span class="o">==</span> <span class="n">node_output</span> <span class="ow">and</span> \
+                    <span class="n">node_path</span><span class="o">.</span><span class="n">node_name</span> <span class="o">==</span> <span class="n">node_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">node_path</span>
+
+        <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="s1">&#39;Failed to find node path&#39;</span><span class="p">)</span>
+
+    <span class="nd">@get</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span> <span class="nf">_get_node_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_path</span><span class="p">:</span> <span class="n">NodePathValue</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dict</span><span class="p">(</span>
+            <span class="n">node_name</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+            <span class="n">subscribe_topic_name</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">subscribe_topic_name</span><span class="p">,</span>
+            <span class="n">publish_topic_name</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">publish_topic_name</span><span class="p">,</span>
+            <span class="n">broadcast_frame_id</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">broadcast_frame_id</span><span class="p">,</span>
+            <span class="n">broadcast_child_frame_id</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">broadcast_child_frame_id</span><span class="p">,</span>
+            <span class="n">buffer_listen_frame_id</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">buffer_listen_frame_id</span><span class="p">,</span>
+            <span class="n">buffer_listen_child_frame_id</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">buffer_listen_child_frame_id</span><span class="p">,</span>
+            <span class="n">buffer_lookup_frame_id</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">buffer_lookup_source_frame_id</span><span class="p">,</span>
+            <span class="n">buffer_lookup_child_frame_id</span><span class="o">=</span><span class="n">node_path</span><span class="o">.</span><span class="n">buffer_lookup_target_frame_id</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@get</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span> <span class="nf">_get_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">subscribe_topic_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">publish_topic_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">broadcast_frame_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">broadcast_child_frame_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">buffer_listen_frame_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">buffer_listen_child_frame_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">buffer_lookup_frame_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">buffer_lookup_child_frame_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodePathStruct</span><span class="p">:</span>
+        <span class="c1"># TODO(hsgwa): add assertion here.</span>
+        <span class="n">is_publisher</span> <span class="o">=</span> <span class="n">publish_topic_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">is_subscrioption</span> <span class="o">=</span> <span class="n">subscribe_topic_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">is_tf_br</span> <span class="o">=</span> <span class="n">broadcast_frame_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">broadcast_child_frame_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">is_tf_buff</span> <span class="o">=</span> <span class="n">buffer_listen_frame_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">buffer_listen_child_frame_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">node_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node_path</span><span class="o">.</span><span class="n">node_name</span> <span class="o">!=</span> <span class="n">node_name</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">node_out_matched</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">node_in_matched</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">node_path</span><span class="o">.</span><span class="n">publisher</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">node_path</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> \
+                    <span class="n">is_publisher</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">is_tf_br</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">node_out_matched</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">node_path</span><span class="o">.</span><span class="n">publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                    <span class="n">node_path</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">==</span> <span class="n">publish_topic_name</span><span class="p">:</span>
+                <span class="n">node_out_matched</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">tf_br</span> <span class="o">=</span> <span class="n">node_path</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span>
+            <span class="k">if</span> <span class="n">tf_br</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                <span class="n">tf_br</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">==</span> <span class="n">broadcast_frame_id</span> <span class="ow">and</span> \
+                    <span class="n">tf_br</span><span class="o">.</span><span class="n">child_frame_id</span> <span class="o">==</span> <span class="n">broadcast_child_frame_id</span><span class="p">:</span>
+                <span class="n">node_out_matched</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">node_path</span><span class="o">.</span><span class="n">subscription</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">node_path</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> \
+                    <span class="n">is_subscrioption</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">is_tf_buff</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">node_in_matched</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">node_path</span><span class="o">.</span><span class="n">subscription</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                    <span class="n">node_path</span><span class="o">.</span><span class="n">subscription</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">==</span> <span class="n">subscribe_topic_name</span><span class="p">:</span>
+                <span class="n">node_in_matched</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">tf_buf</span> <span class="o">=</span> <span class="n">node_path</span><span class="o">.</span><span class="n">tf_frame_buffer</span>
+            <span class="k">if</span> <span class="n">tf_buf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                <span class="n">tf_buf</span><span class="o">.</span><span class="n">listen_frame_id</span> <span class="o">==</span> <span class="n">buffer_listen_frame_id</span> <span class="ow">and</span> \
+                    <span class="n">tf_buf</span><span class="o">.</span><span class="n">listen_child_frame_id</span> <span class="o">==</span> <span class="n">buffer_listen_child_frame_id</span> <span class="ow">and</span> \
+                    <span class="n">tf_buf</span><span class="o">.</span><span class="n">lookup_source_frame_id</span> <span class="o">==</span> <span class="n">buffer_lookup_frame_id</span> <span class="ow">and</span> \
+                    <span class="n">tf_buf</span><span class="o">.</span><span class="n">lookup_target_frame_id</span> <span class="o">==</span> <span class="n">buffer_lookup_child_frame_id</span><span class="p">:</span>
+                <span class="n">node_in_matched</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">node_in_matched</span> <span class="ow">and</span> <span class="n">node_out_matched</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">node_path</span>
+
+        <span class="k">raise</span> <span class="n">ItemNotFoundError</span><span class="p">(</span><span class="s1">&#39;Failed to find node path&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NodePathsStruct.create"><a class="viewcode-back" href="../../../../caret_analyze.architecture.struct.node_path.html#caret_analyze.architecture.struct.NodePathsStruct.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">node_input</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeInputType</span><span class="p">],</span>
+        <span class="n">node_output</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NodeOutputType</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">node_path</span> <span class="o">=</span> <span class="n">NodePathStruct</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_input</span><span class="p">,</span> <span class="n">node_output</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_path</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_search_node_paths</span><span class="p">(</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeStructInterface</span><span class="p">,</span>
+        <span class="n">reader</span><span class="p">:</span> <span class="n">ArchitectureReader</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">NodePathStruct</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.struct.node_path</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

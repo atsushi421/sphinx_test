@@ -1,0 +1,7 @@
+caret\_analyze.record.grouped\_records module
+=============================================
+
+.. automodule:: caret_analyze.record.grouped_records
+   :members:
+   :undoc-members:
+   :show-inheritance:

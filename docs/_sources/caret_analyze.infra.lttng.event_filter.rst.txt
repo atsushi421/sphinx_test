@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.event\_filter module
+===============================================
+
+.. automodule:: caret_analyze.infra.lttng.event_filter
+   :members:
+   :undoc-members:
+   :show-inheritance:

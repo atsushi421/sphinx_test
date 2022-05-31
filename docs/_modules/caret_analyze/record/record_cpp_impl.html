@@ -1,0 +1,475 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.record.record_cpp_impl &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.record.record_cpp_impl</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.record.record_cpp_impl</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">record_cpp_impl</span> <span class="kn">import</span> <span class="n">RecordBase</span><span class="p">,</span> <span class="n">RecordsBase</span>
+
+<span class="kn">from</span> <span class="nn">.column</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Column</span><span class="p">,</span>
+    <span class="n">ColumnEventObserver</span><span class="p">,</span>
+    <span class="n">Columns</span><span class="p">,</span>
+    <span class="n">ColumnValue</span><span class="p">,</span>
+    <span class="n">UniqueList</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.record</span> <span class="kn">import</span> <span class="n">RecordInterface</span><span class="p">,</span> <span class="n">Records</span><span class="p">,</span> <span class="n">RecordsInterface</span>
+<span class="kn">from</span> <span class="nn">..common</span> <span class="kn">import</span> <span class="n">ClockConverter</span><span class="p">,</span> <span class="n">Progress</span>
+<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">InvalidArgumentError</span>
+
+
+<div class="viewcode-block" id="RecordCppImpl"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordCppImpl">[docs]</a><span class="k">class</span> <span class="nc">RecordCppImpl</span><span class="p">(</span><span class="n">RecordBase</span><span class="p">,</span> <span class="n">RecordInterface</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="RecordsCppImpl"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl">[docs]</a><span class="k">class</span> <span class="nc">RecordsCppImpl</span><span class="p">(</span><span class="n">RecordsInterface</span><span class="p">,</span> <span class="n">ColumnEventObserver</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">RecordInterface</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ColumnValue</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">:</span> <span class="n">Columns</span> <span class="o">=</span> <span class="n">Columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">,</span> <span class="n">Columns</span><span class="p">)</span>
+        <span class="n">Records</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span><span class="n">init</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="n">RecordsBase</span><span class="p">(</span><span class="n">init</span> <span class="ow">or</span> <span class="p">[],</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">])</span>
+        <span class="c1"># self._name_to_column = {}</span>
+        <span class="c1"># if columns is not None:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#         assert isinstance(c, Column)</span>
+        <span class="c1">#     self._name_to_column = {str(c): c for c in columns}</span>
+
+<div class="viewcode-block" id="RecordsCppImpl.on_column_renamed"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.on_column_renamed">[docs]</a>    <span class="k">def</span> <span class="nf">on_column_renamed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="n">old</span><span class="p">:</span> <span class="n">new</span><span class="p">})</span>
+        <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.on_column_dropped"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.on_column_dropped">[docs]</a>    <span class="k">def</span> <span class="nf">on_column_dropped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_drop_columns</span><span class="p">([</span><span class="n">column</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.on_column_reindexed"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.on_column_reindexed">[docs]</a>    <span class="k">def</span> <span class="nf">on_column_reindexed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reindex</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">column_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">columns</span>
+
+<div class="viewcode-block" id="RecordsCppImpl.export_json"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.export_json">[docs]</a>    <span class="k">def</span> <span class="nf">export_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">json</span>
+
+        <span class="n">data_dict</span> <span class="o">=</span> <span class="p">[</span><span class="n">dic</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">dic</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data_dict</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.append"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">record</span><span class="p">:</span> <span class="n">RecordInterface</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">unknown_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unknown_columns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Contains an unknown columns. &#39;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">unknown_columns</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.concat"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.concat">[docs]</a>    <span class="k">def</span> <span class="nf">concat</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">RecordsInterface</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">RecordsCppImpl</span><span class="p">)</span>
+        <span class="n">unknown_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unknown_columns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Contains an unknown columns. &#39;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">unknown_columns</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_records</span><span class="p">)</span>
+        <span class="n">Records</span><span class="o">.</span><span class="n">_concat_columns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_columns</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.sort"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">key</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="n">not_exist</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">not_exist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;column [</span><span class="si">{</span><span class="n">not_exist</span><span class="si">}</span><span class="s1">] not found.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">ascending</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.get"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">object</span><span class="p">]:</span>
+        <span class="n">mapper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span><span class="o">.</span><span class="n">mapper</span>
+        <span class="k">if</span> <span class="n">column_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default_value</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mapper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.iget"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.iget">[docs]</a>    <span class="k">def</span> <span class="nf">iget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">column_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default_value</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.sget"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.sget">[docs]</a>    <span class="k">def</span> <span class="nf">sget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">default_value</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.bind_drop_as_delay"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.bind_drop_as_delay">[docs]</a>    <span class="k">def</span> <span class="nf">bind_drop_as_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">bind_drop_as_delay</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.to_dataframe"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.to_dataframe">[docs]</a>    <span class="k">def</span> <span class="nf">to_dataframe</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">converter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClockConverter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">data_dict</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Records</span><span class="o">.</span><span class="n">_to_dataframe</span><span class="p">(</span><span class="n">data_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">converter</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.merge"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">right_records</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">join_left_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">join_right_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">how</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">progress_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsCppImpl</span><span class="p">:</span>
+        <span class="n">progress_label</span> <span class="o">=</span> <span class="n">progress_label</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">assert</span> <span class="n">how</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;outer&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">right_records</span><span class="p">,</span> <span class="n">RecordsCppImpl</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">join_left_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">join_left_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">join_left_key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">join_left_keys</span> <span class="o">=</span> <span class="n">join_left_key</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">join_right_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">join_right_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">join_right_key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">join_right_keys</span> <span class="o">=</span> <span class="n">join_right_key</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">join_left_keys</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;Failed to find column&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">join_right_keys</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">right_records</span><span class="o">.</span><span class="n">column_names</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;Failed to find column&#39;</span><span class="p">)</span>
+
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">UniqueList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="o">+</span> <span class="n">right_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">())</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+        <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">]</span>
+
+        <span class="n">merged_cpp_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">right_records</span><span class="o">.</span><span class="n">_records</span><span class="p">,</span> <span class="n">join_left_keys</span><span class="p">,</span> <span class="n">join_right_keys</span><span class="p">,</span>
+            <span class="n">column_names</span><span class="p">,</span> <span class="n">how</span><span class="p">,</span>
+            <span class="n">Progress</span><span class="o">.</span><span class="n">records_label</span><span class="p">(</span><span class="n">progress_label</span><span class="p">))</span>
+
+        <span class="n">merged_columns</span> <span class="o">=</span> <span class="n">UniqueList</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="o">+</span> <span class="n">right_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">())</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="n">RecordsCppImpl</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">merged_columns</span><span class="p">)</span>
+        <span class="n">merged</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="n">merged_cpp_base</span>
+        <span class="k">return</span> <span class="n">merged</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.groupby"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.groupby">[docs]</a>    <span class="k">def</span> <span class="nf">groupby</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">RecordsInterface</span><span class="p">]:</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span>
+
+        <span class="n">group_cpp_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="o">*</span><span class="n">column_names</span><span class="p">)</span>
+        <span class="n">group</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">RecordsInterface</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">group_cpp_base</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">records</span> <span class="o">=</span> <span class="n">RecordsCppImpl</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()))</span>
+            <span class="n">records</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="n">group</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">records</span>
+        <span class="k">return</span> <span class="n">group</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.get_row_series"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.get_row_series">[docs]</a>    <span class="k">def</span> <span class="nf">get_row_series</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordInterface</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;index exceeds the row size.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.get_column_series"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.get_column_series">[docs]</a>    <span class="k">def</span> <span class="nf">get_column_series</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="n">Records</span><span class="o">.</span><span class="n">_get_column_series_core</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">columns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Columns</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span>
+
+<div class="viewcode-block" id="RecordsCppImpl.drop_duplicates"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.drop_duplicates">[docs]</a>    <span class="k">def</span> <span class="nf">drop_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">record_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">record_dict</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">data</span>
+            <span class="k">if</span> <span class="n">record_dict</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">record_dicts</span><span class="p">:</span>
+                <span class="n">record_dicts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record_dict</span><span class="p">)</span>
+
+        <span class="n">init</span> <span class="o">=</span> <span class="p">[</span><span class="n">RecordCppImpl</span><span class="p">(</span><span class="n">record_dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">record_dict</span> <span class="ow">in</span> <span class="n">record_dicts</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="n">RecordsBase</span><span class="p">(</span><span class="n">init</span> <span class="ow">or</span> <span class="p">[],</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.equals"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.equals">[docs]</a>    <span class="k">def</span> <span class="nf">equals</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">other</span><span class="p">:</span> <span class="n">RecordsInterface</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">RecordsCppImpl</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">match_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_records</span><span class="p">)</span>
+        <span class="n">match_columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">match_records</span> <span class="ow">and</span> <span class="n">match_columns</span></div>
+
+    <span class="k">def</span> <span class="nf">_reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_names</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">miss_match_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span> <span class="o">^</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">miss_match_columns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Contains an unknown columns. &#39;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">miss_match_columns</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RecordsCppImpl.clone"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.clone">[docs]</a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsCppImpl</span><span class="p">:</span>
+        <span class="n">records_clone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="n">RecordsCppImpl</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()))</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="n">records_clone</span>
+        <span class="k">return</span> <span class="n">records</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.append_column"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.append_column">[docs]</a>    <span class="k">def</span> <span class="nf">append_column</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">column</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ColumnValue</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">ColumnValue</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;len(values) != len(records)&#39;</span><span class="p">)</span>
+
+        <span class="n">column_tmp</span><span class="p">:</span> <span class="n">Column</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">ColumnValue</span><span class="p">):</span>
+            <span class="n">column_tmp</span> <span class="o">=</span> <span class="n">Column</span><span class="o">.</span><span class="n">from_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">column_tmp</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">append_column</span><span class="p">(</span><span class="n">column_tmp</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">column_tmp</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_drop_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;columns must be list.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RecordsCppImpl.filter_if"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.filter_if">[docs]</a>    <span class="k">def</span> <span class="nf">filter_if</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">RecordInterface</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">filter_if</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">RecordInterface</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">data</span>
+
+<div class="viewcode-block" id="RecordsCppImpl.merge_sequencial"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.merge_sequencial">[docs]</a>    <span class="k">def</span> <span class="nf">merge_sequencial</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">right_records</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">left_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">right_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">join_left_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span>
+        <span class="n">join_right_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span>
+        <span class="n">how</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">progress_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="n">progress_label</span> <span class="o">=</span> <span class="n">progress_label</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">assert</span> <span class="n">left_stamp_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_names</span>
+        <span class="k">if</span> <span class="n">right_stamp_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">right_records</span><span class="o">.</span><span class="n">column_names</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;Failed to find column&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">right_records</span><span class="p">,</span> <span class="n">RecordsCppImpl</span><span class="p">)</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">UniqueList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="o">+</span> <span class="n">right_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">())</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+        <span class="n">join_left_key</span> <span class="o">=</span> <span class="n">join_left_key</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">join_right_key</span> <span class="o">=</span> <span class="n">join_right_key</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">join_left_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">join_left_key</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">join_left_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">join_left_key</span>
+        <span class="n">join_right_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">join_right_key</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">join_right_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">join_right_key</span>
+
+        <span class="n">missing_left_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">join_left_keys</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_left_columns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to find columns. </span><span class="si">{</span><span class="n">missing_left_columns</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">missing_right_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">join_right_keys</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">right_records</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_right_columns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to find columns. </span><span class="si">{</span><span class="n">missing_right_columns</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">merged_cpp_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">merge_sequencial</span><span class="p">(</span>
+            <span class="n">right_records</span><span class="o">.</span><span class="n">_records</span><span class="p">,</span>
+            <span class="n">left_stamp_key</span><span class="p">,</span>
+            <span class="n">right_stamp_key</span><span class="p">,</span>
+            <span class="n">join_left_keys</span><span class="p">,</span>
+            <span class="n">join_right_keys</span><span class="p">,</span>
+            <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">],</span>
+            <span class="n">how</span><span class="p">,</span>
+            <span class="n">Progress</span><span class="o">.</span><span class="n">records_label</span><span class="p">(</span><span class="n">progress_label</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">merged</span> <span class="o">=</span> <span class="n">RecordsCppImpl</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+        <span class="n">merged</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="n">merged_cpp_base</span>
+        <span class="k">return</span> <span class="n">merged</span></div>
+
+<div class="viewcode-block" id="RecordsCppImpl.merge_sequencial_for_addr_track"><a class="viewcode-back" href="../../../caret_analyze.record.record_cpp_impl.html#caret_analyze.record.record_cpp_impl.RecordsCppImpl.merge_sequencial_for_addr_track">[docs]</a>    <span class="k">def</span> <span class="nf">merge_sequencial_for_addr_track</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">source_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">copy_records</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">copy_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">copy_from_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">copy_to_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">sink_records</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">sink_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">sink_from_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">progress_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">copy_records</span><span class="p">,</span> <span class="n">RecordsCppImpl</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sink_records</span><span class="p">,</span> <span class="n">RecordsCppImpl</span><span class="p">)</span>
+
+        <span class="n">source_columns</span> <span class="o">=</span> <span class="p">{</span><span class="n">source_stamp_key</span><span class="p">,</span> <span class="n">source_key</span><span class="p">}</span>
+        <span class="n">copy_columns</span> <span class="o">=</span> <span class="p">{</span><span class="n">copy_stamp_key</span><span class="p">,</span> <span class="n">copy_from_key</span><span class="p">,</span> <span class="n">copy_to_key</span><span class="p">}</span>
+        <span class="n">sink_columns</span> <span class="o">=</span> <span class="p">{</span><span class="n">sink_stamp_key</span><span class="p">,</span> <span class="n">sink_from_key</span><span class="p">}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">source_columns</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;Failed to find columns&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">copy_columns</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">copy_records</span><span class="o">.</span><span class="n">column_names</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;Failed to find columns&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sink_columns</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">sink_records</span><span class="o">.</span><span class="n">column_names</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span><span class="s1">&#39;Failed to find columns&#39;</span><span class="p">)</span>
+
+        <span class="n">progress_label</span> <span class="o">=</span> <span class="n">progress_label</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">merged_cpp_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_records</span><span class="o">.</span><span class="n">merge_sequencial_for_addr_track</span><span class="p">(</span>
+            <span class="n">source_stamp_key</span><span class="p">,</span>
+            <span class="n">source_key</span><span class="p">,</span>
+            <span class="n">copy_records</span><span class="o">.</span><span class="n">_records</span><span class="p">,</span>
+            <span class="n">copy_stamp_key</span><span class="p">,</span>
+            <span class="n">copy_from_key</span><span class="p">,</span>
+            <span class="n">copy_to_key</span><span class="p">,</span>
+            <span class="n">sink_records</span><span class="o">.</span><span class="n">_records</span><span class="p">,</span>
+            <span class="n">sink_stamp_key</span><span class="p">,</span>
+            <span class="n">sink_from_key</span><span class="p">,</span>
+            <span class="n">Progress</span><span class="o">.</span><span class="n">records_label</span><span class="p">(</span><span class="n">progress_label</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">UniqueList</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span> <span class="o">+</span> <span class="n">sink_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_value</span><span class="p">()</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">base_column_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_from_key</span><span class="p">]</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="n">RecordsCppImpl</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+        <span class="n">merged</span><span class="o">.</span><span class="n">_records</span> <span class="o">=</span> <span class="n">merged_cpp_base</span>
+        <span class="k">return</span> <span class="n">merged</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.record.record_cpp_impl</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,503 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.lttng.column_names module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.infra.lttng.data_frame module" href="caret_analyze.infra.lttng.data_frame.html" />
+    <link rel="prev" title="caret_analyze.infra.lttng.bridge module" href="caret_analyze.infra.lttng.bridge.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.data_frame.html" title="caret_analyze.infra.lttng.data_frame module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.bridge.html" title="caret_analyze.infra.lttng.bridge module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.infra.html" >caret_analyze.infra package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.infra.lttng.html" accesskey="U">caret_analyze.infra.lttng package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.column_names module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.infra.lttng.column_names">
+<span id="caret-analyze-infra-lttng-column-names-module"></span><h1>caret_analyze.infra.lttng.column_names module<a class="headerlink" href="#module-caret_analyze.infra.lttng.column_names" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.column_names.</span></span><span class="sig-name descname"><span class="pre">ColumnName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CALLBACK_START_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CALLBACK_END_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RCLCPP_PUBLISH_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RCLCPP_INTER_PUBLISH_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RCL_PUBLISH_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DDS_WRITE_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ON_DATA_AVAILABLE_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RCLCPP_INTRA_PUBLISH_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TIMER_EVENT_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BROADCASTER</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CALLBACK_OBJECT_INTRA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CLIENT_HANDLE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SERVICE_HANDLE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TF_BUFFER_CORE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TRANSFORM_BROADCASTER</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TF_BROADCASTER</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CALLBACK_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NODE_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PUBLISHER</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PERIOD_NS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SUBSCRIPTION</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SERVICE_NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TARGET_FRAME_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SOURCE_FRAME_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CALLBACK</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MESSAGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DISPATCH_INTRA_PROCESS_SUBSCRIPTION_CALLBACK_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DISPATCH_SUBSCRIPTION_CALLBACK_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SOURCE_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CALLBACK_OBJECT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BUFFER_ENQUEUE_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BUFFER_DEQUEUE_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BUFFER_CLEAR_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BUFFER</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MESSAGE_CONSTRUCT_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ORIGINAL_MESSAGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CONSTRUCTED_MESSAGE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DDS_BIND_ADDR_TO_ADDR_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DDS_BIND_ADDR_TO_STAMP_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ADDR_FROM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ADDR_TO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ADDR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IS_INTRA_PROCESS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PUBLISHER_HANDLE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MESSAGE_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TIMER_HANDLE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SUBSCRIPTION_HANDLE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NODE_HANDLE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TOPIC_NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DEPTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NODE_NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SYMBOL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CALLBACK_NAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TILDE_PUBLISHER</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TILDE_SUBSCRIPTION</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TILDE_PUBLISH_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TILDE_SUBSCRIBE_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TILDE_MESSAGE_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TF_LOOKUP_TRANSFORM_START_TIMESTAMP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TF_LOOKUP_TRANSFORM_END_TIMESTAMP</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/column_names.html#ColumnName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.ADDR">
+<span class="sig-name descname"><span class="pre">ADDR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.ADDR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 43</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.ADDR_FROM">
+<span class="sig-name descname"><span class="pre">ADDR_FROM</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.ADDR_FROM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 41</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.ADDR_TO">
+<span class="sig-name descname"><span class="pre">ADDR_TO</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.ADDR_TO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 42</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.BROADCASTER">
+<span class="sig-name descname"><span class="pre">BROADCASTER</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.BROADCASTER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 9</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.BUFFER">
+<span class="sig-name descname"><span class="pre">BUFFER</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.BUFFER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 33</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.BUFFER_CLEAR_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">BUFFER_CLEAR_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.BUFFER_CLEAR_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 32</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.BUFFER_DEQUEUE_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">BUFFER_DEQUEUE_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.BUFFER_DEQUEUE_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 31</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.BUFFER_ENQUEUE_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">BUFFER_ENQUEUE_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.BUFFER_ENQUEUE_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 30</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK">
+<span class="sig-name descname"><span class="pre">CALLBACK</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 24</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_END_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">CALLBACK_END_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_END_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_ID">
+<span class="sig-name descname"><span class="pre">CALLBACK_ID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 16</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_NAME">
+<span class="sig-name descname"><span class="pre">CALLBACK_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 54</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_OBJECT">
+<span class="sig-name descname"><span class="pre">CALLBACK_OBJECT</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_OBJECT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 29</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_OBJECT_INTRA">
+<span class="sig-name descname"><span class="pre">CALLBACK_OBJECT_INTRA</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_OBJECT_INTRA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 10</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_START_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">CALLBACK_START_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CALLBACK_START_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CLIENT_HANDLE">
+<span class="sig-name descname"><span class="pre">CLIENT_HANDLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CLIENT_HANDLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 11</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.CONSTRUCTED_MESSAGE">
+<span class="sig-name descname"><span class="pre">CONSTRUCTED_MESSAGE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.CONSTRUCTED_MESSAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 38</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.DDS_BIND_ADDR_TO_ADDR_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">DDS_BIND_ADDR_TO_ADDR_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.DDS_BIND_ADDR_TO_ADDR_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 39</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.DDS_BIND_ADDR_TO_STAMP_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">DDS_BIND_ADDR_TO_STAMP_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.DDS_BIND_ADDR_TO_STAMP_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 40</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.DDS_WRITE_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">DDS_WRITE_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.DDS_WRITE_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.DEPTH">
+<span class="sig-name descname"><span class="pre">DEPTH</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.DEPTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 51</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.DISPATCH_INTRA_PROCESS_SUBSCRIPTION_CALLBACK_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">DISPATCH_INTRA_PROCESS_SUBSCRIPTION_CALLBACK_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.DISPATCH_INTRA_PROCESS_SUBSCRIPTION_CALLBACK_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 26</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.DISPATCH_SUBSCRIPTION_CALLBACK_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">DISPATCH_SUBSCRIPTION_CALLBACK_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.DISPATCH_SUBSCRIPTION_CALLBACK_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 27</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.IS_INTRA_PROCESS">
+<span class="sig-name descname"><span class="pre">IS_INTRA_PROCESS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.IS_INTRA_PROCESS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 44</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.MESSAGE">
+<span class="sig-name descname"><span class="pre">MESSAGE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.MESSAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 25</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.MESSAGE_CONSTRUCT_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">MESSAGE_CONSTRUCT_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.MESSAGE_CONSTRUCT_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 36</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.MESSAGE_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">MESSAGE_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.MESSAGE_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 46</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.NODE_HANDLE">
+<span class="sig-name descname"><span class="pre">NODE_HANDLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.NODE_HANDLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 49</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.NODE_ID">
+<span class="sig-name descname"><span class="pre">NODE_ID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.NODE_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 17</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.NODE_NAME">
+<span class="sig-name descname"><span class="pre">NODE_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.NODE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 52</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.ON_DATA_AVAILABLE_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">ON_DATA_AVAILABLE_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.ON_DATA_AVAILABLE_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.ORIGINAL_MESSAGE">
+<span class="sig-name descname"><span class="pre">ORIGINAL_MESSAGE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.ORIGINAL_MESSAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 37</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.PERIOD_NS">
+<span class="sig-name descname"><span class="pre">PERIOD_NS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.PERIOD_NS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 19</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.PID">
+<span class="sig-name descname"><span class="pre">PID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.PID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 34</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.PUBLISHER">
+<span class="sig-name descname"><span class="pre">PUBLISHER</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.PUBLISHER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 18</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.PUBLISHER_HANDLE">
+<span class="sig-name descname"><span class="pre">PUBLISHER_HANDLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.PUBLISHER_HANDLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 45</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.RCLCPP_INTER_PUBLISH_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">RCLCPP_INTER_PUBLISH_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.RCLCPP_INTER_PUBLISH_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.RCLCPP_INTRA_PUBLISH_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">RCLCPP_INTRA_PUBLISH_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.RCLCPP_INTRA_PUBLISH_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 7</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.RCLCPP_PUBLISH_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">RCLCPP_PUBLISH_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.RCLCPP_PUBLISH_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.RCL_PUBLISH_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">RCL_PUBLISH_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.RCL_PUBLISH_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.SERVICE_HANDLE">
+<span class="sig-name descname"><span class="pre">SERVICE_HANDLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.SERVICE_HANDLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 12</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.SERVICE_NAME">
+<span class="sig-name descname"><span class="pre">SERVICE_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.SERVICE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 21</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.SOURCE_FRAME_ID">
+<span class="sig-name descname"><span class="pre">SOURCE_FRAME_ID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.SOURCE_FRAME_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 23</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.SOURCE_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">SOURCE_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.SOURCE_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 28</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.SUBSCRIPTION">
+<span class="sig-name descname"><span class="pre">SUBSCRIPTION</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.SUBSCRIPTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 20</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.SUBSCRIPTION_HANDLE">
+<span class="sig-name descname"><span class="pre">SUBSCRIPTION_HANDLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.SUBSCRIPTION_HANDLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 48</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.SYMBOL">
+<span class="sig-name descname"><span class="pre">SYMBOL</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.SYMBOL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 53</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TARGET_FRAME_ID">
+<span class="sig-name descname"><span class="pre">TARGET_FRAME_ID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TARGET_FRAME_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 22</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TF_BROADCASTER">
+<span class="sig-name descname"><span class="pre">TF_BROADCASTER</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TF_BROADCASTER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 15</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TF_BUFFER_CORE">
+<span class="sig-name descname"><span class="pre">TF_BUFFER_CORE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TF_BUFFER_CORE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 13</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TF_LOOKUP_TRANSFORM_END_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">TF_LOOKUP_TRANSFORM_END_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TF_LOOKUP_TRANSFORM_END_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 61</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TF_LOOKUP_TRANSFORM_START_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">TF_LOOKUP_TRANSFORM_START_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TF_LOOKUP_TRANSFORM_START_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 60</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TID">
+<span class="sig-name descname"><span class="pre">TID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 35</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TILDE_MESSAGE_ID">
+<span class="sig-name descname"><span class="pre">TILDE_MESSAGE_ID</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TILDE_MESSAGE_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 59</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TILDE_PUBLISHER">
+<span class="sig-name descname"><span class="pre">TILDE_PUBLISHER</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TILDE_PUBLISHER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 55</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TILDE_PUBLISH_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">TILDE_PUBLISH_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TILDE_PUBLISH_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 57</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TILDE_SUBSCRIBE_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">TILDE_SUBSCRIBE_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TILDE_SUBSCRIBE_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 58</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TILDE_SUBSCRIPTION">
+<span class="sig-name descname"><span class="pre">TILDE_SUBSCRIPTION</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TILDE_SUBSCRIPTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 56</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TIMER_EVENT_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">TIMER_EVENT_TIMESTAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TIMER_EVENT_TIMESTAMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 8</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TIMER_HANDLE">
+<span class="sig-name descname"><span class="pre">TIMER_HANDLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TIMER_HANDLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 47</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TOPIC_NAME">
+<span class="sig-name descname"><span class="pre">TOPIC_NAME</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TOPIC_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 50</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.column_names.ColumnName.TRANSFORM_BROADCASTER">
+<span class="sig-name descname"><span class="pre">TRANSFORM_BROADCASTER</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.infra.lttng.column_names.ColumnName.TRANSFORM_BROADCASTER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 14</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.infra.lttng.bridge.html"
+                          title="previous chapter">caret_analyze.infra.lttng.bridge module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.infra.lttng.data_frame.html"
+                          title="next chapter">caret_analyze.infra.lttng.data_frame module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.infra.lttng.column_names.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.data_frame.html" title="caret_analyze.infra.lttng.data_frame module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.bridge.html" title="caret_analyze.infra.lttng.bridge module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.infra.html" >caret_analyze.infra package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.infra.lttng.html" >caret_analyze.infra.lttng package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.column_names module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

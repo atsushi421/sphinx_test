@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.data\_frame module
+=============================================
+
+.. automodule:: caret_analyze.infra.lttng.data_frame
+   :members:
+   :undoc-members:
+   :show-inheritance:

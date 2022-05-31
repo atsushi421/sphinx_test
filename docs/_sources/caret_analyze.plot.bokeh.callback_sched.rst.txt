@@ -1,0 +1,7 @@
+caret\_analyze.plot.bokeh.callback\_sched module
+================================================
+
+.. automodule:: caret_analyze.plot.bokeh.callback_sched
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,19 @@
+caret\_analyze.infra.lttng.ros2\_tracing package
+================================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.infra.lttng.ros2_tracing.data_model
+   caret_analyze.infra.lttng.ros2_tracing.processor
+
+Module contents
+---------------
+
+.. automodule:: caret_analyze.infra.lttng.ros2_tracing
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,20 @@
+caret\_analyze.plot.graphviz package
+====================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.plot.graphviz.callback_graph
+   caret_analyze.plot.graphviz.chain_latency
+   caret_analyze.plot.graphviz.node_graph
+
+Module contents
+---------------
+
+.. automodule:: caret_analyze.plot.graphviz
+   :members:
+   :undoc-members:
+   :show-inheritance:

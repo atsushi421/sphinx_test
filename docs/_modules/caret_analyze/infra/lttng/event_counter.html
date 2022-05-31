@@ -1,0 +1,613 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.lttng.event_counter &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.event_counter</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.infra.lttng.event_counter</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">.column_names</span> <span class="kn">import</span> <span class="n">COLUMN_NAME</span> <span class="k">as</span> <span class="n">CN</span>
+<span class="kn">from</span> <span class="nn">.lttng_info</span> <span class="kn">import</span> <span class="n">LttngInfo</span>
+<span class="kn">from</span> <span class="nn">.ros2_tracing</span> <span class="kn">import</span> <span class="n">Ros2DataModel</span><span class="p">,</span> <span class="n">Ros2Handler</span>
+<span class="kn">from</span> <span class="nn">.trace_points</span> <span class="kn">import</span> <span class="n">TRACE_POINT</span> <span class="k">as</span> <span class="n">TP</span>
+<span class="kn">from</span> <span class="nn">.value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CallbackGroupValueLttng</span><span class="p">,</span>
+    <span class="n">ClientCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">NodeValueLttng</span><span class="p">,</span>
+    <span class="n">PublisherValueLttng</span><span class="p">,</span>
+    <span class="n">ServiceCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">SubscriptionCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">TimerCallbackValueLttng</span><span class="p">,</span>
+    <span class="n">TransformBroadcasterValueLttng</span><span class="p">,</span>
+    <span class="n">TransformBufferValueLttng</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">...exceptions</span> <span class="kn">import</span> <span class="n">Error</span><span class="p">,</span> <span class="n">InvalidArgumentError</span>
+<span class="kn">from</span> <span class="nn">...record</span> <span class="kn">import</span> <span class="n">RecordsInterface</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s1">&#39;unkown&#39;</span>
+
+
+<div class="viewcode-block" id="Category"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.Category">[docs]</a><span class="k">class</span> <span class="nc">Category</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># PANDAS treats the None value differently, so enter a string by default.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">UNKNOWN</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="n">UNKNOWN</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace_point</span> <span class="o">=</span> <span class="n">UNKNOWN</span></div>
+
+
+<span class="n">ServerKey</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="CategoryServer"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.CategoryServer">[docs]</a><span class="k">class</span> <span class="nc">CategoryServer</span><span class="p">:</span>
+
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;node_handle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;timer_handle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;publisher_handle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;subscription_handle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;service_handle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;client_handle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;callback_object&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;callback_group&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tf_buffer_core&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;tf_broadcaster&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">:</span> <span class="n">LttngInfo</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">NodeValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clients</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">ClientCallbackValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_publishers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">PublisherValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subscriptions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">SubscriptionCallbackValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">ServiceCallbackValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">TimerCallbackValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cbgs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">CallbackGroupValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tf_br</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">TransformBroadcasterValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tf_buff</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">TransformBufferValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">node_handle</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cbgs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="p">(</span><span class="n">cbg</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">cbg</span><span class="o">.</span><span class="n">callback_group_addr</span><span class="p">):</span> <span class="n">cbg</span>
+                    <span class="k">for</span> <span class="n">cbg</span>
+                    <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">get_callback_groups</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="p">})</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_clients</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="p">(</span><span class="n">clt</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">clt</span><span class="o">.</span><span class="n">client_handle</span><span class="p">):</span> <span class="n">clt</span>
+                    <span class="k">for</span> <span class="n">clt</span>
+                    <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">get_client_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="p">})</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_publishers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="p">(</span><span class="n">pub</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">pub</span><span class="o">.</span><span class="n">publisher_handle</span><span class="p">):</span> <span class="n">pub</span>
+                    <span class="k">for</span> <span class="n">pub</span>
+                    <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">get_publishers</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="p">})</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_subscriptions</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">sub</span><span class="o">.</span><span class="n">subscription_handle</span><span class="p">):</span> <span class="n">sub</span>
+                    <span class="k">for</span> <span class="n">sub</span>
+                    <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">get_subscription_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="p">})</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="p">(</span><span class="n">srv</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">srv</span><span class="o">.</span><span class="n">service_handle</span><span class="p">):</span> <span class="n">srv</span>
+                    <span class="k">for</span> <span class="n">srv</span>
+                    <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">get_service_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="p">})</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_timers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="p">(</span><span class="n">tmr</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">tmr</span><span class="o">.</span><span class="n">timer_handle</span><span class="p">):</span> <span class="n">tmr</span>
+                    <span class="k">for</span> <span class="n">tmr</span>
+                    <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">get_timer_callbacks</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="p">})</span>
+
+                <span class="n">bf</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get_tf_broadcaster</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">bf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tf_br</span><span class="p">[</span><span class="n">bf</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">bf</span><span class="o">.</span><span class="n">broadcaster_handler</span><span class="p">]</span> <span class="o">=</span> <span class="n">bf</span>
+                <span class="n">buf</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get_tf_buffer</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">buf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tf_buff</span><span class="p">[</span><span class="n">buf</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">buf</span><span class="o">.</span><span class="n">buffer_handler</span><span class="p">]</span> <span class="o">=</span> <span class="n">buf</span>
+            <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Failed to get node info: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer_callbacks</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">TimerCallbackValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">timer</span><span class="o">.</span><span class="n">callback_object</span><span class="p">):</span> <span class="n">timer</span>
+            <span class="k">for</span> <span class="n">timer</span>
+            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subscription_callbacks</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">SubscriptionCallbackValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">sub</span><span class="o">.</span><span class="n">callback_object</span><span class="p">):</span> <span class="n">sub</span>
+            <span class="k">for</span> <span class="n">sub</span>
+            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subscriptions</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_service_callbacks</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ServerKey</span><span class="p">,</span> <span class="n">ServiceCallbackValueLttng</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">srv</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">srv</span><span class="o">.</span><span class="n">callback_object</span><span class="p">):</span> <span class="n">srv</span>
+            <span class="k">for</span> <span class="n">srv</span>
+            <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="CategoryServer.get"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.CategoryServer.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">addr</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Category</span><span class="p">:</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">Category</span><span class="p">()</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">node_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timers</span><span class="p">:</span>
+            <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">node_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_publishers</span><span class="p">:</span>
+            <span class="n">publisher</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_publishers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">publisher</span><span class="o">.</span><span class="n">node_name</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="n">publisher</span><span class="o">.</span><span class="n">topic_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subscriptions</span><span class="p">:</span>
+            <span class="n">subscription</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subscriptions</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">subscription</span><span class="o">.</span><span class="n">node_name</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="n">subscription</span><span class="o">.</span><span class="n">subscribe_topic_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="p">:</span>
+            <span class="n">service</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">node_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clients</span><span class="p">:</span>
+            <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clients</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">node_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer_callbacks</span><span class="p">:</span>
+            <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer_callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">timer</span><span class="o">.</span><span class="n">node_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_callbacks</span><span class="p">:</span>
+            <span class="n">service</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">node_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subscription_callbacks</span><span class="p">:</span>
+            <span class="n">subscription</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subscription_callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">subscription</span><span class="o">.</span><span class="n">node_name</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="n">subscription</span><span class="o">.</span><span class="n">subscribe_topic_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clients</span><span class="p">:</span>
+            <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clients</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">node_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cbgs</span><span class="p">:</span>
+            <span class="n">cbg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cbgs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">cbg</span><span class="o">.</span><span class="n">node_name</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tf_buff</span><span class="p">:</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="s1">&#39;/tf&#39;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tf_br</span><span class="p">:</span>
+            <span class="n">tf_br</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tf_br</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">tf_br</span><span class="o">.</span><span class="n">node_name</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="s1">&#39;/tf&#39;</span>
+
+        <span class="k">return</span> <span class="n">info</span></div></div>
+
+
+<div class="viewcode-block" id="CountRecord"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.CountRecord">[docs]</a><span class="k">class</span> <span class="nc">CountRecord</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">trace_point</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">:</span> <span class="n">Category</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_trace_point</span> <span class="o">=</span> <span class="n">trace_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_info</span> <span class="o">=</span> <span class="n">info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="n">size</span>
+
+<div class="viewcode-block" id="CountRecord.as_dict"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.CountRecord.as_dict">[docs]</a>    <span class="k">def</span> <span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;trace_point&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trace_point</span><span class="p">,</span>
+            <span class="s1">&#39;topic_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">topic_name</span><span class="p">,</span>
+            <span class="s1">&#39;node_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+            <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">,</span>
+        <span class="p">}</span></div></div>
+
+
+<div class="viewcode-block" id="CountRule"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.CountRule">[docs]</a><span class="k">class</span> <span class="nc">CountRule</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">trace_point</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">data_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace_point</span> <span class="o">=</span> <span class="n">trace_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">records</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_key</span> <span class="o">=</span> <span class="n">data_key</span></div>
+
+
+<div class="viewcode-block" id="EventCounter"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.EventCounter">[docs]</a><span class="k">class</span> <span class="nc">EventCounter</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Ros2DataModel</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">:</span> <span class="n">LttngInfo</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allowed_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;trace_point&#39;</span><span class="p">,</span> <span class="s1">&#39;node_name&#39;</span><span class="p">,</span> <span class="s1">&#39;topic_name&#39;</span><span class="p">]</span>
+
+        <span class="n">counter</span> <span class="o">=</span> <span class="n">CategoryServer</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+        <span class="n">count_rules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_count_rules</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_tracepoints</span><span class="p">(</span><span class="n">count_rules</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>
+        <span class="n">count_dicts</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">count_dicts</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EventCounter.get_count"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.EventCounter.get_count">[docs]</a>    <span class="k">def</span> <span class="nf">get_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupby</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">groupby_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allowed_keys</span> <span class="k">if</span> <span class="n">groupby</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">groupby</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">groupby_</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_allowed_keys</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;invalid groupby: </span><span class="si">{</span><span class="n">groupby_</span><span class="si">}</span><span class="s1">. </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_allowed_keys</span><span class="si">}</span><span class="s1"> are allowed.&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_count_df</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">grouped_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">groupby_</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">([[</span><span class="s1">&#39;size&#39;</span><span class="p">]])</span>
+        <span class="n">count_df</span> <span class="o">=</span> <span class="n">grouped_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">count_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">count_df</span> <span class="o">=</span> <span class="n">count_df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">groupby_</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">count_df</span></div>
+
+<div class="viewcode-block" id="EventCounter.get_count_rules"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.EventCounter.get_count_rules">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_count_rules</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Ros2DataModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">CountRule</span><span class="p">]:</span>
+        <span class="n">count_rules</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># initialization tracepoints</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CONSTRUCT_RING_BUFFER</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">construct_ring_buffer</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_CLIENT_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_client_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CLIENT_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_init</span><span class="p">,</span>
+                      <span class="n">UNKNOWN</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_LIFECYCLE_STATE_MACHINE_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_lifecycle_state_machine_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">NODE_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_LIFECYCLE_TRANSITION</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">lifecycle_transitions</span><span class="p">,</span>
+                      <span class="n">UNKNOWN</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_NODE_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_node_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">NODE_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_PUBLISHER_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_publisher_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_SERVICE_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_service_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SERVICE_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_SUBSCRIPTION_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_subscription_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SUBSCRIPTION_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_TIMER_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_timer_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TIMER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_CALLBACK_REGISTER</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_callback_register</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_SERVICE_CALLBACK_ADDED</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_service_callback_added</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_SUBSCRIPTION_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_subscription_callback_added</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_SUBSCRIPTION_CALLBACK_ADDED</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_subscription_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SUBSCRIPTION_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_TIMER_CALLBACK_ADDED</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_timer_callback_added</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TIMER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_TIMER_LINK_NODE</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_timer_link_node</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TIMER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">ADD_CALLBACK_GROUP</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">add_callback_group</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">ADD_CALLBACK_GROUP_STATIC_EXECUTOR</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">add_callback_group_static_executor</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CALLBACK_GROUP_ADD_CLIENT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">callback_group_add_client</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CLIENT_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CALLBACK_GROUP_ADD_SERVICE</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">callback_group_add_service</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SERVICE_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CALLBACK_GROUP_ADD_SUBSCRIPTION</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">callback_group_add_subscription</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SUBSCRIPTION_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CALLBACK_GROUP_ADD_TIMER</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">callback_group_add_timer</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TIMER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CONSTRUCT_EXECUTOR</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">construct_executor</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CONSTRUCT_IPM</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">construct_ipm</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CONSTRUCT_NODE_HOOK</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">construct_node_hook</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">NODE_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CONSTRUCT_STATIC_EXECUTOR</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">construct_static_executor</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CONSTRUCT_TF_BUFFER</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">construct_tf_buffer</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INIT_BIND_TF_BROADCASTER_SEND_TRANSFORM</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">transform_broadcaster_frames</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TRANSFORM_BROADCASTER</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INIT_BIND_TF_BUFFER_CORE</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">init_bind_tf_buffer_core</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INIT_BIND_TRANSFORM_BROADCASTER</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">transform_broadcaster</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INIT_TF_BROADCASTER_FRAME_ID_COMPACT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">init_tf_buffer_frame_id_compact</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BROADCASTER</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INIT_TF_BUFFER_FRAME_ID_COMPACT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">init_tf_buffer_frame_id_compact</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INIT_TF_BUFFER_LOOKUP_TRANSFORM</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tf_buffer_lookup_transform</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INIT_TF_BUFFER_SET_TRANSFORM</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tf_buffer_set_transform</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">IPM_ADD_PUBLISHER</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">ipm_add_publisher</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">IPM_ADD_SUBSCRIPTION</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">ipm_add_subscription</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SUBSCRIPTION_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">IPM_INSERT_SUB_ID_FOR_PUB</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">ipm_insert_sub_id_for_pub</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RMW_IMPLEMENTATION</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rmw_implementation</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">SYMBOL_RENAME</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">symbol_rename</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TILDE_PUBLISHER_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tilde_publisher_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TILDE_SUBSCRIBE_ADDED</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tilde_subscribe_added</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SUBSCRIPTION</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TILDE_SUBSCRIPTION_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tilde_subscription_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SUBSCRIPTION</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_INIT_CARET</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_init_caret</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PID</span><span class="p">),</span>
+
+            <span class="c1"># measurement tracepoints</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CALLBACK_END</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">callback_end</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">CALLBACK_START</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">callback_start</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">DISPATCH_INTRA_PROCESS_SUBSCRIPTION_CALLBACK</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">dispatch_intra_process_subscription_callback</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">DISPATCH_SUBSCRIPTION_CALLBACK</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">dispatch_subscription_callback</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">MESSAGE_CONSTRUCT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">message_construct</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCL_PUBLISH</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rcl_publish</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_INTRA_PUBLISH</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_intra_publish</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_PUBLISH</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_publish</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RING_BUFFER_CLEAR</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">ring_buffer_clear</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RING_BUFFER_DEQUEUE</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">ring_buffer_dequeue</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RING_BUFFER_ENQUEUE</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">ring_buffer_enqueue</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">DDS_BIND_ADDR_TO_ADDR</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">dds_bind_addr_to_addr</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">DDS_BIND_ADDR_TO_STAMP</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">dds_bind_addr_to_stamp</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">DDS_WRITE</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">dds_write</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INTER_CALLBACK_DURATION</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">inter_callback_duration</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INTER_PUBLISH</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">inter_publish</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER_HANDLE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">INTRA_CALLBACK_DURATION</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">intra_callback_duration</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">CALLBACK_OBJECT</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">ON_DATA_AVAILABLE</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">on_data_available</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">SEND_TRANSFORM</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">send_transform</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">BROADCASTER</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">SIM_TIME</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">sim_time</span><span class="p">,</span>
+                      <span class="kc">None</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TF_BUFFER_FIND_CLOSEST</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tf_buffer_find_closest</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TF_LOOKUP_TRANSFORM</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tf_lookup_transform</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TF_LOOKUP_TRANSFORM_START</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tf_lookup_transform_start</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TF_LOOKUP_TRANSFORM_END</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tf_lookup_transform_end</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TF_LOOKUP_TRANSFORM</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tf_lookup_transform</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TILDE_PUBLISH</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tilde_publish</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TILDE_SUBSCRIBE</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tilde_subscribe</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">SUBSCRIPTION</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">TF_SET_TRANSFORM</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">tf_set_transform</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">TF_BUFFER_CORE</span><span class="p">),</span>
+            <span class="n">CountRule</span><span class="p">(</span><span class="n">TP</span><span class="o">.</span><span class="n">RCLCPP_PUBLISHER_INIT</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">.</span><span class="n">rclcpp_publisher_init</span><span class="p">,</span>
+                      <span class="n">CN</span><span class="o">.</span><span class="n">PUBLISHER_HANDLE</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="n">handler_tracepoints</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">Ros2Handler</span><span class="o">.</span><span class="n">get_tracepoints</span><span class="p">())</span>
+        <span class="c1"># validate count_rules</span>
+        <span class="n">count_rule_tracepoints</span> <span class="o">=</span> <span class="p">{</span><span class="n">rule</span><span class="o">.</span><span class="n">trace_point</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">count_rules</span><span class="p">}</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="n">handler_tracepoints</span> <span class="o">-</span> <span class="n">count_rule_tracepoints</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;Missing trace points: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span>
+        <span class="n">over_set</span> <span class="o">=</span> <span class="n">count_rule_tracepoints</span> <span class="o">-</span> <span class="n">handler_tracepoints</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">over_set</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;Over-set trace points: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">over_set</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">count_rules</span></div>
+
+<div class="viewcode-block" id="EventCounter.count_tracepoints"><a class="viewcode-back" href="../../../../caret_analyze.infra.lttng.event_counter.html#caret_analyze.infra.lttng.event_counter.EventCounter.count_tracepoints">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">count_tracepoints</span><span class="p">(</span>
+        <span class="n">count_rules</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">CountRule</span><span class="p">],</span>
+        <span class="n">server</span><span class="p">:</span> <span class="n">CategoryServer</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">CountRecord</span><span class="p">]:</span>
+        <span class="n">l</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CountRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">count_rules</span><span class="p">:</span>
+            <span class="n">records</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">records</span>
+            <span class="n">trace_point</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">trace_point</span>
+            <span class="n">record_key</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">record_key</span>
+
+            <span class="k">if</span> <span class="n">record_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">record</span> <span class="o">=</span> <span class="n">CountRecord</span><span class="p">(</span><span class="n">trace_point</span><span class="p">,</span> <span class="n">Category</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">))</span>
+                <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">keys</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">records</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">CN</span><span class="o">.</span><span class="n">PID</span><span class="p">,</span> <span class="n">record_key</span><span class="p">])</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">pid</span> <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">key_value</span> <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">record</span> <span class="o">=</span> <span class="n">CountRecord</span><span class="p">(</span><span class="n">trace_point</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">key_value</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">))</span>
+                <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">l</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.event_counter</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

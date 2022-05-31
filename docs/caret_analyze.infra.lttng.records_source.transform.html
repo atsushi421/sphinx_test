@@ -1,0 +1,171 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.lttng.records_source.transform module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.infra.lttng.records_source.var_pass_records module" href="caret_analyze.infra.lttng.records_source.var_pass_records.html" />
+    <link rel="prev" title="caret_analyze.infra.lttng.records_source.timer_records module" href="caret_analyze.infra.lttng.records_source.timer_records.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.records_source.var_pass_records.html" title="caret_analyze.infra.lttng.records_source.var_pass_records module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.records_source.timer_records.html" title="caret_analyze.infra.lttng.records_source.timer_records module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.infra.html" >caret_analyze.infra package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.infra.lttng.html" >caret_analyze.infra.lttng package</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="caret_analyze.infra.lttng.records_source.html" accesskey="U">caret_analyze.infra.lttng.records_source package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.records_source.transform module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.infra.lttng.records_source.transform">
+<span id="caret-analyze-infra-lttng-records-source-transform-module"></span><h1>caret_analyze.infra.lttng.records_source.transform module<a class="headerlink" href="#module-caret_analyze.infra.lttng.records_source.transform" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_source.transform.TransformCommRecordsContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.records_source.transform.</span></span><span class="sig-name descname"><span class="pre">TransformCommRecordsContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bridge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge" title="caret_analyze.infra.lttng.bridge.LttngBridge"><span class="pre">LttngBridge</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.ros2_tracing.data_model.html#caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel" title="caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel"><span class="pre">Ros2DataModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.lttng_info.html#caret_analyze.infra.lttng.lttng_info.LttngInfo" title="caret_analyze.infra.lttng.lttng_info.LttngInfo"><span class="pre">LttngInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">send_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.infra.lttng.records_source.transform.TransformSendRecordsContainer" title="caret_analyze.infra.lttng.records_source.transform.TransformSendRecordsContainer"><span class="pre">TransformSendRecordsContainer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.infra.lttng.records_source.transform.TransformSetRecordsContainer" title="caret_analyze.infra.lttng.records_source.transform.TransformSetRecordsContainer"><span class="pre">TransformSetRecordsContainer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.infra.lttng.records_source.transform.TransformLookupContainer" title="caret_analyze.infra.lttng.records_source.transform.TransformLookupContainer"><span class="pre">TransformLookupContainer</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_source/transform.html#TransformCommRecordsContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_source.transform.TransformCommRecordsContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_source.transform.TransformCommRecordsContainer.get_inter_records">
+<span class="sig-name descname"><span class="pre">get_inter_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformCommunicationStructValue" title="caret_analyze.value_objects.transform.TransformCommunicationStructValue"><span class="pre">TransformCommunicationStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_source/transform.html#TransformCommRecordsContainer.get_inter_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_source.transform.TransformCommRecordsContainer.get_inter_records" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_source.transform.TransformLookupContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.records_source.transform.</span></span><span class="sig-name descname"><span class="pre">TransformLookupContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bridge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge" title="caret_analyze.infra.lttng.bridge.LttngBridge"><span class="pre">LttngBridge</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.ros2_tracing.data_model.html#caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel" title="caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel"><span class="pre">Ros2DataModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.lttng_info.html#caret_analyze.infra.lttng.lttng_info.LttngInfo" title="caret_analyze.infra.lttng.lttng_info.LttngInfo"><span class="pre">LttngInfo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_source/transform.html#TransformLookupContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_source.transform.TransformLookupContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_source.transform.TransformLookupContainer.get_records">
+<span class="sig-name descname"><span class="pre">get_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_source/transform.html#TransformLookupContainer.get_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_source.transform.TransformLookupContainer.get_records" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_source.transform.TransformSendRecordsContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.records_source.transform.</span></span><span class="sig-name descname"><span class="pre">TransformSendRecordsContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bridge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge" title="caret_analyze.infra.lttng.bridge.LttngBridge"><span class="pre">LttngBridge</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.ros2_tracing.data_model.html#caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel" title="caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel"><span class="pre">Ros2DataModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.lttng_info.html#caret_analyze.infra.lttng.lttng_info.LttngInfo" title="caret_analyze.infra.lttng.lttng_info.LttngInfo"><span class="pre">LttngInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pub_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.records_source.publish_records.html#caret_analyze.infra.lttng.records_source.publish_records.PublishRecordsContainer" title="caret_analyze.infra.lttng.records_source.publish_records.PublishRecordsContainer"><span class="pre">PublishRecordsContainer</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_source/transform.html#TransformSendRecordsContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_source.transform.TransformSendRecordsContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_source.transform.TransformSendRecordsContainer.get_records">
+<span class="sig-name descname"><span class="pre">get_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">broadcaster</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_source/transform.html#TransformSendRecordsContainer.get_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_source.transform.TransformSendRecordsContainer.get_records" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_source.transform.TransformSetRecordsContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.records_source.transform.</span></span><span class="sig-name descname"><span class="pre">TransformSetRecordsContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bridge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.bridge.html#caret_analyze.infra.lttng.bridge.LttngBridge" title="caret_analyze.infra.lttng.bridge.LttngBridge"><span class="pre">LttngBridge</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.ros2_tracing.data_model.html#caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel" title="caret_analyze.infra.lttng.ros2_tracing.data_model.Ros2DataModel"><span class="pre">Ros2DataModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.lttng_info.html#caret_analyze.infra.lttng.lttng_info.LttngInfo" title="caret_analyze.infra.lttng.lttng_info.LttngInfo"><span class="pre">LttngInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cb_records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.records_source.callback_records.html#caret_analyze.infra.lttng.records_source.callback_records.CallbackRecordsContainer" title="caret_analyze.infra.lttng.records_source.callback_records.CallbackRecordsContainer"><span class="pre">CallbackRecordsContainer</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_source/transform.html#TransformSetRecordsContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_source.transform.TransformSetRecordsContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_source.transform.TransformSetRecordsContainer.get_records">
+<span class="sig-name descname"><span class="pre">get_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_source/transform.html#TransformSetRecordsContainer.get_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_source.transform.TransformSetRecordsContainer.get_records" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.infra.lttng.records_source.timer_records.html"
+                          title="previous chapter">caret_analyze.infra.lttng.records_source.timer_records module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.infra.lttng.records_source.var_pass_records.html"
+                          title="next chapter">caret_analyze.infra.lttng.records_source.var_pass_records module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.infra.lttng.records_source.transform.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.records_source.var_pass_records.html" title="caret_analyze.infra.lttng.records_source.var_pass_records module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.records_source.timer_records.html" title="caret_analyze.infra.lttng.records_source.timer_records module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.infra.html" >caret_analyze.infra package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.infra.lttng.html" >caret_analyze.infra.lttng package</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="caret_analyze.infra.lttng.records_source.html" >caret_analyze.infra.lttng.records_source package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.records_source.transform module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.executor module
+==================================================
+
+.. automodule:: caret_analyze.architecture.struct.executor
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,343 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.value_objects.message_context module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.value_objects.node module" href="caret_analyze.value_objects.node.html" />
+    <link rel="prev" title="caret_analyze.value_objects.executor module" href="caret_analyze.value_objects.executor.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.value_objects.node.html" title="caret_analyze.value_objects.node module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.value_objects.executor.html" title="caret_analyze.value_objects.executor module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.value_objects.html" accesskey="U">caret_analyze.value_objects package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.value_objects.message_context module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.value_objects.message_context">
+<span id="caret-analyze-value-objects-message-context-module"></span><h1>caret_analyze.value_objects.message_context module<a class="headerlink" href="#module-caret_analyze.value_objects.message_context" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.CallbackChain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.value_objects.message_context.</span></span><span class="sig-name descname"><span class="pre">CallbackChain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_context_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subscription</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">publisher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.CallbackStructValue" title="caret_analyze.value_objects.callback.CallbackStructValue"><span class="pre">CallbackStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#CallbackChain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.CallbackChain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContext" title="caret_analyze.value_objects.message_context.MessageContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContext</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.CallbackChain.TYPE_NAME">
+<span class="sig-name descname"><span class="pre">TYPE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'callback_chain'</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.CallbackChain.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback chain.</p>
+<p>Latency is calculated from callback durations in the node path.
+When a path within a node passes through multiple callbacks,
+it is assumed that messages are passed between callbacks by a buffer of queue size 1
+(ex. a member variable that stores a single message).
+If the queue size is larger than 1, the node latency may be calculated to be small.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.CallbackChain.context_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.CallbackChain.context_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.CallbackChain.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#CallbackChain.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.CallbackChain.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.CallbackChain.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#CallbackChain.verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.CallbackChain.verify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.InheritUniqueStamp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.value_objects.message_context.</span></span><span class="sig-name descname"><span class="pre">InheritUniqueStamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.CallbackStructValue" title="caret_analyze.value_objects.callback.CallbackStructValue"><span class="pre">CallbackStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#InheritUniqueStamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.InheritUniqueStamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContext" title="caret_analyze.value_objects.message_context.MessageContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContext</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.InheritUniqueStamp.TYPE_NAME">
+<span class="sig-name descname"><span class="pre">TYPE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'inherit_unique_stamp'</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.InheritUniqueStamp.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inherit header timestamp.</p>
+<p>Latency is calculated for pub/sub messages with the same timestamp value.
+If the input timestamp is not unique, it may calculate an incorrect value.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.InheritUniqueStamp.context_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.InheritUniqueStamp.context_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.InheritUniqueStamp.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#InheritUniqueStamp.verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.InheritUniqueStamp.verify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.value_objects.message_context.</span></span><span class="sig-name descname"><span class="pre">MessageContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.CallbackStructValue" title="caret_analyze.value_objects.callback.CallbackStructValue"><span class="pre">CallbackStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#MessageContext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="caret_analyze.value_objects.value_object.html#caret_analyze.value_objects.value_object.ValueObject" title="caret_analyze.value_objects.value_object.ValueObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueObject</span></code></a>, <a class="reference internal" href="caret_analyze.common.summary.html#caret_analyze.common.summary.Summarizable" title="caret_analyze.common.summary.Summarizable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Summarizable</span></code></a></p>
+<p>Structured message context value.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.callbacks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.CallbackStructValue" title="caret_analyze.value_objects.callback.CallbackStructValue"><span class="pre">CallbackStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.context_type">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.context_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.create_instance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context_type_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.CallbackStructValue" title="caret_analyze.value_objects.callback.CallbackStructValue"><span class="pre">CallbackStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContext" title="caret_analyze.value_objects.message_context.MessageContext"><span class="pre">MessageContext</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#MessageContext.create_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.create_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.node_in">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_in</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.node_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.node_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.node_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.node_out">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_out</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.node_out" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.publisher">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">publisher</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.publisher" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.publisher_topic_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">publisher_topic_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.publisher_topic_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.subscription">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscription</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.subscription" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.subscription_topic_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscription_topic_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.subscription_topic_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.summary">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">summary</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.common.summary.html#caret_analyze.common.summary.Summary" title="caret_analyze.common.summary.Summary"><span class="pre">Summary</span></a></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.tf_frame_broadcaster">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tf_frame_broadcaster</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.tf_frame_broadcaster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.tf_frame_buffer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tf_frame_buffer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.tf_frame_buffer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#MessageContext.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.type_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.type_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContext.verify">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#MessageContext.verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContext.verify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContextType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.value_objects.message_context.</span></span><span class="sig-name descname"><span class="pre">MessageContextType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#MessageContextType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContextType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="caret_analyze.value_objects.value_object.html#caret_analyze.value_objects.value_object.ValueObject" title="caret_analyze.value_objects.value_object.ValueObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueObject</span></code></a></p>
+<p>Message context type.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContextType.CALLBACK_CHAIN">
+<span class="sig-name descname"><span class="pre">CALLBACK_CHAIN</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;caret_analyze.value_objects.message_context.MessageContextType</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContextType.CALLBACK_CHAIN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContextType.INHERIT_UNIQUE_STAMP">
+<span class="sig-name descname"><span class="pre">INHERIT_UNIQUE_STAMP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;caret_analyze.value_objects.message_context.MessageContextType</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContextType.INHERIT_UNIQUE_STAMP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContextType.TILDE">
+<span class="sig-name descname"><span class="pre">TILDE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;caret_analyze.value_objects.message_context.MessageContextType</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContextType.TILDE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContextType.USE_LATEST_MESSAGE">
+<span class="sig-name descname"><span class="pre">USE_LATEST_MESSAGE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;caret_analyze.value_objects.message_context.MessageContextType</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContextType.USE_LATEST_MESSAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.MessageContextType.type_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.MessageContextType.type_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.Tilde">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.value_objects.message_context.</span></span><span class="sig-name descname"><span class="pre">Tilde</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_context_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.CallbackStructValue" title="caret_analyze.value_objects.callback.CallbackStructValue"><span class="pre">CallbackStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#Tilde"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.Tilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContext" title="caret_analyze.value_objects.message_context.MessageContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContext</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.Tilde.TYPE_NAME">
+<span class="sig-name descname"><span class="pre">TYPE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tilde'</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.Tilde.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>tilde.</p>
+<p>Latency is calculated from tilde.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.Tilde.context_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.Tilde.context_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.Tilde.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#Tilde.verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.Tilde.verify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.UseLatestMessage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.value_objects.message_context.</span></span><span class="sig-name descname"><span class="pre">UseLatestMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.CallbackStructValue" title="caret_analyze.value_objects.callback.CallbackStructValue"><span class="pre">CallbackStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#UseLatestMessage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.UseLatestMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContext" title="caret_analyze.value_objects.message_context.MessageContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContext</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.UseLatestMessage.TYPE_NAME">
+<span class="sig-name descname"><span class="pre">TYPE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'use_latest_message'</span></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.UseLatestMessage.TYPE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use messsage context</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.UseLatestMessage.context_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.value_objects.message_context.MessageContextType" title="caret_analyze.value_objects.message_context.MessageContextType"><span class="pre">MessageContextType</span></a></em><a class="headerlink" href="#caret_analyze.value_objects.message_context.UseLatestMessage.context_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.value_objects.message_context.UseLatestMessage.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/value_objects/message_context.html#UseLatestMessage.verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.value_objects.message_context.UseLatestMessage.verify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.value_objects.executor.html"
+                          title="previous chapter">caret_analyze.value_objects.executor module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.value_objects.node.html"
+                          title="next chapter">caret_analyze.value_objects.node module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.value_objects.message_context.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.value_objects.node.html" title="caret_analyze.value_objects.node module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.value_objects.executor.html" title="caret_analyze.value_objects.executor module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.value_objects.html" >caret_analyze.value_objects package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.value_objects.message_context module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

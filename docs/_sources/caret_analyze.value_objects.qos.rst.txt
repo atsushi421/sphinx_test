@@ -1,0 +1,7 @@
+caret\_analyze.value\_objects.qos module
+========================================
+
+.. automodule:: caret_analyze.value_objects.qos
+   :members:
+   :undoc-members:
+   :show-inheritance:

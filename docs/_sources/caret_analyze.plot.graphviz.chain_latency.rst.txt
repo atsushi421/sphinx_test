@@ -1,0 +1,7 @@
+caret\_analyze.plot.graphviz.chain\_latency module
+==================================================
+
+.. automodule:: caret_analyze.plot.graphviz.chain_latency
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,27 @@
+caret\_analyze.infra.lttng.records\_source package
+==================================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.infra.lttng.records_source.callback_records
+   caret_analyze.infra.lttng.records_source.comm_records
+   caret_analyze.infra.lttng.records_source.ipc_buffer_records
+   caret_analyze.infra.lttng.records_source.node_records
+   caret_analyze.infra.lttng.records_source.publish_records
+   caret_analyze.infra.lttng.records_source.records_source
+   caret_analyze.infra.lttng.records_source.subscribe_records
+   caret_analyze.infra.lttng.records_source.timer_records
+   caret_analyze.infra.lttng.records_source.transform
+   caret_analyze.infra.lttng.records_source.var_pass_records
+
+Module contents
+---------------
+
+.. automodule:: caret_analyze.infra.lttng.records_source
+   :members:
+   :undoc-members:
+   :show-inheritance:

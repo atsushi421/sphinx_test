@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.trace\_points module
+===============================================
+
+.. automodule:: caret_analyze.infra.lttng.trace_points
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+caret\_analyze.value\_objects.communication module
+==================================================
+
+.. automodule:: caret_analyze.value_objects.communication
+   :members:
+   :undoc-members:
+   :show-inheritance:

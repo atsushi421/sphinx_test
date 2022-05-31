@@ -1,0 +1,311 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.plot.graphviz.callback_graph &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.plot.graphviz.callback_graph</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.plot.graphviz.callback_graph</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span><span class="p">,</span> <span class="n">Source</span>
+
+<span class="kn">from</span> <span class="nn">...runtime</span> <span class="kn">import</span> <span class="n">CallbackBase</span><span class="p">,</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Publisher</span><span class="p">,</span> <span class="n">Subscription</span>
+<span class="kn">from</span> <span class="nn">...value_objects</span> <span class="kn">import</span> <span class="p">(</span><span class="n">CallbackStructValue</span><span class="p">,</span> <span class="n">CallbackType</span><span class="p">,</span>
+                              <span class="n">NodeStructValue</span><span class="p">,</span> <span class="n">PublisherStructValue</span><span class="p">,</span>
+                              <span class="n">SubscriptionStructValue</span><span class="p">)</span>
+
+<span class="n">NodeClass</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Node</span><span class="p">,</span> <span class="n">NodeStructValue</span><span class="p">]</span>
+<span class="n">CallbackClass</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">CallbackBase</span><span class="p">,</span> <span class="n">CallbackStructValue</span><span class="p">]</span>
+<span class="n">PublisherClass</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Publisher</span><span class="p">,</span> <span class="n">PublisherStructValue</span><span class="p">]</span>
+<span class="n">SubscriptionClass</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Subscription</span><span class="p">,</span> <span class="n">SubscriptionStructValue</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="callback_graph"><a class="viewcode-back" href="../../../../caret_analyze.plot.graphviz.callback_graph.html#caret_analyze.plot.callback_graph">[docs]</a><span class="k">def</span> <span class="nf">callback_graph</span><span class="p">(</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">NodeClass</span><span class="p">,</span>
+    <span class="n">export_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Source</span><span class="p">]:</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+
+    <span class="n">dot</span> <span class="o">=</span> <span class="n">CallbackGraph</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">to_dot</span><span class="p">()</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">export_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">export_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">file_path_wo_ext</span> <span class="o">=</span> <span class="n">export_path</span><span class="p">[:</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_path_wo_ext</span><span class="p">)</span>
+        <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path_wo_ext</span><span class="p">)</span>
+        <span class="n">source</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">dirname</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">source</span></div>
+
+
+<div class="viewcode-block" id="CallbackGraph"><a class="viewcode-back" href="../../../../caret_analyze.plot.graphviz.callback_graph.html#caret_analyze.plot.CallbackGraph">[docs]</a><span class="k">class</span> <span class="nc">CallbackGraph</span><span class="p">:</span>
+    <span class="n">IGNORE_NODES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/rviz2&#39;</span><span class="p">]</span>
+    <span class="n">PATH_HIGHLIGHT_COLOR</span> <span class="o">=</span> <span class="s1">&#39;darkgreen&#39;</span>
+    <span class="n">PATH_HIGHLIGHT_FILL_COLOR</span> <span class="o">=</span> <span class="s1">&#39;darkseagreen1&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">NodeClass</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span> <span class="o">=</span> <span class="n">Digraph</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;svg&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Hover the mouse over a callback.&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="n">compound</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="n">rankdir</span><span class="o">=</span><span class="s1">&#39;LR&#39;</span><span class="p">,</span>
+                         <span class="n">style</span><span class="o">=</span><span class="s1">&#39;rounded&#39;</span><span class="p">,</span> <span class="n">newrank</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_labelled_edges</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">LabelledEdge</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">pub_topic_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">publish_topic_names</span><span class="p">)</span>
+        <span class="n">sub_topic_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">subscribe_topic_names</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="n">topic_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">sub_topic_name</span> <span class="o">+</span> <span class="n">pub_topic_name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">topic_name</span> <span class="ow">in</span> <span class="n">topic_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_labelled_edges</span><span class="p">[</span><span class="n">topic_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelledEdge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_graph</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CallbackGraph.to_dot"><a class="viewcode-back" href="../../../../caret_analyze.plot.graphviz.callback_graph.html#caret_analyze.plot.CallbackGraph.to_dot">[docs]</a>    <span class="k">def</span> <span class="nf">to_dot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">source</span></div>
+
+    <span class="k">def</span> <span class="nf">_to_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">splitted</span> <span class="o">=</span> <span class="n">node_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">splitted</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_draw_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeClass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">pub</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">publishers</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_labelled_edges</span><span class="p">[</span><span class="n">pub</span><span class="o">.</span><span class="n">topic_name</span><span class="p">]</span><span class="o">.</span><span class="n">draw_publisher</span><span class="p">(</span><span class="n">pub</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">subscriptions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_labelled_edges</span><span class="p">[</span><span class="n">sub</span><span class="o">.</span><span class="n">topic_name</span><span class="p">]</span><span class="o">.</span><span class="n">draw_subscription</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">variable_passings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">variable_passings</span><span class="p">:</span>
+                <span class="n">head_name</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">callback_name_read</span>
+                <span class="n">tail_name</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">callback_name_write</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+                <span class="n">penwidth</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="n">tail_name</span><span class="p">,</span> <span class="n">head_name</span><span class="p">,</span>
+                                 <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">penwidth</span><span class="o">=</span><span class="n">penwidth</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">CallbackClass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">callback</span><span class="o">.</span><span class="n">callback_type</span> <span class="o">==</span> <span class="n">CallbackType</span><span class="o">.</span><span class="n">TIMER</span><span class="p">:</span>
+            <span class="n">period_ns_str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:,}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">period_ns</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;period ns: </span><span class="si">{</span><span class="n">period_ns_str</span><span class="si">}</span><span class="se">\n</span><span class="s1"> symbol: </span><span class="si">{</span><span class="n">callback</span><span class="o">.</span><span class="n">symbol</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="k">if</span> <span class="n">callback</span><span class="o">.</span><span class="n">callback_type</span> <span class="o">==</span> <span class="n">CallbackType</span><span class="o">.</span><span class="n">SUBSCRIPTION</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;topic name: </span><span class="si">{</span><span class="n">callback</span><span class="o">.</span><span class="n">subscribe_topic_name</span><span class="si">}</span><span class="se">\n</span><span class="s1"> symbol: </span><span class="si">{</span><span class="n">callback</span><span class="o">.</span><span class="n">symbol</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_draw_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_cluster</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeClass</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">callbacks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">callbacks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">node_cluster</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+                <span class="s1">&#39; &#39;</span><span class="p">,</span>
+                <span class="n">_attributes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="s1">&#39;box&#39;</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;filled&#39;</span><span class="p">},</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                <span class="n">fillcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">callbacks</span><span class="p">:</span>
+            <span class="n">tooltip</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_tooltip</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+            <span class="n">fillcolor</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span>
+
+            <span class="n">node_cluster</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
+                <span class="n">callback</span><span class="o">.</span><span class="n">callback_name</span><span class="p">,</span>
+                <span class="n">callback</span><span class="o">.</span><span class="n">callback_name</span><span class="p">,</span>
+                <span class="n">_attributes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="s1">&#39;box&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;tooltip&#39;</span><span class="p">:</span> <span class="n">tooltip</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;filled&#39;</span><span class="p">},</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                <span class="n">fillcolor</span><span class="o">=</span><span class="n">fillcolor</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_draw_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">NodeClass</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Nesting clusters is not available due to an error in graphviz.</span>
+        <span class="c1"># Graphviz-2.49.1 used for verification.</span>
+
+        <span class="c1"># draw node cluster</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_cluster_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;node_&#39;</span><span class="p">),</span>
+            <span class="n">graph_attr</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span>
+                        <span class="s1">&#39;bgcolor&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">},</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">node_cluster</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_callbacks</span><span class="p">(</span><span class="n">node_cluster</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_to_cluster_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;cluster_&#39;</span> <span class="o">+</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">node_name</span></div>
+
+
+<div class="viewcode-block" id="LabelledEdge"><a class="viewcode-back" href="../../../../caret_analyze.plot.graphviz.callback_graph.html#caret_analyze.plot.LabelledEdge">[docs]</a><span class="k">class</span> <span class="nc">LabelledEdge</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">CallbackGraph</span><span class="p">,</span> <span class="n">topic_name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span> <span class="o">=</span> <span class="n">graph</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">=</span> <span class="n">topic_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
+
+    <span class="k">def</span> <span class="nf">_to_tail_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">+</span> <span class="n">node_name</span>
+
+    <span class="k">def</span> <span class="nf">_to_head_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span> <span class="o">+</span> <span class="n">node_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">topic_name</span><span class="si">}</span><span class="s1">&#39;</span>
+
+<div class="viewcode-block" id="LabelledEdge.draw_publisher"><a class="viewcode-back" href="../../../../caret_analyze.plot.graphviz.callback_graph.html#caret_analyze.plot.LabelledEdge.draw_publisher">[docs]</a>    <span class="k">def</span> <span class="nf">draw_publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherClass</span><span class="p">):</span>
+        <span class="n">head_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_head_name</span><span class="p">(</span><span class="n">publisher</span><span class="o">.</span><span class="n">topic_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
+            <span class="n">head_name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;cds&#39;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">_attributes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;180&#39;</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">publisher</span><span class="o">.</span><span class="n">callback_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">callback_name</span> <span class="ow">in</span> <span class="n">publisher</span><span class="o">.</span><span class="n">callback_names</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_draw_edge_from_callback</span><span class="p">(</span>
+                    <span class="n">callback_name</span><span class="p">,</span> <span class="n">head_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_edge_from_node</span><span class="p">(</span><span class="n">publisher</span><span class="p">,</span> <span class="n">head_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LabelledEdge.draw_subscription"><a class="viewcode-back" href="../../../../caret_analyze.plot.graphviz.callback_graph.html#caret_analyze.plot.LabelledEdge.draw_subscription">[docs]</a>    <span class="k">def</span> <span class="nf">draw_subscription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subscription</span><span class="p">:</span> <span class="n">SubscriptionClass</span><span class="p">):</span>
+        <span class="n">head_name</span> <span class="o">=</span> <span class="n">subscription</span><span class="o">.</span><span class="n">callback_name</span>
+        <span class="n">tail_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_tail_name</span><span class="p">(</span><span class="n">subscription</span><span class="o">.</span><span class="n">node_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">node</span><span class="p">(</span>
+            <span class="n">tail_name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;cds&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span>
+            <span class="n">tail_name</span><span class="p">,</span> <span class="n">head_name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_draw_edge_from_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherClass</span><span class="p">,</span> <span class="n">head_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">publisher</span><span class="o">.</span><span class="n">callback_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># Choose only one temporary callback that you need to connect to.</span>
+        <span class="n">tail_name</span> <span class="o">=</span> <span class="n">publisher</span><span class="o">.</span><span class="n">callback_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">publish_node_cluster_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">_to_cluster_name</span><span class="p">(</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;node_&#39;</span><span class="p">)</span>
+        <span class="n">tooltip</span> <span class="o">=</span> <span class="s1">&#39;The callback to publish is not specified.&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span>
+            <span class="n">tail_name</span><span class="p">,</span>
+            <span class="n">head_name</span><span class="p">,</span>
+            <span class="n">ltail</span><span class="o">=</span><span class="n">publish_node_cluster_name</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+            <span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span>
+            <span class="n">_attributes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;arrowtail&#39;</span><span class="p">:</span> <span class="s1">&#39;dot&#39;</span><span class="p">},</span>
+            <span class="n">tooltip</span><span class="o">=</span><span class="n">tooltip</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_draw_edge_from_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">head_name</span><span class="p">):</span>
+        <span class="n">tail_name</span> <span class="o">=</span> <span class="n">callback_name</span>
+
+        <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+        <span class="n">penwidth</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">_graph</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="n">tail_name</span><span class="p">,</span>
+                                <span class="n">head_name</span><span class="p">,</span>
+                                <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                                <span class="n">penwidth</span><span class="o">=</span><span class="n">penwidth</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.plot.graphviz.callback_graph</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

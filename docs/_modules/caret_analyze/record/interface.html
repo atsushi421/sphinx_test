@@ -1,0 +1,730 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.record.interface &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.record.interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.record.interface</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">Iterator</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Sequence</span><span class="p">,</span>
+    <span class="n">Set</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">.column</span> <span class="kn">import</span> <span class="n">Columns</span><span class="p">,</span> <span class="n">ColumnValue</span>
+<span class="kn">from</span> <span class="nn">..common</span> <span class="kn">import</span> <span class="n">ClockConverter</span>
+
+
+<div class="viewcode-block" id="RecordInterface"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordInterface">[docs]</a><span class="k">class</span> <span class="nc">RecordInterface</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interface for Record class.</span>
+
+<span class="sd">    This behavior is similar to the dictionary type.</span>
+<span class="sd">    To avoid conflicts with the pybind metaclass, ABC is not used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RecordInterface.equals"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordInterface.equals">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">equals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">RecordInterface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compare record.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : RecordInterface</span>
+<span class="sd">            comparison target.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if record data is same, otherwise false.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordInterface.merge"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordInterface.merge">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">RecordInterface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mege record.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : RecordInterface</span>
+<span class="sd">            merge target.</span>
+<span class="sd">        inplace : bool</span>
+<span class="sd">            inplace record if true, otherwise false.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Record</span>
+<span class="sd">            Merged record class if inplace = false, otherwise None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordInterface.drop_columns"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordInterface.drop_columns">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">drop_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Drop columns method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        column_names : List[str]</span>
+<span class="sd">            columns to be dropped.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordInterface.add"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordInterface.add">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">stamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add(Update) column value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            key name to set.</span>
+<span class="sd">        stamp : int</span>
+<span class="sd">            key value to set.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordInterface.change_dict_key"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordInterface.change_dict_key">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">change_dict_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change columns name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        old_key : str</span>
+<span class="sd">            column name to be changed.</span>
+<span class="sd">        new_key : str</span>
+<span class="sd">            new column name.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordInterface.get"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordInterface.get">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get value for specific column.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            key name to get.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Value for selected key.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordInterface.get_with_default"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordInterface.get_with_default">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_with_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get value for specific column.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            key name to get.</span>
+<span class="sd">        v : int</span>
+<span class="sd">            default value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Value for selected key.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert to dictionary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data : Dict[str, int]:</span>
+<span class="sd">            dictionary data.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">columns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get columnnames.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Set[str]</span>
+<span class="sd">            Column names.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="RecordsInterface"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface">[docs]</a><span class="k">class</span> <span class="nc">RecordsInterface</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interface for Record class.</span>
+
+<span class="sd">    To avoid conflicts with the pybind metaclass, ABC is not used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RecordsInterface.equals"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.equals">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">equals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Equals method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : RecordsInterface</span>
+<span class="sd">            comparison target.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            true if record data is same, otherwise false.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.append"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.append">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">RecordInterface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Append new record.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : RecordInterface</span>
+<span class="sd">            record to be added.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.concat"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.concat">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Concat records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : RecordsInterface</span>
+<span class="sd">            records to be concatenated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+<span class="sd">            concatenated records if inplace=False, otherwise None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.sort"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.sort">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sort records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : Union[str, List[str]]</span>
+<span class="sd">            key name to used for sort.</span>
+<span class="sd">        ascending : bool</span>
+<span class="sd">            ascending if True, descending if false.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="c1"># @abstractmethod</span>
+    <span class="c1"># def get_column(</span>
+    <span class="c1">#     self,</span>
+    <span class="c1">#     column_name: str</span>
+    <span class="c1"># ) -&gt; Column:</span>
+    <span class="c1">#     pass</span>
+
+<div class="viewcode-block" id="RecordsInterface.filter_if"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.filter_if">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">filter_if</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">RecordInterface</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get filterd records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        f : Callable[[RecordInterface], bool]</span>
+<span class="sd">            condition function.</span>
+<span class="sd">        inplace : bool</span>
+<span class="sd">            inplace original instance if true.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">RecordInterface</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get records list.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Seque[RecordInterface]</span>
+<span class="sd">            Records list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">column_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get column names.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            column names.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="RecordsInterface.get_row_series"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.get_row_series">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_row_series</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.get_column_series"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.get_column_series">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_column_series</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reindex columns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        column_names : List[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="RecordsInterface.iget"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.iget">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">iget</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">default_value</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.sget"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.sget">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">sget</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">default_value</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">pass</span></div>
+
+    <span class="c1"># @abstractmethod</span>
+    <span class="c1"># def drop_columns(</span>
+    <span class="c1">#     self, column_names: List[str]</span>
+    <span class="c1"># ) -&gt; None:</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Drop cnameolumns.</span>
+
+    <span class="c1">#     Parameters</span>
+    <span class="c1">#     ----------</span>
+    <span class="c1">#     column_names : List[str]</span>
+    <span class="c1">#         columns to be dropped.</span>
+
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     pass</span>
+
+    <span class="c1"># @abstractmethod</span>
+    <span class="c1"># def rename_columns(</span>
+    <span class="c1">#     self, column_names: Dict[str, str]</span>
+    <span class="c1"># ) -&gt; None:</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Rename columns.</span>
+
+    <span class="c1">#     Parameters</span>
+    <span class="c1">#     ----------</span>
+    <span class="c1">#     column_names : Dict[str, str]</span>
+    <span class="c1">#         rename params. same as dataframe rename.</span>
+
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">columns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Columns</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get columns.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Columns</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="RecordsInterface.to_dataframe"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.to_dataframe">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">to_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">converter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClockConverter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert to pandas dataframe.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            Records data.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.merge"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.merge">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">right_records</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">join_left_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">join_right_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">how</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">progress_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge records by key match.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        right_records : RecordInterface</span>
+<span class="sd">            merge target.</span>
+<span class="sd">        join_left_key : str</span>
+<span class="sd">            Key to use for matching.</span>
+<span class="sd">        join_right_key : str</span>
+<span class="sd">            Key to use for matching.</span>
+<span class="sd">        how : str</span>
+<span class="sd">            merge type. [inner/right/left/outer]</span>
+<span class="sd">        progress_label : str</span>
+<span class="sd">            label for progress bar. cpp impl only.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        &gt;&gt;&gt; left_records = Records([</span>
+<span class="sd">            Record({&#39;join_key&#39;: 1, &#39;left_other&#39;: 1}),</span>
+<span class="sd">            Record({&#39;join_key&#39;: 2, &#39;left_other&#39;: 2}),</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; right_records = Records([</span>
+<span class="sd">            Record({&#39;join_key&#39;: 2, &#39;right_other&#39;: 3}),</span>
+<span class="sd">            Record({&#39;join_key&#39;: 1, &#39;right_other&#39;: 4}),</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; expected = Records([</span>
+<span class="sd">            Record({&#39;join_key&#39;: 1, &#39;left_other&#39;: 1, &#39;right_other&#39;: 4}),</span>
+<span class="sd">            Record({&#39;join_key&#39;: 2, &#39;left_other&#39;: 2, &#39;right_other&#39;: 3}),</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; left_records.merge(right_records, &#39;join_key&#39;).equals(expected)</span>
+<span class="sd">        True</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.merge_sequencial"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.merge_sequencial">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">merge_sequencial</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">right_records</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">left_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">right_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">join_left_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span>
+        <span class="n">join_right_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span>
+        <span class="n">how</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">progress_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge chronologically contiguous records.</span>
+
+<span class="sd">        Merge left_records[left_key] and the right_records[right_key]</span>
+<span class="sd">        that occurred immediately after it.</span>
+<span class="sd">        If join_key is set, left_records[join_key]==right_records[join_key] is added as condition.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        right_records : RecordsInterface</span>
+<span class="sd">            merge target.</span>
+<span class="sd">        left_stamp_key : str</span>
+<span class="sd">            left records key name to use for comparison in time series merge.</span>
+<span class="sd">        right_stamp_key : str</span>
+<span class="sd">            right records key name to use for comparison in time series merge.</span>
+<span class="sd">        join_key : str</span>
+<span class="sd">            join key name to use equal condition.</span>
+<span class="sd">        how : str</span>
+<span class="sd">            merge type. [inner/right/left/outer]</span>
+<span class="sd">        progress_label : str</span>
+<span class="sd">            label for progress bar. cpp impl only.</span>
+
+<span class="sd">        Records</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+<span class="sd">            Merged records.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        &gt;&gt;&gt; left_records = Records([</span>
+<span class="sd">            Record({&#39;join_key&#39;: 1, &#39;left_stamp_key&#39;: 0}),</span>
+<span class="sd">            Record({&#39;join_key&#39;: 2, &#39;left_stamp_key&#39;: 3})</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; right_records = Records([</span>
+<span class="sd">            Record({&#39;join_key&#39;: 2, &#39;right_stamp_key&#39;: 5}),</span>
+<span class="sd">            Record({&#39;join_key&#39;: 1, &#39;right_stamp_key&#39;: 6})</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; expected = Records([</span>
+<span class="sd">            Record({&#39;join_key&#39;: 1, &#39;left_stamp_key&#39;: 0, &#39;right_stamp_key&#39;: 6}),</span>
+<span class="sd">            Record({&#39;join_key&#39;: 2, &#39;left_stamp_key&#39;: 3, &#39;right_stamp_key&#39;: 5}),</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; left_records.merge_sequencial(</span>
+<span class="sd">            right_records, &#39;left_stamp_key&#39;, &#39;right_stamp_key&#39;, &#39;join_key&#39;, &#39;inner&#39;</span>
+<span class="sd">        ).equals(expected)</span>
+<span class="sd">        True</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.merge_sequencial_for_addr_track"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.merge_sequencial_for_addr_track">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">merge_sequencial_for_addr_track</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">source_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">copy_records</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">copy_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">copy_from_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">copy_to_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">sink_records</span><span class="p">:</span> <span class="n">RecordsInterface</span><span class="p">,</span>
+        <span class="n">sink_stamp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">sink_from_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">progress_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge for tracking addresses when copying occurs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        source_stamp_key : str</span>
+<span class="sd">            key name indicating time stamp for source records</span>
+<span class="sd">        source_key : str</span>
+<span class="sd">            Key name indicating the address of the copy source for source records.</span>
+<span class="sd">        copy_records : Recordsinterface</span>
+<span class="sd">            copy records</span>
+<span class="sd">        copy_stamp_key : str</span>
+<span class="sd">            key name indicating time stamp for copy records</span>
+<span class="sd">        copy_from_key : str</span>
+<span class="sd">            Key name indicating the address of the copy source for source records.</span>
+<span class="sd">        copy_to_key : str</span>
+<span class="sd">            Key name indicating the address of the copy destination</span>
+<span class="sd">        sink_records : RecordsInterface</span>
+<span class="sd">            sink-side records</span>
+<span class="sd">        sink_stamp_key : str</span>
+<span class="sd">            keyname indicating time stamp for copy records</span>
+<span class="sd">        sink_from_key : str</span>
+<span class="sd">            Key name indicating the address of the copy destination</span>
+<span class="sd">        progress_label : str</span>
+<span class="sd">            label for progress bar. cpp impl only.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+<span class="sd">            Merged records.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; source_records = Records([</span>
+<span class="sd">            Record({&#39;source_key&#39;: 1, &#39;source_stamp&#39;: 0}),</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; copy_records = Records([</span>
+<span class="sd">            Record({&#39;copy_from_key&#39;: 1, &#39;copy_to_key&#39;: 11, &#39;copy_stamp_key&#39;: 1})</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; sink_records = Records([</span>
+<span class="sd">            Record({&#39;sink_from_key&#39;: 11, &#39;sink_stamp&#39;: 2}),</span>
+<span class="sd">            Record({&#39;sink_from_key&#39;: 1, &#39;sink_stamp&#39;: 3}),</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; expected = Records([</span>
+<span class="sd">            Record({&#39;source_stamp&#39;:0, &#39;sink_stamp&#39;:3, &#39;source_key&#39;:1}),</span>
+<span class="sd">            Record({&#39;source_stamp&#39;:0, &#39;sink_stamp&#39;:2, &#39;source_key&#39;:1}),</span>
+<span class="sd">        ])</span>
+<span class="sd">        &gt;&gt;&gt; source_records.merge_sequencial_for_addr_track(</span>
+<span class="sd">            &#39;source_stamp&#39;, &#39;source_key&#39;, copy_records, &#39;copy_stamp_key&#39;, &#39;copy_from_key&#39;,</span>
+<span class="sd">            &#39;copy_to_key&#39;, sink_records, &#39;sink_stamp&#39;, &#39;sink_from_key&#39;</span>
+<span class="sd">        ).equals(expected)</span>
+<span class="sd">        True</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.append_column"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.append_column">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">append_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">:</span> <span class="n">ColumnValue</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Append column to records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        column : Column</span>
+<span class="sd">        values: List[int]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.clone"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.clone">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get duplicated records.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+<span class="sd">            deep-copyed records.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.bind_drop_as_delay"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.bind_drop_as_delay">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">bind_drop_as_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Convert the dropped points to records converted as delay.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.groupby"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.groupby">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">groupby</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">RecordsInterface</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Split based on the value of the given column name.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsInterface.drop_duplicates"><a class="viewcode-back" href="../../../caret_analyze.record.interface.html#caret_analyze.record.RecordsInterface.drop_duplicates">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">drop_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.record.interface</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

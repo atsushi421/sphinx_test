@@ -1,0 +1,7 @@
+caret\_analyze.plot.bokeh.callback\_info module
+===============================================
+
+.. automodule:: caret_analyze.plot.bokeh.callback_info
+   :members:
+   :undoc-members:
+   :show-inheritance:

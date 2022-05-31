@@ -1,0 +1,32 @@
+caret\_analyze package
+======================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.architecture
+   caret_analyze.common
+   caret_analyze.infra
+   caret_analyze.plot
+   caret_analyze.record
+   caret_analyze.runtime
+   caret_analyze.value_objects
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.exceptions
+
+Module contents
+---------------
+
+.. automodule:: caret_analyze
+   :members:
+   :undoc-members:
+   :show-inheritance:

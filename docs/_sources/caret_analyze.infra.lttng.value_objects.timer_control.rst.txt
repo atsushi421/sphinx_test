@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.value\_objects.timer\_control module
+===============================================================
+
+.. automodule:: caret_analyze.infra.lttng.value_objects.timer_control
+   :members:
+   :undoc-members:
+   :show-inheritance:

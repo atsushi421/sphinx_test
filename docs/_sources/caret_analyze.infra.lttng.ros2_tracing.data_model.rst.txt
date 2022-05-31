@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.ros2\_tracing.data\_model module
+===========================================================
+
+.. automodule:: caret_analyze.infra.lttng.ros2_tracing.data_model
+   :members:
+   :undoc-members:
+   :show-inheritance:

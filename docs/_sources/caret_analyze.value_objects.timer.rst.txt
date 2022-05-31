@@ -1,0 +1,7 @@
+caret\_analyze.value\_objects.timer module
+==========================================
+
+.. automodule:: caret_analyze.value_objects.timer
+   :members:
+   :undoc-members:
+   :show-inheritance:

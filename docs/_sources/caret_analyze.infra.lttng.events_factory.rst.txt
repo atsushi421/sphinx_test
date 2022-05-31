@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.events\_factory module
+=================================================
+
+.. automodule:: caret_analyze.infra.lttng.events_factory
+   :members:
+   :undoc-members:
+   :show-inheritance:

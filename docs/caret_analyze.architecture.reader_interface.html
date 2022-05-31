@@ -1,0 +1,242 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.architecture.reader_interface module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.architecture.unified_architecture_reader module" href="caret_analyze.architecture.unified_architecture_reader.html" />
+    <link rel="prev" title="caret_analyze.architecture.architecture_reader_factory module" href="caret_analyze.architecture.architecture_reader_factory.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.architecture.unified_architecture_reader.html" title="caret_analyze.architecture.unified_architecture_reader module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.architecture.architecture_reader_factory.html" title="caret_analyze.architecture.architecture_reader_factory module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.architecture.html" accesskey="U">caret_analyze.architecture package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.reader_interface module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.architecture.reader_interface">
+<span id="caret-analyze-architecture-reader-interface-module"></span><h1>caret_analyze.architecture.reader_interface module<a class="headerlink" href="#module-caret_analyze.architecture.reader_interface" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.architecture.reader_interface.</span></span><span class="sig-name descname"><span class="pre">ArchitectureReader</span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Architecture reader base class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_callback_groups">
+<span class="sig-name descname"><span class="pre">get_callback_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback_group.html#caret_analyze.value_objects.callback_group.CallbackGroupValue" title="caret_analyze.value_objects.callback_group.CallbackGroupValue"><span class="pre">CallbackGroupValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_callback_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_callback_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_client_callbacks">
+<span class="sig-name descname"><span class="pre">get_client_callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.ClientCallbackValue" title="caret_analyze.value_objects.callback.ClientCallbackValue"><span class="pre">ClientCallbackValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_client_callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_client_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_executors">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_executors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.executor.html#caret_analyze.value_objects.executor.ExecutorValue" title="caret_analyze.value_objects.executor.ExecutorValue"><span class="pre">ExecutorValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_executors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_executors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get executor values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>executor values</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Sequence[<a class="reference internal" href="caret_analyze.value_objects.html#caret_analyze.value_objects.ExecutorValue" title="caret_analyze.value_objects.ExecutorValue">ExecutorValue</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_message_contexts">
+<span class="sig-name descname"><span class="pre">get_message_contexts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_message_contexts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_message_contexts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_node">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.value_objects.node.html#caret_analyze.value_objects.node.NodeValue" title="caret_analyze.value_objects.node.NodeValue"><span class="pre">NodeValue</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_node" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_nodes">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.node.html#caret_analyze.value_objects.node.NodeValue" title="caret_analyze.value_objects.node.NodeValue"><span class="pre">NodeValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>node values.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Sequence[<a class="reference internal" href="caret_analyze.value_objects.html#caret_analyze.value_objects.NodeValue" title="caret_analyze.value_objects.NodeValue">NodeValue</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_paths">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.path.html#caret_analyze.value_objects.path.PathValue" title="caret_analyze.value_objects.path.PathValue"><span class="pre">PathValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>path values</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Sequence[PathInfo]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_publishers">
+<span class="sig-name descname"><span class="pre">get_publishers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherValue" title="caret_analyze.value_objects.publisher.PublisherValue"><span class="pre">PublisherValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_publishers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_publishers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_service_callbacks">
+<span class="sig-name descname"><span class="pre">get_service_callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.ServiceCallbackValue" title="caret_analyze.value_objects.callback.ServiceCallbackValue"><span class="pre">ServiceCallbackValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_service_callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_service_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_subscription_callbacks">
+<span class="sig-name descname"><span class="pre">get_subscription_callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.SubscriptionCallbackValue" title="caret_analyze.value_objects.callback.SubscriptionCallbackValue"><span class="pre">SubscriptionCallbackValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_subscription_callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_subscription_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_subscriptions">
+<span class="sig-name descname"><span class="pre">get_subscriptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionValue" title="caret_analyze.value_objects.subscription.SubscriptionValue"><span class="pre">SubscriptionValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_subscriptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_subscriptions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_tf_broadcaster">
+<span class="sig-name descname"><span class="pre">get_tf_broadcaster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformBroadcasterValue" title="caret_analyze.value_objects.transform.TransformBroadcasterValue"><span class="pre">TransformBroadcasterValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_tf_broadcaster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_tf_broadcaster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_tf_buffer">
+<span class="sig-name descname"><span class="pre">get_tf_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformBufferValue" title="caret_analyze.value_objects.transform.TransformBufferValue"><span class="pre">TransformBufferValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_tf_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_tf_buffer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_tf_frames">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_tf_frames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformValue" title="caret_analyze.value_objects.transform.TransformValue"><span class="pre">TransformValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_tf_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_tf_frames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_timer_callbacks">
+<span class="sig-name descname"><span class="pre">get_timer_callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.TimerCallbackValue" title="caret_analyze.value_objects.callback.TimerCallbackValue"><span class="pre">TimerCallbackValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_timer_callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_timer_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_timers">
+<span class="sig-name descname"><span class="pre">get_timers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.timer.html#caret_analyze.value_objects.timer.TimerValue" title="caret_analyze.value_objects.timer.TimerValue"><span class="pre">TimerValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_timers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_timers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.reader_interface.ArchitectureReader.get_variable_passings">
+<span class="sig-name descname"><span class="pre">get_variable_passings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.variable_passing.html#caret_analyze.value_objects.variable_passing.VariablePassingValue" title="caret_analyze.value_objects.variable_passing.VariablePassingValue"><span class="pre">VariablePassingValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/reader_interface.html#ArchitectureReader.get_variable_passings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.reader_interface.ArchitectureReader.get_variable_passings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.architecture.architecture_reader_factory.html"
+                          title="previous chapter">caret_analyze.architecture.architecture_reader_factory module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.architecture.unified_architecture_reader.html"
+                          title="next chapter">caret_analyze.architecture.unified_architecture_reader module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.architecture.reader_interface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.architecture.unified_architecture_reader.html" title="caret_analyze.architecture.unified_architecture_reader module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.architecture.architecture_reader_factory.html" title="caret_analyze.architecture.architecture_reader_factory module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.architecture.html" >caret_analyze.architecture package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.reader_interface module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

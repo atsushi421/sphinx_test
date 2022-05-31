@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.records\_source.comm\_records module
+===============================================================
+
+.. automodule:: caret_analyze.infra.lttng.records_source.comm_records
+   :members:
+   :undoc-members:
+   :show-inheritance:

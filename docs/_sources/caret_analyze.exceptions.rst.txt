@@ -1,0 +1,7 @@
+caret\_analyze.exceptions module
+================================
+
+.. automodule:: caret_analyze.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:

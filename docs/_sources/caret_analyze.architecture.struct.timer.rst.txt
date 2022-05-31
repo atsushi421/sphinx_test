@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.timer module
+===============================================
+
+.. automodule:: caret_analyze.architecture.struct.timer
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+caret\_analyze.runtime.publisher module
+=======================================
+
+.. automodule:: caret_analyze.runtime.publisher
+   :members:
+   :undoc-members:
+   :show-inheritance:

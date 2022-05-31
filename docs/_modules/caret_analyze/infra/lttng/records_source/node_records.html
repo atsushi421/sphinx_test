@@ -1,0 +1,394 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.lttng.records_source.node_records &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.records_source.node_records</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.infra.lttng.records_source.node_records</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="kn">from</span> <span class="nn">.callback_records</span> <span class="kn">import</span> <span class="n">CallbackRecordsContainer</span>
+<span class="kn">from</span> <span class="nn">.publish_records</span> <span class="kn">import</span> <span class="n">PublishRecordsContainer</span>
+<span class="kn">from</span> <span class="nn">.subscribe_records</span> <span class="kn">import</span> <span class="n">SubscribeRecordsContainer</span>
+<span class="kn">from</span> <span class="nn">.transform</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TransformLookupContainer</span><span class="p">,</span>
+    <span class="n">TransformSendRecordsContainer</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..bridge</span> <span class="kn">import</span> <span class="n">LttngBridge</span>
+<span class="kn">from</span> <span class="nn">..column_names</span> <span class="kn">import</span> <span class="n">COLUMN_NAME</span>
+<span class="kn">from</span> <span class="nn">....record</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ColumnAttribute</span><span class="p">,</span>
+    <span class="n">merge</span><span class="p">,</span>
+    <span class="n">merge_sequencial</span><span class="p">,</span>
+    <span class="n">RecordsInterface</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">....value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MessageContextType</span><span class="p">,</span>
+    <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="n">PublisherStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="NodeRecordsContainer"><a class="viewcode-back" href="../../../../../caret_analyze.infra.lttng.records_source.node_records.html#caret_analyze.infra.lttng.records_source.node_records.NodeRecordsContainer">[docs]</a><span class="k">class</span> <span class="nc">NodeRecordsContainer</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">bridge</span><span class="p">:</span> <span class="n">LttngBridge</span><span class="p">,</span>
+        <span class="n">cb_records</span><span class="p">:</span> <span class="n">CallbackRecordsContainer</span><span class="p">,</span>
+        <span class="n">sub_records</span><span class="p">:</span> <span class="n">SubscribeRecordsContainer</span><span class="p">,</span>
+        <span class="n">pub_records</span><span class="p">:</span> <span class="n">PublishRecordsContainer</span><span class="p">,</span>
+        <span class="n">tf_lookup_records</span><span class="p">:</span> <span class="n">TransformLookupContainer</span><span class="p">,</span>
+        <span class="n">tf_send_records</span><span class="p">:</span> <span class="n">TransformSendRecordsContainer</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bridge</span> <span class="o">=</span> <span class="n">bridge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cb_records</span> <span class="o">=</span> <span class="n">cb_records</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pub_records</span> <span class="o">=</span> <span class="n">pub_records</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tf_lookup_records</span> <span class="o">=</span> <span class="n">tf_lookup_records</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tf_send_records</span> <span class="o">=</span> <span class="n">tf_send_records</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sub_records</span> <span class="o">=</span> <span class="n">sub_records</span>
+
+<div class="viewcode-block" id="NodeRecordsContainer.get_records"><a class="viewcode-back" href="../../../../../caret_analyze.infra.lttng.records_source.node_records.html#caret_analyze.infra.lttng.records_source.node_records.NodeRecordsContainer.get_records">[docs]</a>    <span class="k">def</span> <span class="nf">get_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_path_val</span><span class="p">:</span> <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">node_path_val</span><span class="o">.</span><span class="n">message_context_type</span> <span class="o">==</span> <span class="n">MessageContextType</span><span class="o">.</span><span class="n">CALLBACK_CHAIN</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_callback_chain</span><span class="p">(</span><span class="n">node_path_val</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">node_path_val</span><span class="o">.</span><span class="n">message_context_type</span> <span class="o">==</span> <span class="n">MessageContextType</span><span class="o">.</span><span class="n">USE_LATEST_MESSAGE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_use_latest_message</span><span class="p">(</span><span class="n">node_path_val</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">node_path_val</span><span class="o">.</span><span class="n">message_context_type</span> <span class="o">==</span> <span class="n">MessageContextType</span><span class="o">.</span><span class="n">TILDE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_tilde</span><span class="p">(</span><span class="n">node_path_val</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">_get_use_latest_message</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_path_val</span><span class="p">:</span> <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="n">node_out_records</span><span class="p">:</span> <span class="n">RecordsInterface</span>
+        <span class="n">node_in_records</span><span class="p">:</span> <span class="n">RecordsInterface</span>
+
+        <span class="k">if</span> <span class="n">node_path_val</span><span class="o">.</span><span class="n">publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_out_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">node_path_val</span><span class="o">.</span><span class="n">publisher</span><span class="p">)</span>
+            <span class="n">node_out_column</span> <span class="o">=</span> <span class="n">node_out_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">RCLCPP_PUBLISH_TIMESTAMP</span><span class="p">,</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">node_out_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">PID</span><span class="p">,</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">TID</span><span class="p">,</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">RCL_PUBLISH_TIMESTAMP</span><span class="p">,</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">DDS_WRITE_TIMESTAMP</span><span class="p">,</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">MESSAGE_TIMESTAMP</span><span class="p">,</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">SOURCE_TIMESTAMP</span><span class="p">,</span>
+                <span class="p">],</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">node_path_val</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_out_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tf_send_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span>
+                <span class="n">node_path_val</span><span class="o">.</span><span class="n">tf_frame_broadcaster</span><span class="p">)</span>
+            <span class="n">node_out_column</span> <span class="o">=</span> <span class="n">node_out_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">RCLCPP_PUBLISH_TIMESTAMP</span><span class="p">,</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node_path_val</span><span class="o">.</span><span class="n">subscription_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_in_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">node_path_val</span><span class="o">.</span><span class="n">subscription_callback</span><span class="p">)</span>
+            <span class="n">node_in_column</span> <span class="o">=</span> <span class="n">node_in_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_START_TIMESTAMP</span><span class="p">,</span>
+                <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="n">node_in_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">PID</span><span class="p">,</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">TID</span><span class="p">,</span>
+                    <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_END_TIMESTAMP</span>
+                <span class="p">],</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">node_path_val</span><span class="o">.</span><span class="n">tf_frame_buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node_in_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tf_lookup_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">node_path_val</span><span class="o">.</span><span class="n">tf_frame_buffer</span><span class="p">)</span>
+            <span class="n">node_in_column</span> <span class="o">=</span> <span class="n">node_in_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s1">&#39;lookup_transform_end_timestamp&#39;</span><span class="p">,</span>
+                <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">node_in_column</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ColumnAttribute</span><span class="o">.</span><span class="n">NODE_IO</span><span class="p">)</span>
+        <span class="n">node_out_column</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ColumnAttribute</span><span class="o">.</span><span class="n">NODE_IO</span><span class="p">)</span>
+
+        <span class="n">records</span> <span class="o">=</span> <span class="n">merge_sequencial</span><span class="p">(</span>
+            <span class="n">left_records</span><span class="o">=</span><span class="n">node_in_records</span><span class="p">,</span>
+            <span class="n">right_records</span><span class="o">=</span><span class="n">node_out_records</span><span class="p">,</span>
+            <span class="n">left_stamp_key</span><span class="o">=</span><span class="n">node_in_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">right_stamp_key</span><span class="o">=</span><span class="n">node_out_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">join_left_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">join_right_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">records</span>
+
+<div class="viewcode-block" id="NodeRecordsContainer.get_use_latest_message_records_tf_lookup_to_pub"><a class="viewcode-back" href="../../../../../caret_analyze.infra.lttng.records_source.node_records.html#caret_analyze.infra.lttng.records_source.node_records.NodeRecordsContainer.get_use_latest_message_records_tf_lookup_to_pub">[docs]</a>    <span class="k">def</span> <span class="nf">get_use_latest_message_records_tf_lookup_to_pub</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tf_buffer</span><span class="p">:</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+        <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">publish_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span>
+        <span class="n">publish_column</span> <span class="o">=</span> <span class="n">publish_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get_by_attrs</span><span class="p">([</span>
+            <span class="n">ColumnAttribute</span><span class="o">.</span><span class="n">NODE_IO</span><span class="p">,</span>
+            <span class="n">ColumnAttribute</span><span class="o">.</span><span class="n">SYSTEM_TIME</span><span class="p">,</span>
+        <span class="p">],</span> <span class="s1">&#39;head&#39;</span><span class="p">)</span>
+        <span class="n">callback_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">()</span>
+
+        <span class="n">callback_column</span> <span class="o">=</span> <span class="n">callback_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_START_TIMESTAMP</span>
+        <span class="p">)</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="n">merge_sequencial</span><span class="p">(</span>
+            <span class="n">left_records</span><span class="o">=</span><span class="n">callback_records</span><span class="p">,</span>
+            <span class="n">right_records</span><span class="o">=</span><span class="n">publish_records</span><span class="p">,</span>
+            <span class="n">left_stamp_key</span><span class="o">=</span><span class="n">callback_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">right_stamp_key</span><span class="o">=</span><span class="n">publish_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">join_left_key</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">],</span>
+            <span class="n">join_right_key</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">],</span>
+            <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># if self._node_path.subscription is not None:</span>
+        <span class="c1">#     node_in_records = self._provider.subscribe_records(self._node_path.subscription)</span>
+        <span class="c1"># elif self._node_path.tf_frame_buffer is not None:</span>
+        <span class="c1">#     node_in_records = self._provider.tf_lookup_records(self._node_path.tf_frame_buffer)</span>
+
+        <span class="c1"># if self._node_path.publisher is not None:</span>
+        <span class="c1">#     node_out_records = self._provider.publish_records(self._node_path.publisher)</span>
+        <span class="c1"># elif self._node_path.tf_frame_broadcaster is not None and \</span>
+        <span class="c1">#         self._node_path.tf_frame_broadcaster.publisher is not None:</span>
+        <span class="c1">#     node_out_records = self._provider.publish_records(</span>
+        <span class="c1">#         self._node_path.tf_frame_broadcaster.publisher)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     raise UnsupportedNodeRecordsError(&#39;node_path.publisher is None&#39;)</span>
+
+        <span class="c1"># column_names = [</span>
+        <span class="c1">#     node_in_records.columns[0].column_name,</span>
+        <span class="c1">#     f&#39;{self._node_path.publish_topic_name}/rclcpp_publish_timestamp&#39;,</span>
+        <span class="c1"># ]</span>
+        <span class="c1"># node_io_records = merge_sequencial(</span>
+        <span class="c1">#     left_records=node_in_records,</span>
+        <span class="c1">#     right_records=node_out_records,</span>
+        <span class="c1">#     left_stamp_key=node_in_records.columns[0].column_name,</span>
+        <span class="c1">#     right_stamp_key=node_out_records.columns[0].column_name,</span>
+        <span class="c1">#     join_left_key=None,</span>
+        <span class="c1">#     join_right_key=None,</span>
+        <span class="c1">#     how=&#39;left_use_latest&#39;,</span>
+        <span class="c1">#     progress_label=&#39;binding use_latest_message.&#39;</span>
+        <span class="c1"># )</span>
+
+        <span class="c1"># drop_columns = list(set(node_io_records.column_names) - set(column_names))</span>
+        <span class="c1"># node_io_records.drop_columns(drop_columns)</span>
+        <span class="c1"># node_io_records.reindex(column_names)</span>
+        <span class="c1"># return node_io_records</span>
+
+        <span class="k">return</span> <span class="n">records</span></div>
+
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">_get_tilde</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_path</span><span class="p">:</span> <span class="n">NodePathStructValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_START_TIMESTAMP</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">RCLCPP_PUBLISH_TIMESTAMP</span>
+        <span class="p">]</span>
+        <span class="k">assert</span> <span class="n">node_path</span><span class="o">.</span><span class="n">subscription</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="n">node_path</span><span class="o">.</span><span class="n">publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">sub_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sub_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">node_path</span><span class="o">.</span><span class="n">subscription</span><span class="p">)</span>
+        <span class="n">pub_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">node_path</span><span class="o">.</span><span class="n">publisher</span><span class="p">)</span>
+        <span class="n">sub_tilde_message_id_column</span> <span class="o">=</span> <span class="n">sub_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">TILDE_MESSAGE_ID</span><span class="p">,</span>
+            <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">pub_tilde_message_id_column</span> <span class="o">=</span> <span class="n">pub_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">TILDE_MESSAGE_ID</span><span class="p">,</span>
+            <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span>
+            <span class="n">left_records</span><span class="o">=</span><span class="n">sub_records</span><span class="p">,</span>
+            <span class="n">right_records</span><span class="o">=</span><span class="n">pub_records</span><span class="p">,</span>
+            <span class="n">join_left_key</span><span class="o">=</span><span class="n">sub_tilde_message_id_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">join_right_key</span><span class="o">=</span><span class="n">pub_tilde_message_id_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span>
+        <span class="p">)</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">PID</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">TID</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">TILDE_MESSAGE_ID</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">MESSAGE_TIMESTAMP</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">TILDE_SUBSCRIPTION</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">SOURCE_TIMESTAMP</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_END_TIMESTAMP</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">RCL_PUBLISH_TIMESTAMP</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">DDS_WRITE_TIMESTAMP</span><span class="p">,</span>
+        <span class="p">],</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">records</span>
+
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">_get_callback_chain</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_path</span><span class="p">:</span> <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="n">callbacks</span> <span class="o">=</span> <span class="n">node_path</span><span class="o">.</span><span class="n">callbacks</span>
+
+        <span class="k">assert</span> <span class="n">callbacks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">callbacks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="n">callbacks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">records_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+            <span class="n">end_column</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_END_TIMESTAMP</span><span class="p">,</span> <span class="n">take</span><span class="o">=</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="n">start_column</span> <span class="o">=</span> <span class="n">records_</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_START_TIMESTAMP</span><span class="p">,</span> <span class="n">take</span><span class="o">=</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+            <span class="n">records</span> <span class="o">=</span> <span class="n">merge_sequencial</span><span class="p">(</span>
+                <span class="n">left_records</span><span class="o">=</span><span class="n">records</span><span class="p">,</span>
+                <span class="n">right_records</span><span class="o">=</span><span class="n">records_</span><span class="p">,</span>
+                <span class="n">left_stamp_key</span><span class="o">=</span><span class="n">end_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+                <span class="n">right_stamp_key</span><span class="o">=</span><span class="n">start_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+                <span class="n">join_left_key</span><span class="o">=</span><span class="p">[</span><span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">PID</span><span class="p">],</span>
+                <span class="n">join_right_key</span><span class="o">=</span><span class="p">[</span><span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">PID</span><span class="p">],</span>
+                <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span>
+            <span class="p">)</span>
+
+        <span class="n">column_callback_start_time</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_START_TIMESTAMP</span><span class="p">,</span> <span class="n">take</span><span class="o">=</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">node_path</span><span class="o">.</span><span class="n">publisher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">publish_records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pub_records</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">node_path</span><span class="o">.</span><span class="n">publisher</span><span class="p">)</span>
+        <span class="n">publish_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">RCL_PUBLISH_TIMESTAMP</span><span class="p">,</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">DDS_WRITE_TIMESTAMP</span><span class="p">,</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">MESSAGE_TIMESTAMP</span><span class="p">,</span>
+                <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">SOURCE_TIMESTAMP</span>
+            <span class="p">],</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">column_publish_time</span> <span class="o">=</span> <span class="n">publish_records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">RCLCPP_PUBLISH_TIMESTAMP</span><span class="p">,</span> <span class="n">take</span><span class="o">=</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">records</span> <span class="o">=</span> <span class="n">merge_sequencial</span><span class="p">(</span>
+            <span class="n">left_records</span><span class="o">=</span><span class="n">records</span><span class="p">,</span>
+            <span class="n">right_records</span><span class="o">=</span><span class="n">publish_records</span><span class="p">,</span>
+            <span class="n">join_left_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">join_right_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">left_stamp_key</span><span class="o">=</span><span class="n">column_callback_start_time</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">right_stamp_key</span><span class="o">=</span><span class="n">column_publish_time</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+            <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+            <span class="n">progress_label</span><span class="o">=</span><span class="s1">&#39;binding: callback_start and publish&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">callback_end_column</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">CALLBACK_END_TIMESTAMP</span><span class="p">,</span> <span class="n">take</span><span class="o">=</span><span class="s1">&#39;tail&#39;</span><span class="p">,</span> <span class="n">base_name_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">PID</span><span class="p">,</span>
+            <span class="n">COLUMN_NAME</span><span class="o">.</span><span class="n">TID</span><span class="p">,</span>
+            <span class="n">callback_end_column</span><span class="o">.</span><span class="n">column_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">records</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.records_source.node_records</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

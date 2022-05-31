@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.event\_counter module
+================================================
+
+.. automodule:: caret_analyze.infra.lttng.event_counter
+   :members:
+   :undoc-members:
+   :show-inheritance:

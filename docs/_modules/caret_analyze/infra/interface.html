@@ -1,0 +1,275 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.interface &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.interface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for caret_analyze.infra.interface</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 Research Institute of Systems Planning, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">caret_analyze.value_objects.subscription</span> <span class="kn">import</span> <span class="n">IntraProcessBufferStructValue</span>
+
+<span class="kn">from</span> <span class="nn">..common</span> <span class="kn">import</span> <span class="n">ClockConverter</span>
+<span class="kn">from</span> <span class="nn">..record</span> <span class="kn">import</span> <span class="n">RecordsInterface</span>
+<span class="kn">from</span> <span class="nn">..value_objects</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CallbackStructValue</span><span class="p">,</span>
+    <span class="n">CommunicationStructValue</span><span class="p">,</span>
+    <span class="n">NodePathStructValue</span><span class="p">,</span>
+    <span class="n">PublisherStructValue</span><span class="p">,</span>
+    <span class="n">Qos</span><span class="p">,</span>
+    <span class="n">SubscriptionStructValue</span><span class="p">,</span>
+    <span class="n">TimerStructValue</span><span class="p">,</span>
+    <span class="n">TransformCommunicationStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span>
+    <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+    <span class="n">VariablePassingStructValue</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="RecordsProvider"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider">[docs]</a><span class="k">class</span> <span class="nc">RecordsProvider</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+    <span class="c1"># callback_start</span>
+    <span class="c1"># callback_end</span>
+<div class="viewcode-block" id="RecordsProvider.callback_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.callback_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">callback_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">callback_info</span><span class="p">:</span> <span class="n">CallbackStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compose callback records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        callback_info : CallbackStructInfo</span>
+<span class="sd">            [description]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+<span class="sd">            [description]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="c1"># callback_end</span>
+    <span class="c1"># any</span>
+    <span class="c1"># callback_start</span>
+<div class="viewcode-block" id="RecordsProvider.variable_passing_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.variable_passing_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">variable_passing_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">variable_passing_info</span><span class="p">:</span> <span class="n">VariablePassingStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compose variable passing records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variable_passing_info : VariablePassingStructInfo</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RecordsInterface</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.ipc_buffer_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.ipc_buffer_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">ipc_buffer_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ipc_buffer</span><span class="p">:</span> <span class="n">IntraProcessBufferStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+    <span class="c1"># callback_start</span>
+    <span class="c1"># any</span>
+    <span class="c1"># rclcpp_publish</span>
+<div class="viewcode-block" id="RecordsProvider.node_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.node_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">node_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_path_info</span><span class="p">:</span> <span class="n">NodePathStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.communication_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.communication_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">communication_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">communication_info</span><span class="p">:</span> <span class="n">CommunicationStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.subscribe_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.subscribe_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">subscribe_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">subscription</span><span class="p">:</span> <span class="n">SubscriptionStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.publish_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.publish_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">publish_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.tf_broadcast_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.tf_broadcast_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">tf_broadcast_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">broadcaster</span><span class="p">:</span> <span class="n">TransformFrameBroadcasterStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.tf_lookup_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.tf_lookup_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">tf_lookup_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">buffer</span><span class="p">:</span> <span class="n">TransformFrameBufferStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.tf_communication_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.tf_communication_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">tf_communication_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">communication</span><span class="p">:</span> <span class="n">TransformCommunicationStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.timer_records"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.timer_records">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">timer_records</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">timer</span><span class="p">:</span> <span class="n">TimerStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecordsInterface</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.get_sim_time_converter"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.get_sim_time_converter">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_sim_time_converter</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClockConverter</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RecordsProvider.verify_communication"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RecordsProvider.verify_communication">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">verify_communication</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">communication</span><span class="p">:</span> <span class="n">CommunicationStructValue</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="RuntimeDataProvider"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RuntimeDataProvider">[docs]</a><span class="k">class</span> <span class="nc">RuntimeDataProvider</span><span class="p">(</span><span class="n">RecordsProvider</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RuntimeDataProvider.get_rmw_implementation"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RuntimeDataProvider.get_rmw_implementation">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_rmw_implementation</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RuntimeDataProvider.is_intra_process_communication"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RuntimeDataProvider.is_intra_process_communication">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">is_intra_process_communication</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">publisher</span><span class="p">:</span> <span class="n">PublisherStructValue</span><span class="p">,</span>
+        <span class="n">subscription</span><span class="p">:</span> <span class="n">SubscriptionStructValue</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="RuntimeDataProvider.get_qos"><a class="viewcode-back" href="../../../caret_analyze.infra.interface.html#caret_analyze.infra.RuntimeDataProvider.get_qos">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_qos</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublisherStructValue</span><span class="p">,</span> <span class="n">SubscriptionStructValue</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Qos</span><span class="p">]:</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.interface</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

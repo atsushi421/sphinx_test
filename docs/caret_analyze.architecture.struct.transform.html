@@ -1,0 +1,361 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.architecture.struct.transform module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.architecture.struct.variable_passing module" href="caret_analyze.architecture.struct.variable_passing.html" />
+    <link rel="prev" title="caret_analyze.architecture.struct.timer module" href="caret_analyze.architecture.struct.timer.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.architecture.struct.variable_passing.html" title="caret_analyze.architecture.struct.variable_passing module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.architecture.struct.timer.html" title="caret_analyze.architecture.struct.timer module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.architecture.html" >caret_analyze.architecture package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.architecture.struct.html" accesskey="U">caret_analyze.architecture.struct package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.struct.transform module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.architecture.struct.transform">
+<span id="caret-analyze-architecture-struct-transform-module"></span><h1>caret_analyze.architecture.struct.transform module<a class="headerlink" href="#module-caret_analyze.architecture.struct.transform" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBroadcasterStruct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.architecture.struct.transform.</span></span><span class="sig-name descname"><span class="pre">TransformBroadcasterStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publisher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.architecture.struct.publisher.html#caret_analyze.architecture.struct.publisher.PublisherStruct" title="caret_analyze.architecture.struct.publisher.PublisherStruct"><span class="pre">PublisherStruct</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.BroadcastedTransformValue" title="caret_analyze.value_objects.transform.BroadcastedTransformValue"><span class="pre">BroadcastedTransformValue</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformBroadcasterStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBroadcasterStruct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformBroadcasterStructInterface" title="caret_analyze.architecture.struct.struct_interface.TransformBroadcasterStructInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformBroadcasterStructInterface</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.frame_broadcasters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frame_broadcasters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct"><span class="pre">TransformFrameBroadcastersStruct</span></a></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.frame_broadcasters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBroadcasterStructInterface" title="caret_analyze.architecture.struct.struct_interface.TransformFrameBroadcasterStructInterface"><span class="pre">TransformFrameBroadcasterStructInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformBroadcasterStruct.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.publisher">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">publisher</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.architecture.struct.publisher.html#caret_analyze.architecture.struct.publisher.PublisherStruct" title="caret_analyze.architecture.struct.publisher.PublisherStruct"><span class="pre">PublisherStruct</span></a></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.publisher" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.to_value">
+<span class="sig-name descname"><span class="pre">to_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformBroadcasterStructValue"><span class="pre">TransformBroadcasterStructValue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformBroadcasterStruct.to_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.to_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.transforms">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transforms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.BroadcastedTransformValue" title="caret_analyze.value_objects.transform.BroadcastedTransformValue"><span class="pre">BroadcastedTransformValue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBroadcasterStruct.transforms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.architecture.struct.transform.</span></span><span class="sig-name descname"><span class="pre">TransformBufferStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lookup_node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tf_tree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformTreeValue" title="caret_analyze.value_objects.transform.TransformTreeValue"><span class="pre">TransformTreeValue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_transforms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformValue" title="caret_analyze.value_objects.transform.TransformValue"><span class="pre">TransformValue</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listen_transforms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.BroadcastedTransformValue" title="caret_analyze.value_objects.transform.BroadcastedTransformValue"><span class="pre">BroadcastedTransformValue</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_subscription</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface" title="caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface"><span class="pre">SubscriptionStructInterface</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformBufferStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformBufferStructInterface" title="caret_analyze.architecture.struct.struct_interface.TransformBufferStructInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformBufferStructInterface</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.frame_buffers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frame_buffers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct"><span class="pre">TransformFrameBuffersStruct</span></a></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.frame_buffers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listen_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listen_child_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_source_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_target_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBufferStructInterface" title="caret_analyze.architecture.struct.struct_interface.TransformFrameBufferStructInterface"><span class="pre">TransformFrameBufferStructInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformBufferStruct.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.is_pair">
+<span class="sig-name descname"><span class="pre">is_pair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformBufferStruct.is_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.is_pair" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.listen_transforms">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listen_transforms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.BroadcastedTransformValue" title="caret_analyze.value_objects.transform.BroadcastedTransformValue"><span class="pre">BroadcastedTransformValue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.listen_transforms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.listener_node_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listener_node_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.listener_node_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.listener_subscription">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listener_subscription</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface" title="caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface"><span class="pre">SubscriptionStructInterface</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.listener_subscription" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.lookup_node_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_node_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.lookup_node_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.lookup_transforms">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_transforms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformValue" title="caret_analyze.value_objects.transform.TransformValue"><span class="pre">TransformValue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.lookup_transforms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformBufferStruct.to_value">
+<span class="sig-name descname"><span class="pre">to_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformBufferStructValue" title="caret_analyze.value_objects.transform.TransformBufferStructValue"><span class="pre">TransformBufferStructValue</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformBufferStruct.to_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformBufferStruct.to_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.architecture.struct.transform.</span></span><span class="sig-name descname"><span class="pre">TransformFrameBroadcasterStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publisher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.architecture.struct.publisher.html#caret_analyze.architecture.struct.publisher.PublisherStruct" title="caret_analyze.architecture.struct.publisher.PublisherStruct"><span class="pre">PublisherStruct</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.BroadcastedTransformValue" title="caret_analyze.value_objects.transform.BroadcastedTransformValue"><span class="pre">BroadcastedTransformValue</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBroadcasterStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBroadcasterStructInterface" title="caret_analyze.architecture.struct.struct_interface.TransformFrameBroadcasterStructInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformFrameBroadcasterStructInterface</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.child_frame_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">child_frame_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.child_frame_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.frame_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frame_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.frame_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.is_pair">
+<span class="sig-name descname"><span class="pre">is_pair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBroadcasterStruct.is_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.is_pair" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.node_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.node_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.publisher">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">publisher</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.architecture.struct.publisher.html#caret_analyze.architecture.struct.publisher.PublisherStruct" title="caret_analyze.architecture.struct.publisher.PublisherStruct"><span class="pre">PublisherStruct</span></a></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.publisher" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.to_value">
+<span class="sig-name descname"><span class="pre">to_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBroadcasterStruct.to_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.to_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.transform">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.BroadcastedTransformValue" title="caret_analyze.value_objects.transform.BroadcastedTransformValue"><span class="pre">BroadcastedTransformValue</span></a></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct.transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.architecture.struct.transform.</span></span><span class="sig-name descname"><span class="pre">TransformFrameBroadcastersStruct</span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBroadcastersStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">brs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct"><span class="pre">TransformFrameBroadcastersStruct</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBroadcastersStruct.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct.as_list">
+<span class="sig-name descname"><span class="pre">as_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct"><span class="pre">TransformFrameBroadcasterStruct</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBroadcastersStruct.as_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct.as_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct"><span class="pre">TransformFrameBroadcasterStruct</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBroadcastersStruct.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBroadcasterStruct"><span class="pre">TransformFrameBroadcasterStruct</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBroadcastersStruct.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBroadcastersStruct.insert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.architecture.struct.transform.</span></span><span class="sig-name descname"><span class="pre">TransformFrameBufferStruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tf_tree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformTreeValue" title="caret_analyze.value_objects.transform.TransformTreeValue"><span class="pre">TransformTreeValue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_subscription</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface" title="caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface"><span class="pre">SubscriptionStructInterface</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformValue" title="caret_analyze.value_objects.transform.TransformValue"><span class="pre">TransformValue</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listen_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.BroadcastedTransformValue" title="caret_analyze.value_objects.transform.BroadcastedTransformValue"><span class="pre">BroadcastedTransformValue</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBufferStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.TransformFrameBufferStructInterface" title="caret_analyze.architecture.struct.struct_interface.TransformFrameBufferStructInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformFrameBufferStructInterface</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.is_pair">
+<span class="sig-name descname"><span class="pre">is_pair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBufferStruct.is_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.is_pair" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listen_child_frame_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listen_child_frame_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listen_child_frame_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listen_frame_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listen_frame_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listen_frame_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listen_transform">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listen_transform</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.BroadcastedTransformValue" title="caret_analyze.value_objects.transform.BroadcastedTransformValue"><span class="pre">BroadcastedTransformValue</span></a></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listen_transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listener_node_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listener_node_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listener_node_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listener_subscription">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listener_subscription</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.architecture.struct.struct_interface.html#caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface" title="caret_analyze.architecture.struct.struct_interface.SubscriptionStructInterface"><span class="pre">SubscriptionStructInterface</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.listener_subscription" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.lookup_node_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_node_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.lookup_node_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.lookup_source_frame_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_source_frame_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.lookup_source_frame_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.lookup_target_frame_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_target_frame_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.lookup_target_frame_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.lookup_transform">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lookup_transform</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformValue" title="caret_analyze.value_objects.transform.TransformValue"><span class="pre">TransformValue</span></a></em><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.lookup_transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.to_value">
+<span class="sig-name descname"><span class="pre">to_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBufferStruct.to_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct.to_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.architecture.struct.transform.</span></span><span class="sig-name descname"><span class="pre">TransformFrameBuffersStruct</span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBuffersStruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">brs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct"><span class="pre">TransformFrameBuffersStruct</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBuffersStruct.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct.as_list">
+<span class="sig-name descname"><span class="pre">as_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct"><span class="pre">TransformFrameBufferStruct</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBuffersStruct.as_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct.as_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listen_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listen_child_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_child_frame_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct"><span class="pre">TransformFrameBufferStruct</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBuffersStruct.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#caret_analyze.architecture.struct.transform.TransformFrameBufferStruct" title="caret_analyze.architecture.struct.transform.TransformFrameBufferStruct"><span class="pre">TransformFrameBufferStruct</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/caret_analyze/architecture/struct/transform.html#TransformFrameBuffersStruct.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.architecture.struct.transform.TransformFrameBuffersStruct.insert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.architecture.struct.timer.html"
+                          title="previous chapter">caret_analyze.architecture.struct.timer module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.architecture.struct.variable_passing.html"
+                          title="next chapter">caret_analyze.architecture.struct.variable_passing module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.architecture.struct.transform.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.architecture.struct.variable_passing.html" title="caret_analyze.architecture.struct.variable_passing module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.architecture.struct.timer.html" title="caret_analyze.architecture.struct.timer module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.architecture.html" >caret_analyze.architecture package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.architecture.struct.html" >caret_analyze.architecture.struct package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.architecture.struct.transform module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

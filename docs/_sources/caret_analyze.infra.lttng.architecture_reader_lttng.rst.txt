@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.architecture\_reader\_lttng module
+=============================================================
+
+.. automodule:: caret_analyze.infra.lttng.architecture_reader_lttng
+   :members:
+   :undoc-members:
+   :show-inheritance:

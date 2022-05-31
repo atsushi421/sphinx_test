@@ -1,0 +1,7 @@
+caret\_analyze.architecture.reader\_interface module
+====================================================
+
+.. automodule:: caret_analyze.architecture.reader_interface
+   :members:
+   :undoc-members:
+   :show-inheritance:

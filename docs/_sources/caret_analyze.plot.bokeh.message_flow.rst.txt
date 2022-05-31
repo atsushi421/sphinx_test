@@ -1,0 +1,7 @@
+caret\_analyze.plot.bokeh.message\_flow module
+==============================================
+
+.. automodule:: caret_analyze.plot.bokeh.message_flow
+   :members:
+   :undoc-members:
+   :show-inheritance:

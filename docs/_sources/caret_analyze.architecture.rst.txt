@@ -1,0 +1,33 @@
+caret\_analyze.architecture package
+===================================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.architecture.graph_search
+   caret_analyze.architecture.struct
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.architecture.architecture
+   caret_analyze.architecture.architecture_dict
+   caret_analyze.architecture.architecture_loaded
+   caret_analyze.architecture.architecture_reader_factory
+   caret_analyze.architecture.reader_interface
+   caret_analyze.architecture.unified_architecture_reader
+   caret_analyze.architecture.util
+
+Module contents
+---------------
+
+.. automodule:: caret_analyze.architecture
+   :members:
+   :undoc-members:
+   :show-inheritance:

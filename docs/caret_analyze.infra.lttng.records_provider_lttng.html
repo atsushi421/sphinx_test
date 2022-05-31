@@ -1,0 +1,330 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>caret_analyze.infra.lttng.records_provider_lttng module &#8212; caret_analyze  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="caret_analyze.infra.lttng.trace_points module" href="caret_analyze.infra.lttng.trace_points.html" />
+    <link rel="prev" title="caret_analyze.infra.lttng.records_post_process module" href="caret_analyze.infra.lttng.records_post_process.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.trace_points.html" title="caret_analyze.infra.lttng.trace_points module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.records_post_process.html" title="caret_analyze.infra.lttng.records_post_process module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.infra.html" >caret_analyze.infra package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.infra.lttng.html" accesskey="U">caret_analyze.infra.lttng package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.records_provider_lttng module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-caret_analyze.infra.lttng.records_provider_lttng">
+<span id="caret-analyze-infra-lttng-records-provider-lttng-module"></span><h1>caret_analyze.infra.lttng.records_provider_lttng module<a class="headerlink" href="#module-caret_analyze.infra.lttng.records_provider_lttng" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">caret_analyze.infra.lttng.records_provider_lttng.</span></span><span class="sig-name descname"><span class="pre">RecordsProviderLttng</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lttng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.infra.lttng.lttng.html#caret_analyze.infra.lttng.lttng.Lttng" title="caret_analyze.infra.lttng.lttng.Lttng"><span class="pre">Lttng</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="caret_analyze.infra.interface.html#caret_analyze.infra.interface.RuntimeDataProvider" title="caret_analyze.infra.interface.RuntimeDataProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeDataProvider</span></code></a></p>
+<p>Records are processed and measurement results are calculated.</p>
+<p>In addition to merging, filtering and other operations are performed here.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.callback_records">
+<span class="sig-name descname"><span class="pre">callback_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.callback.html#caret_analyze.value_objects.callback.CallbackStructValue" title="caret_analyze.value_objects.callback.CallbackStructValue"><span class="pre">CallbackStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.callback_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.callback_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return callback duration records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>callback_val</strong> (<a class="reference internal" href="caret_analyze.value_objects.html#caret_analyze.value_objects.CallbackStructValue" title="caret_analyze.value_objects.CallbackStructValue"><em>CallbackStructValue</em></a>) – target callback value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Columns
+- [callback_name]/callback_start_timestamp
+- [callback_name]/callback_end_timestamp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.RecordsInterface" title="caret_analyze.record.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.communication_records">
+<span class="sig-name descname"><span class="pre">communication_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comm_val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.communication.html#caret_analyze.value_objects.communication.CommunicationStructValue" title="caret_analyze.value_objects.communication.CommunicationStructValue"><span class="pre">CommunicationStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.communication_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.communication_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide communication records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>comm_info</strong> (<em>CommunicationStructInfo</em>) – communicadtion info.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Columns:
+- [topic_name]/rclcpp_publish_timestamp
+- [topic_name]/rcl_publish_timestamp (Optional)
+- [topic_name]/dds_publish_timestamp (Optional)
+- [callback_name]/callback_start_timestamp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.RecordsInterface" title="caret_analyze.record.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.get_qos">
+<span class="sig-name descname"><span class="pre">get_qos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pub_sub</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.value_objects.qos.html#caret_analyze.value_objects.qos.Qos" title="caret_analyze.value_objects.qos.Qos"><span class="pre">Qos</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.get_qos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.get_qos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.get_rmw_implementation">
+<span class="sig-name descname"><span class="pre">get_rmw_implementation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.get_rmw_implementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.get_rmw_implementation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.get_sim_time_converter">
+<span class="sig-name descname"><span class="pre">get_sim_time_converter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.common.clock_converter.html#caret_analyze.common.clock_converter.ClockConverter" title="caret_analyze.common.clock_converter.ClockConverter"><span class="pre">ClockConverter</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.get_sim_time_converter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.get_sim_time_converter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.ipc_buffer_records">
+<span class="sig-name descname"><span class="pre">ipc_buffer_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ipc_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.IntraProcessBufferStructValue" title="caret_analyze.value_objects.subscription.IntraProcessBufferStructValue"><span class="pre">IntraProcessBufferStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.ipc_buffer_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.ipc_buffer_records" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.is_intra_process_communication">
+<span class="sig-name descname"><span class="pre">is_intra_process_communication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publisher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">subscription</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.is_intra_process_communication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.is_intra_process_communication" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.node_records">
+<span class="sig-name descname"><span class="pre">node_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_path_val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.node_path.html#caret_analyze.value_objects.node_path.NodePathStructValue" title="caret_analyze.value_objects.node_path.NodePathStructValue"><span class="pre">NodePathStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.node_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.node_records" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.publish_records">
+<span class="sig-name descname"><span class="pre">publish_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publisher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.publisher.html#caret_analyze.value_objects.publisher.PublisherStructValue" title="caret_analyze.value_objects.publisher.PublisherStructValue"><span class="pre">PublisherStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.publish_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.publish_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return publish records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>publish</strong> (<a class="reference internal" href="caret_analyze.value_objects.html#caret_analyze.value_objects.PublisherStructValue" title="caret_analyze.value_objects.PublisherStructValue"><em>PublisherStructValue</em></a>) – target publisher</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Columns
+- [topic_name]/rclcpp_publish_timestamp
+- [topic_name]/rclcpp_intra_publish_timestamp (Optional)
+- [topic_name]/rclcpp_inter_publish_timestamp (Optional)
+- [topic_name]/rcl_publish_timestamp (Optional)
+- [topic_name]/dds_write_timestamp (Optional)
+- [topic_name]/message_timestamp
+- [topic_name]/source_timestamp (Optional)
+—
+- [topic_name]/tilde_publish_timestamp (Optional)
+- [topic_name]/tilde_message_id (Optional)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.RecordsInterface" title="caret_analyze.record.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.subscribe_records">
+<span class="sig-name descname"><span class="pre">subscribe_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subscription</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.subscription.html#caret_analyze.value_objects.subscription.SubscriptionStructValue" title="caret_analyze.value_objects.subscription.SubscriptionStructValue"><span class="pre">SubscriptionStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.subscribe_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.subscribe_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide subscription records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subscription_value</strong> (<a class="reference internal" href="caret_analyze.value_objects.html#caret_analyze.value_objects.SubscriptionStructValue" title="caret_analyze.value_objects.SubscriptionStructValue"><em>SubscriptionStructValue</em></a>) – Target subscription value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Columns
+- [callback_name]/callback_start_timestamp
+- [topic_name]/message_timestamp
+- [topic_name]/source_timestamp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.RecordsInterface" title="caret_analyze.record.RecordsInterface">RecordsInterface</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="caret_analyze.exceptions.html#caret_analyze.exceptions.InvalidArgumentError" title="caret_analyze.exceptions.InvalidArgumentError"><strong>InvalidArgumentError</strong></a> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.tf_broadcast_records">
+<span class="sig-name descname"><span class="pre">tf_broadcast_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">broadcaster</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue" title="caret_analyze.value_objects.transform.TransformFrameBroadcasterStructValue"><span class="pre">TransformFrameBroadcasterStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.tf_broadcast_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.tf_broadcast_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compose transform broadcast records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>broadcaster</strong> (<a class="reference internal" href="caret_analyze.value_objects.html#caret_analyze.value_objects.TransformBroadcasterStructValue" title="caret_analyze.value_objects.TransformBroadcasterStructValue"><em>TransformBroadcasterStructValue</em></a>) – target bradcaster</p></li>
+<li><p><strong>transform</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="caret_analyze.value_objects.html#caret_analyze.value_objects.TransformValue" title="caret_analyze.value_objects.TransformValue"><em>TransformValue</em></a><em>]</em>) – target transform</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Columns
+- frame_id
+- child_frame_id
+- same as publlish records</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.RecordsInterface" title="caret_analyze.record.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.tf_communication_records">
+<span class="sig-name descname"><span class="pre">tf_communication_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">communication</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformCommunicationStructValue" title="caret_analyze.value_objects.transform.TransformCommunicationStructValue"><span class="pre">TransformCommunicationStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.tf_communication_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.tf_communication_records" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.tf_lookup_records">
+<span class="sig-name descname"><span class="pre">tf_lookup_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.transform.html#caret_analyze.value_objects.transform.TransformFrameBufferStructValue" title="caret_analyze.value_objects.transform.TransformFrameBufferStructValue"><span class="pre">TransformFrameBufferStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.tf_lookup_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.tf_lookup_records" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.timer_records">
+<span class="sig-name descname"><span class="pre">timer_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.timer.html#caret_analyze.value_objects.timer.TimerStructValue" title="caret_analyze.value_objects.timer.TimerStructValue"><span class="pre">TimerStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.timer_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.timer_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return timer records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timer</strong> (<a class="reference internal" href="caret_analyze.value_objects.html#caret_analyze.value_objects.TimerStructValue" title="caret_analyze.value_objects.TimerStructValue"><em>TimerStructValue</em></a>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Columns
+- [callback_name]/timer_event
+- [callback_name]/callback_start
+- [callback_name]/callback_end</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.RecordsInterface" title="caret_analyze.record.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.variable_passing_records">
+<span class="sig-name descname"><span class="pre">variable_passing_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable_passing_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.variable_passing.html#caret_analyze.value_objects.variable_passing.VariablePassingStructValue" title="caret_analyze.value_objects.variable_passing.VariablePassingStructValue"><span class="pre">VariablePassingStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="caret_analyze.record.interface.html#caret_analyze.record.interface.RecordsInterface" title="caret_analyze.record.interface.RecordsInterface"><span class="pre">RecordsInterface</span></a></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.variable_passing_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.variable_passing_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return variable passing records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>variable_passing_info</strong> (<em>VariablePassingStructInfo</em>) – target variable passing info.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Columns
+- [callback_name]/callback_end_timestamp
+- [callback_name]/callback_start_timestamp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="caret_analyze.record.html#caret_analyze.record.RecordsInterface" title="caret_analyze.record.RecordsInterface">RecordsInterface</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.verify_communication">
+<span class="sig-name descname"><span class="pre">verify_communication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">communication</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="caret_analyze.value_objects.communication.html#caret_analyze.value_objects.communication.CommunicationStructValue" title="caret_analyze.value_objects.communication.CommunicationStructValue"><span class="pre">CommunicationStructValue</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/caret_analyze/infra/lttng/records_provider_lttng.html#RecordsProviderLttng.verify_communication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#caret_analyze.infra.lttng.records_provider_lttng.RecordsProviderLttng.verify_communication" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="caret_analyze.infra.lttng.records_post_process.html"
+                          title="previous chapter">caret_analyze.infra.lttng.records_post_process module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="caret_analyze.infra.lttng.trace_points.html"
+                          title="next chapter">caret_analyze.infra.lttng.trace_points module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/caret_analyze.infra.lttng.records_provider_lttng.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.trace_points.html" title="caret_analyze.infra.lttng.trace_points module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caret_analyze.infra.lttng.records_post_process.html" title="caret_analyze.infra.lttng.records_post_process module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">caret_analyze  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="caret_analyze.html" >caret_analyze package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="caret_analyze.infra.html" >caret_analyze.infra package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="caret_analyze.infra.lttng.html" >caret_analyze.infra.lttng package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">caret_analyze.infra.lttng.records_provider_lttng module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Author.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.0.
+    </div>
+  </body>
+</html>

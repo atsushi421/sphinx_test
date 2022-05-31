@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.communication module
+=======================================================
+
+.. automodule:: caret_analyze.architecture.struct.communication
+   :members:
+   :undoc-members:
+   :show-inheritance:

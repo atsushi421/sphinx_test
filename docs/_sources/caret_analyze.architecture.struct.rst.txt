@@ -1,0 +1,31 @@
+caret\_analyze.architecture.struct package
+==========================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   caret_analyze.architecture.struct.callback
+   caret_analyze.architecture.struct.callback_group
+   caret_analyze.architecture.struct.callback_path
+   caret_analyze.architecture.struct.communication
+   caret_analyze.architecture.struct.executor
+   caret_analyze.architecture.struct.node
+   caret_analyze.architecture.struct.node_path
+   caret_analyze.architecture.struct.path
+   caret_analyze.architecture.struct.publisher
+   caret_analyze.architecture.struct.struct_interface
+   caret_analyze.architecture.struct.subscription
+   caret_analyze.architecture.struct.timer
+   caret_analyze.architecture.struct.transform
+   caret_analyze.architecture.struct.variable_passing
+
+Module contents
+---------------
+
+.. automodule:: caret_analyze.architecture.struct
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+caret\_analyze.architecture.struct.callback\_path module
+========================================================
+
+.. automodule:: caret_analyze.architecture.struct.callback_path
+   :members:
+   :undoc-members:
+   :show-inheritance:

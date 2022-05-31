@@ -1,0 +1,7 @@
+caret\_analyze.infra.lttng.value\_objects.subscription module
+=============================================================
+
+.. automodule:: caret_analyze.infra.lttng.value_objects.subscription
+   :members:
+   :undoc-members:
+   :show-inheritance:
